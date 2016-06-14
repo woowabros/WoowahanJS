@@ -1,7 +1,6 @@
 import { format } from 'util';
 import Debug from 'debug';
 import Config from '../global.config';
-import Config from '../global.config';
 import MD5 from 'md5';
 
 const debug = Debug('Core:ReducerCreator');

@@ -14,7 +14,7 @@ var actionObject = {};
 var queuemonitor;
 
 window._ = _;
-window.$ = $;
+window.$ = window.jQuery = $;
 window.Handlebars = Handlebars;
 
 /* Enable backbone.js devtools for chrome */
