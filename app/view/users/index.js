@@ -1,5 +1,5 @@
 import { ActionCreator } from '../../core';
-import { FETCH_USERS } from '../../action';
+import { FETCH_USERS, FETCH_ONE_USER } from '../../action';
 import { ListView } from '../../component';
 import Template from './index.hbs';
 import User from './user';
@@ -40,8 +40,12 @@ export default ListView.extend({
     });
   },
 
+  fetchOneUser(data) {
+    alert(data.name);
+  },
+
   onSelectedRow(row) {
-    this.logStamp(row);
+    this.dispatch(ActionCreator(FETCH_ONE_USER, { id: row.id }), this.fetchOneUser);
   },
 
   onRefresh() {

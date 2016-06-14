@@ -9,6 +9,7 @@ const defaultConfiguration = {
   timeout: DEFAULT_TIMEOUT
 };
 
+//TODO: 다수의 액션을 하나의 리듀서가 처리할 수 있는 구조 구현
 export default function(actionName, handler) {
   let Reducer = function(data, subscriber) {
     this._timestamp = Date.now();

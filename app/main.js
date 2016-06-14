@@ -2,11 +2,12 @@ import Debug from 'debug';
 import Router from './router';
 import { CoreView, Application } from './core';
 import Users from './reducer/users';
+import OneUser from './reducer/one-user';
 
 import 'bootstrap';
 
 var application = new Application({
-  reducers: [ Users ]
+  reducers: [ Users, OneUser ]
 });
 
 application.on('start', () => $('.loading').show());

@@ -20,7 +20,7 @@ app.get('/users', (req, res) => {
 
   res.json(resultSet);
 });
-app.get('/users/:id', (req, res) => res.json(users.filter(user => user.id == +req.params.id)));
+app.get('/users/:id', (req, res) => res.json(users.find(user => user.id == +req.params.id)));
 
 app.listen(port, () => {
   console.log('ready %s', port);
