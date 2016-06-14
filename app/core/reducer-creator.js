@@ -1,12 +1,13 @@
 import { format } from 'util';
 import Debug from 'debug';
+import Config from '../global.config';
+import Config from '../global.config';
 import MD5 from 'md5';
 
 const debug = Debug('Core:ReducerCreator');
-const DEFAULT_TIMEOUT = 3000;
 
 const defaultConfiguration = {
-  timeout: DEFAULT_TIMEOUT
+  timeout: Config.Request.Timeout
 };
 
 //TODO: 다수의 액션을 하나의 리듀서가 처리할 수 있는 구조 구현

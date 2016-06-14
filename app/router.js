@@ -1,4 +1,4 @@
-import Backbone from 'Backbone';
+import Backbone from 'backbone';
 import { CoreRouter } from './core';
 import Layout from './view/layout';
 import Welcome from './view/welcome';
