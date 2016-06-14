@@ -1,6 +1,6 @@
 import Debug from 'debug';
 import Router from './router';
-import { CoreView, Application } from './core';
+import { Application } from './core';
 import Users from './reducer/users';
 import OneUser from './reducer/one-user';
 

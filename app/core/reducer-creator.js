@@ -16,9 +16,7 @@ export default function(actionName, handler) {
     this._id = MD5(actionName.toLowerCase()+this._timestamp);
     this.subscriber = subscriber;
     this.useraction(data);
-
-    //TODO: 리펙토링
-    application.addAction(this._id);
+    this.addAction(this._id);
   };
 
   Reducer.actionName = actionName;
@@ -29,6 +27,8 @@ export default function(actionName, handler) {
 
   fn.id = () => this._id;
   fn.createtime = () => this._timestamp;
+  fn.addAction = (id) => window.application.addAction(id);
+  fn.removeAction = (id) => window.application.removeAction(id);
 
   fn.get = function(url, settings) {
     if (typeof url === 'object') {
@@ -59,8 +59,7 @@ export default function(actionName, handler) {
     options = options || null;
 
     this.subscriber.call(this, data, options);
-    //TODO: 리펙토링
-    application.removeAction(this._id);
+    this.removeAction(this._id);
   };
 
   return Reducer;

@@ -77,7 +77,6 @@ fn.queuing = function() {
 };
 
 fn.bindReducer = function(reducer) {
-  // reducer.setApplication(this);
   reducers[reducer.actionName] = reducer;
 };
 
@@ -85,7 +84,6 @@ fn.combineReducer = function(reducers) {
   if (!reducers) return;
 
   reducers.forEach(reducer => {
-    // reducer.setApplication(this);
     this.bindReducer(reducer);
   });
 };
