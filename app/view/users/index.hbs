@@ -1,0 +1,38 @@
+<div>
+    <h2>사용자 목록</h2>
+</div>
+
+<div>
+    <ol class="breadcrumb">
+        <li><a href="#">Home</a></li>
+        <li class="active"><a href="#">사용자 목록 (<span data-role="bind" data-name="numOfRows">{{numOfRows}}</span>)</a></li>
+    </ol>
+</div>
+
+<nav>
+    <ul class="pager">
+        <li class="previous"><a href="#/users?p={{prevPage}}"><span aria-hidden="true">&larr;</span> 이전</a></li>
+        <li class="next"><a href="#/users?p={{nextPage}}">다음 <span aria-hidden="true">&rarr;</span></a></li>
+    </ul>
+</nav>
+
+<table class="table table-bordered table-hover list">
+    <thead>
+    <tr>
+        <th>이름</th>
+        <th>성별</th>
+        <th>나이</th>
+        <th>국적</th>
+        <th>회사</th>
+        <th>이메일</th>
+        <th>가입일</th>
+        <th>전화번호</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<div>
+    <button class="btn btn-default" data-action="refresh">새로고침</button>
+</div>
