@@ -18,7 +18,9 @@ window.$ = window.jQuery = $;
 window.Handlebars = Handlebars;
 
 /* Enable backbone.js devtools for chrome */
-window.__backboneAgent && window.__backboneAgent.handleBackbone(Backbone);
+if (window.__backboneAgent) {
+  window.__backboneAgent.handleBackbone(Backbone);
+}
 
 function Application(settings) {
   settings = settings || {};
@@ -66,11 +68,14 @@ fn.queuing = function() {
 
   if (queue.length > 0) {
     let item = queue.shift();
-
-    debug(format('pop action %s', item.action.type));
-
     let Reducer = reducers[item.action.type];
-    let reducer = new (Function.prototype.bind.apply(Reducer, _.concat(Reducer, item.action.data, _.bind(item.subscriber, this))));
+
+    if (!Reducer) {
+      this.enableQueue();
+      throw new Error('The unregistered reducer. Please check the type of action, if there is a written reducer use after registration.');
+    }
+
+    new (Function.prototype.bind.apply(Reducer, _.concat(Reducer, item.action.data, _.bind(item.subscriber, this))))();
   }
 
   this.enableQueue();
