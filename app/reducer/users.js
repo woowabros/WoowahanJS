@@ -6,7 +6,7 @@ var Users = ReducerCreator(FETCH_USERS, function() {
     this.finish(response);
   };
 
-  this.get('/users');
+  this.getData('/users');
 });
 
 export default Users;

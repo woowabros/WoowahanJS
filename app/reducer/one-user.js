@@ -6,7 +6,7 @@ var OneUser = ReducerCreator(FETCH_ONE_USER, function(options) {
     this.finish(response);
   };
 
-  this.get('/users/'+options.id);
+  this.getData('/users/'+options.id);
 });
 
 export default OneUser;

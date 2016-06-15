@@ -30,7 +30,7 @@ export default function(actionName, handler) {
   fn.addAction = (id) => window.application.addAction(id);
   fn.removeAction = (id) => window.application.removeAction(id);
 
-  fn.get = function(url, settings) {
+  fn.getData = function(url, settings) {
     if (typeof url === 'object') {
       settings = Object.assign(defaultConfiguration, url);
     } else {
@@ -41,18 +41,32 @@ export default function(actionName, handler) {
     let success = this.onSuccess || this.success;
     let fail = this.onFail || this.fail;
 
-    $.ajax(settings)
+    $.get(settings)
       .done(success.bind(this))
       .fail(fail.bind(this));
   };
 
+  fn.putData = function(url, settings) {
+
+  };
+
+  fn.postData = function(url, settings) {
+
+  };
+
+  fn.deleteData = function(url, settings) {
+
+  };
+  
   fn.success = function(data) {
     debug(data);
   };
 
   fn.fail = function(request, error) {
     request.abort();
-    debug(error);
+
+    this.removeAction(this._id);
+    this.addError(error);
   };
 
   fn.finish = function(data, options) {
