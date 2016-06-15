@@ -14,7 +14,7 @@ export default CoreRouter.extend({
   },
 
   initialize() {
-    CoreRouter.prototype.initialize.apply(this, arguments);
+    this.super();
 
     var layout = new Layout();
 

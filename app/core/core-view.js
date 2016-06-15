@@ -12,7 +12,11 @@ Backbone.Model.prototype.hasEventListener = function(eventName) {
   return this._events.hasOwnProperty(eventName);
 };
 
-export default Backbone.View.extend({
+var CoreView = Backbone.View.extend({
+  super() {
+    CoreView.prototype.initialize.apply(this, arguments);
+  },
+
   initialize() {
     this._finishBind = false;
     this._views = {};
@@ -207,3 +211,5 @@ export default Backbone.View.extend({
     }
   }
 });
+
+export default CoreView;

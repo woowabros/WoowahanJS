@@ -10,7 +10,7 @@ const ListViewEvents = [
 export default CoreView.extend({
   rowViews: [],
 
-  initialize() {
+  super() {
     CoreView.prototype.initialize.apply(this, arguments);
 
     this.collection = this.collection || new Backbone.Collection();

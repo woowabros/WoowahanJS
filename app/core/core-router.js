@@ -2,8 +2,12 @@ import Debug from 'debug';
 import { format } from 'util';
 import Backbone from 'backbone';
 
-export default Backbone.Router.extend({
+var CoreRouter = Backbone.Router.extend({
   views: [],
+
+  super() {
+    CoreRouter.prototype.initialize.apply(this, arguments);
+  },
 
   initialize() {
     if (typeof this['namespace'] !== 'undefined') {
@@ -36,3 +40,5 @@ export default Backbone.Router.extend({
     this.debug(format.apply(this, arguments));
   }
 });
+
+export default CoreRouter;

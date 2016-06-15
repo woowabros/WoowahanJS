@@ -16,7 +16,7 @@ export default ListView.extend({
   },
 
   initialize() {
-    ListView.prototype.initialize.apply(this, arguments);
+    this.super();
 
     this.setModel({
       prevPage: 0,

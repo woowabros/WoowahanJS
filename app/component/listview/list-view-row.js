@@ -7,7 +7,7 @@ export default CoreView.extend({
     'click': '_onSelectedRow'
   },
 
-  initialize() {
+  super() {
     CoreView.prototype.initialize.apply(this, arguments);
   },
 

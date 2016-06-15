@@ -5,7 +5,7 @@ export default CoreView.extend({
   className: 'container',
 
   initialize() {
-    CoreView.prototype.initialize.apply(this, arguments);
+    this.super();
 
     this.render();
   },

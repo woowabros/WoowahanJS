@@ -7,8 +7,7 @@ export default ListViewRow.extend({
   template: Template,
 
   initialize(data) {
-    ListViewRow.prototype.initialize.apply(this, arguments);
-
+    this.super();
     this.model = data;
     this.render();
   },

@@ -2,8 +2,7 @@ import { CoreView } from '../core';
 
 export default CoreView.extend({
   initialize() {
-    CoreView.prototype.initialize.apply(this, arguments);
-
+    this.super();
     this.render();
   },
 
