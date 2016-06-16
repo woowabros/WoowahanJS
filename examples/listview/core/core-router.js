@@ -2,6 +2,8 @@ import Debug from 'debug';
 import { format } from 'util';
 import Backbone from 'backbone';
 
+const INTERVAL = 1000/30;
+
 var CoreRouter = Backbone.Router.extend({
   views: [],
 
@@ -13,6 +15,22 @@ var CoreRouter = Backbone.Router.extend({
     if (typeof this['namespace'] !== 'undefined') {
       this.debug = Debug(this['namespace']);
     }
+
+    this._handleBackground = setInterval(_.bind(this._backgroundWorker, this), INTERVAL);
+
+    Backbone.history.start();
+  },
+
+  _backgroundWorker() {
+    if (this.$container && this.$container.length > 0) return;
+
+    this.$container = $(this.container);
+
+    this.views.forEach(view => {
+      this.$container.html(view.$el)
+    })
+
+
   },
 
   addView(view) {

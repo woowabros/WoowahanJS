@@ -1,9 +1,3 @@
-import Woowa from './libs/woowa';
-import Router from './libs/router';
-import View from './libs/view';
+import Woowahan from './lib/woowahan';
 
-export {
-  Woowa,
-  Router,
-  View
-};
+export default Woowahan;

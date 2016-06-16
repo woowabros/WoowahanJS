@@ -10,16 +10,24 @@ app.use(morgan('dev'));
 app.use(express.static('dist'));
 
 app.get('/users', (req, res) => {
-  var page = req.query.p || 1;
-  var limit = req.query.l || 15;
+  var page = +(req.query.p || 1);
+  var limit = +(req.query.l || 15);
   var resultSet = [];
 
-  for(var i=0; i<limit; i++) {
-    resultSet.push(users[i]);
+  for(var start=(page-1)*limit, i=0; i<limit; i++) {
+    resultSet.push(users[start+i]);
   }
 
-  res.json(resultSet);
+  res.json({
+    page: {
+      total: users.length,
+      page: page,
+      limit: limit
+    },
+    resultSet: resultSet
+  });
 });
+
 app.get('/users/:id', (req, res) => res.json(users.find(user => user.id == +req.params.id)));
 
 app.listen(port, () => {

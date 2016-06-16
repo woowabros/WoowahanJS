@@ -1,4 +1,3 @@
-import Backbone from 'backbone';
 import { CoreRouter } from './core';
 import Layout from './view/layout';
 import Welcome from './view/welcome';
@@ -19,8 +18,6 @@ export default CoreRouter.extend({
     var layout = new Layout();
 
     $('#app').append(layout.$el);
-
-    Backbone.history.start();
   },
 
   before() {

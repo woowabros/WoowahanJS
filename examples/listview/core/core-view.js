@@ -98,6 +98,11 @@ var CoreView = Backbone.View.extend({
   setModel(attrs) {
     if (!this.model) this.model = new Backbone.Model();
 
+    if (attrs instanceof Backbone.Model) {
+      this.model = attrs;
+      return;
+    }
+    
     for(let attr in attrs) {
       let value = this.model.get(attr);
       

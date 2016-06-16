@@ -9,13 +9,6 @@
     </ol>
 </div>
 
-<nav>
-    <ul class="pager">
-        <li class="previous"><a href="#/users?p={{prevPage}}"><span aria-hidden="true">&larr;</span> 이전</a></li>
-        <li class="next"><a href="#/users?p={{nextPage}}">다음 <span aria-hidden="true">&rarr;</span></a></li>
-    </ul>
-</nav>
-
 <table class="table table-bordered table-hover list">
     <thead>
     <tr>
@@ -33,6 +26,9 @@
     </tbody>
 </table>
 
-<div>
-    <button class="btn btn-default" data-action="refresh">새로고침</button>
+<div class="row">
+    <div class="col-md-4">
+        <button class="btn btn-default" data-action="refresh">새로고침</button>
+    </div>
+    <div class="col-md-8 pager-container text-right"></div>
 </div>

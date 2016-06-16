@@ -3,6 +3,7 @@ import { FETCH_USERS, FETCH_ONE_USER } from '../../action';
 import { ListView } from '../../component';
 import Template from './index.hbs';
 import User from './user';
+import Pager from '../control/pager';
 
 export default ListView.extend({
   namespace: 'View:Users',
@@ -12,7 +13,8 @@ export default ListView.extend({
   rowView: User,
 
   events: {
-    'click [data-action=refresh]': 'onRefresh'
+    'click [data-action=refresh]': 'onRefresh',
+    '@paging .pager-container': 'onPaging'
   },
 
   initialize() {
@@ -34,10 +36,15 @@ export default ListView.extend({
   },
 
   fetchUsers(data) {
-    this.reload(data);
+    this.reload(data.resultSet);
     this.setModel({
-      numOfRows: data.length
+      prevPage: data.page.page - 1,
+      currentPage: data.page.page,
+      nextPage: data.page.page + 1,
+      numOfRows: data.resultSet.length
     });
+
+    this.updateView('.pager-container', Pager, this.model);
   },
 
   fetchOneUser(data) {
@@ -45,10 +52,14 @@ export default ListView.extend({
   },
 
   onSelectedRow(row) {
-    this.dispatch(ActionCreator(FETCH_ONE_USER, { id: row.id }), this.fetchOneUser);
+    this.dispatch(ActionCreator(FETCH_ONE_USER, { id: row.id, page: 1 }), this.fetchOneUser);
   },
 
   onRefresh() {
     this.dispatch(ActionCreator(FETCH_USERS), this.fetchUsers);
+  },
+
+  onPaging(page) {
+    this.dispatch(ActionCreator(FETCH_USERS, { page: page }), this.fetchUsers);
   }
 });

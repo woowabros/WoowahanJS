@@ -1,9 +1,13 @@
+import Debug from 'debug';
 import _ from 'lodash';
 import $ from 'jquery';
 import Handlebars from 'handlebars/runtime';
 import { format } from 'util';
-import Debug from 'debug';
 import Backbone from 'backbone';
+
+/* Enable debug log */
+window.debug = Debug;
+Debug.enable('*');
 
 const debug = Debug('Woowahan:Application');
 const INTERVAL = 1000/60;
