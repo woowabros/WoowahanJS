@@ -1,20 +1,35 @@
 import Debug from 'debug';
 import Router from './router';
-import { Application } from './core';
+// import { Application } from './core';
 import Users from './reducer/users';
 import OneUser from './reducer/one-user';
 
+import { Woowa } from '../';
+
 import 'bootstrap';
 
-var application = new Application({
-  reducers: [ Users, OneUser ]
-});
+const DEFAULT_SETTING = {
+  reducers: [ Users, OneUser ],
+  routers: [Router]
+};
 
-application.on('start', () => $('.loading').show());
-application.on('finish', () => $('.loading').hide());
+let woowa;
 
-/* Enable debug log */
-window.debug = Debug;
-Debug.enable('*');
+// use 1
+woowa = new Woowa(DEFAULT_SETTING);
 
-new Router();
+woowa.on('start', () => $('.loading').show());
+woowa.on('finish', () => $('.loading').hide());
+
+woowa.start();
+
+// // use 2
+// woowa = new Woowa;
+// woowa.use(Users);
+// woowa.use(OneUser);
+// woowa.use(Router);
+//
+// woowa.on('start', () => $('.loading').show());
+// woowa.on('finish', () => $('.loading').hide());
+//
+// woowa.start();

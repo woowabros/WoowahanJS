@@ -1,7 +1,7 @@
 import Debug from 'debug';
 import { format } from 'util';
 import Backbone from 'backbone';
-import * as Plugins from '../plugin.config';
+import * as Plugins from '../app/plugin.config';
 
 const delegateEventSplitter = /^(\S+)\s*(.*)$/;
 const childEventSplitter = /^(\@)\s*(.*)$/;
@@ -12,9 +12,9 @@ Backbone.Model.prototype.hasEventListener = function(eventName) {
   return this._events.hasOwnProperty(eventName);
 };
 
-var CoreView = Backbone.View.extend({
+var View = Backbone.View.extend({
   super() {
-    CoreView.prototype.initialize.apply(this, arguments);
+    View.prototype.initialize.apply(this, arguments);
   },
 
   initialize() {
@@ -92,7 +92,7 @@ var CoreView = Backbone.View.extend({
     action.__options = options || {};
 
     //TODO: 리펙토링
-    global.woowa.dispatch(action, _.bind(subscriber, this));
+    window.application.dispatch(action, _.bind(subscriber, this));
   },
 
   setModel(attrs) {
@@ -100,7 +100,7 @@ var CoreView = Backbone.View.extend({
 
     for(let attr in attrs) {
       let value = this.model.get(attr);
-      
+
       if (value !== attrs[attr]) {
         this.model.set(attr, attrs[attr]);
       }
@@ -212,4 +212,4 @@ var CoreView = Backbone.View.extend({
   }
 });
 
-export default CoreView;
+export default View;
