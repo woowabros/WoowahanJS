@@ -1,12 +1,12 @@
 import Woowahan from '../../';
+import HelloView from './hello-view';
 
-var Index = Woowahan.View.create({
-  render() {
-    this.$el.html('<h1>Hello, WoowahanJS</h1>');
-    return this;
-  }  
+var app = new Woowahan();
+
+app.start({
+  design: {
+    url: '',
+    container: '#app',
+    view: HelloView
+  }
 });
-
-var index = new Index();
-
-$('body').html(index.render().$el);
