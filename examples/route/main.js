@@ -47,7 +47,7 @@ const siteDesign = {
       { url: 'overview/:page1', container: '.sub', view: View }
     ] }
   ] },
-  options: { empty: EmptyView }
+  options: { empty: page => { alert(`${page}는 없는 페이지!!`); } }
 };
 
 const woowahan = global.woowahan = new Woowahan;
