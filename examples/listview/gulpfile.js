@@ -13,7 +13,7 @@ var webpackConfig = require('./webpack.config.js')[environment];
 var port = $.util.env.port || 1337;
 var src = 'app';
 var dist = 'dist';
-var buildTaskPack = ['static', 'lib', 'html', 'styles', 'scripts'];
+var buildTaskPack = ['lib', 'html', 'scripts'];
 
 var autoprefixerBrowsers = [
   'ie >= 9',
@@ -37,38 +37,17 @@ gulp.task('scripts', () => {
     .pipe(gulp.dest(path.resolve(__dirname, dist, 'js')))
     .pipe($.size({ title : 'js' }))
     .pipe($.size())
-    .pipe($.connect.reload())
     .pipe($.if(notifyEnable, $.notify('Complete scripts')));
 });
 
 gulp.task('html', () => {
-  return gulp.src(path.resolve(src, 'index.html'))
+  return gulp.src(path.resolve('./', 'index.html'))
     .pipe(gulp.dest(path.resolve(__dirname, dist)))
-    .pipe($.size({ title : 'html' }))
-    .pipe($.connect.reload());
-});
-
-gulp.task('serve', () => {
-  $.connect.server({
-    root: dist,
-    port: port,
-    livereload: {
-      port: 35728
-    }
-  });
-});
-
-gulp.task('static', () => {
-  return gulp.src('static/**/*')
-    .pipe($.size({ title : 'static' }))
-    .pipe(gulp.dest(dist));
+    .pipe($.size({ title : 'html' }));
 });
 
 gulp.task('lib', () => {
-  gulp.src([
-    'node_modules/bootstrap/dist/**/*',
-    'node_modules/bootstrap-datepicker/dist/**/*'
-  ])
+  gulp.src(['node_modules/bootstrap/dist/**/*'])
     .pipe($.size({ title : 'lib:js/css folder structure' }))
     .pipe(gulp.dest(dist));
   gulp.src([
@@ -79,21 +58,9 @@ gulp.task('lib', () => {
     .pipe(gulp.dest(dist+'/js'));
 });
 
-gulp.task('styles', () => {
-  gulp.src('sass/**/*.scss')
-    .pipe($.sass().on('error', $.sass.logError))
-    .pipe(gulp.dest(path.resolve(__dirname, dist, 'css')));
-});
-
-gulp.task('watch', () => {
-  gulp.watch(src+'/index.html', ['html']);
-  gulp.watch('sass/**/*.scss', ['styles']);
-  gulp.watch([src+'/**/*.js', src+'/**/*.hbs'], ['scripts']);
-});
-
 gulp.task('clean', (cb) => {
   del([dist], cb);
 });
 
-gulp.task('default', ['clean'], () => gulp.start(_.concat(buildTaskPack, 'serve', 'watch')));
+gulp.task('default', ['build']);
 gulp.task('build', ['clean'], () => gulp.start(buildTaskPack));

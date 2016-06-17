@@ -1,33 +1,36 @@
-import Router from './router';
-import Users from './reducer/users';
-import OneUser from './reducer/one-user';
-
-import { Woowahan } from '../';
+import Woowahan from '../../';
+// import Users from './reducer/users';
+// import OneUser from './reducer/one-user';
+import LayoutView from './view/layout';
+// import UsersView from './view/users';
 
 import 'bootstrap';
 
-const DEFAULT_SETTING = {
-  reducers: [ Users, OneUser ],
-  routers: [Router]
-};
-
-let woowa;
-
-// use 1
-woowa = new Woowahan(DEFAULT_SETTING);
-
-woowa.on('start', () => $('.loading').show());
-woowa.on('finish', () => $('.loading').hide());
-
-woowa.start();
-
-// // use 2
-// woowa = new Woowahan;
-// woowa.use(Users);
-// woowa.use(OneUser);
-// woowa.use(Router);
+var app = new Woowahan();
 //
-// woowa.on('start', () => $('.loading').show());
-// woowa.on('finish', () => $('.loading').hide());
-//
-// woowa.start();
+// app.use(Users);
+// app.use(OneUser);
+
+/*
+app.start({
+  design: {
+    url: '',
+    container: '#app',
+    view: LayoutView,
+    pages: [
+      {
+        url: '/users',
+        container: '.content',
+        view: UsersView
+      }
+    ]
+  }
+});
+*/
+app.start({
+  design: {
+    url: '',
+    container: '#app',
+    view: LayoutView
+  }
+});

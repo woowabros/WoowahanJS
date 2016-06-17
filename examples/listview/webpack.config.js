@@ -1,8 +1,8 @@
 var webpack = require('webpack');
-var entry = './index.js';
+var entry = './main.js';
 var output = {
   path: __dirname,
-  filename: 'woowahan.js'
+  filename: 'bundle.js'
 };
 
 var uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
@@ -24,7 +24,7 @@ module.exports.development = {
     loaders : [
       { test: /\.js?$/, exclude: /node_modules/, loader: 'babel-loader' },
       { test: /\.css$/, exclude: /node_modules/, loader: 'css-loader' },
-      { test: /\.hbs$/, loader: 'handlebars-loader', query: { helperDirs: [__dirname+'/template-helper'] }}
+      { test: /\.hbs$/, exclude: /node_modules/, loader: 'handlebars-loader'}
     ]
   }
 };
@@ -37,7 +37,7 @@ module.exports.production = {
     loaders : [
       { test: /\.js?$/, exclude: /node_modules/, loader: 'babel-loader' },
       { test: /\.css$/, exclude: /node_modules/, loader: 'css-loader' },
-      { test: /\.hbs$/, loader: 'handlebars-loader', query: { helperDirs: [__dirname+'/template-helper'] }}
+      { test: /\.hbs$/, exclude: /node_modules/, loader: 'handlebars-loader'}
     ]
   },
   plugins: [ uglifyJsPlugin ]

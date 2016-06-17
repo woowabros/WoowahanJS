@@ -1,7 +1,7 @@
-import { CoreView } from '../core';
+import Woowahan from '../../../';
 import Template from './layout.hbs';
 
-export default CoreView.extend({
+export default Woowahan.View.create('LayoutView', {
   className: 'container',
   el: '.subview',
 
