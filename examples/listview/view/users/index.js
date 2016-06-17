@@ -1,6 +1,6 @@
-import { ActionCreator } from '../../core';
-import { FETCH_USERS, FETCH_ONE_USER } from '../../action';
-import { ListView } from '../../component';
+// import { ActionCreator } from '../../core';
+// import { FETCH_USERS, FETCH_ONE_USER } from '../../action';
+import { ListView } from '../../../../';
 import Template from './index.hbs';
 import User from './user';
 import Pager from '../control/pager';
@@ -33,6 +33,7 @@ export default ListView.extend({
 
   render() {
     this.$el.html(Template(this.model.toJSON()));
+    return this;
   },
 
   fetchUsers(data) {
@@ -52,14 +53,14 @@ export default ListView.extend({
   },
 
   onSelectedRow(row) {
-    this.dispatch(ActionCreator(FETCH_ONE_USER, { id: row.id, page: 1 }), this.fetchOneUser);
+    // this.dispatch(ActionCreator(FETCH_ONE_USER, { id: row.id, page: 1 }), this.fetchOneUser);
   },
 
   onRefresh() {
-    this.dispatch(ActionCreator(FETCH_USERS), this.fetchUsers);
+    // this.dispatch(ActionCreator(FETCH_USERS), this.fetchUsers);
   },
 
   onPaging(page) {
-    this.dispatch(ActionCreator(FETCH_USERS, { page: page }), this.fetchUsers);
+    // this.dispatch(ActionCreator(FETCH_USERS, { page: page }), this.fetchUsers);
   }
 });

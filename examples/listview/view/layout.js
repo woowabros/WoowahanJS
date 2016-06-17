@@ -3,7 +3,6 @@ import Template from './layout.hbs';
 
 export default Woowahan.View.create('LayoutView', {
   className: 'container',
-  el: '.subview',
 
   initialize() {
     this.super();
@@ -12,5 +11,6 @@ export default Woowahan.View.create('LayoutView', {
 
   render() {
     this.$el.html(Template());
+    return this;
   }
 });

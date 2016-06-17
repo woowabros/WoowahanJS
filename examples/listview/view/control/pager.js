@@ -1,7 +1,7 @@
-import { CoreView } from '../../core';
+import Woowahan from '../../../../';
 import Template from './pager.hbs';
 
-export default CoreView.extend({
+export default Woowahan.View.create('Pager', {
   namespace: 'View:Control:Pager',
   tagName: 'nav',
   
@@ -18,6 +18,7 @@ export default CoreView.extend({
   render() {
     this.logStamp(this.model.toJSON());
     this.$el.html(Template(this.model.toJSON()));
+    return this;
   },
 
   onPaging(event) {

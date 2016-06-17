@@ -1,5 +1,5 @@
 import Template from './user.hbs';
-import { ListViewRow } from '../../component';
+import { ListViewRow } from '../../../../';
 
 export default ListViewRow.extend({
   namespace: 'View:Users:User',
