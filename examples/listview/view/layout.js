@@ -3,6 +3,7 @@ import Template from './layout.hbs';
 
 export default CoreView.extend({
   className: 'container',
+  el: '.subview',
 
   initialize() {
     this.super();
