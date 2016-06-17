@@ -27,8 +27,8 @@ export default function(actionName, handler) {
 
   fn.id = () => this._id;
   fn.createtime = () => this._timestamp;
-  fn.addAction = (id) => global.woowa.addAction(id);
-  fn.removeAction = (id) => global.woowa.removeAction(id);
+  fn.addAction = (id) => global.woowahan.addAction(id);
+  fn.removeAction = (id) => global.woowahan.removeAction(id);
 
   fn.getData = function(url, settings) {
     if (typeof url === 'object') {

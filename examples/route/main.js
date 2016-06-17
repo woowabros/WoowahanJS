@@ -4,9 +4,6 @@ import TmpSub1 from './template/sub1.hbs';
 import TmpSub2 from './template/sub2.hbs';
 import TmpSub2_2 from './template/sub2-2.hbs';
 
-
-global.Woowahan = Woowahan;
-
 const MainView = Woowahan.View.create('Main', {
   render() {
     this.$el.html(TmpMain());

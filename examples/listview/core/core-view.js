@@ -92,7 +92,7 @@ var CoreView = Backbone.View.extend({
     action.__options = options || {};
 
     //TODO: 리펙토링
-    global.woowa.dispatch(action, _.bind(subscriber, this));
+    global.woowahan.dispatch(action, _.bind(subscriber, this));
   },
 
   setModel(attrs) {
