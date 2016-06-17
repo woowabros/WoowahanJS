@@ -26,20 +26,33 @@ const View = Woowahan.View.create('Sub', {
   }
 });
 
+const EmptyView = Woowahan.View.create('Empty', {
+  initialize(className) {
+    this.className = className;
+  },
+
+  render() {
+    this.$el.html(`<div class="${this.className}">빈 페이지</div>`);
+
+    return this;
+  }
+});
+
 // nextView.setElement(currentView.$('key'));
 
-Woowahan.Site.design([
-  { url: '', view: RootView, container: '.wrap', pages: [
+const siteDesign = {
+  design: { url: '', view: RootView, container: '.wrap', pages: [
     { url: 'company', container: '.content', view: View },
     { url: 'overview', container: '.content', view: View, pages: [
       { url: 'overview/:page1', container: '.sub', view: View }
     ] }
-  ] }
-]);
+  ] },
+  options: { empty: EmptyView }
+};
 
 const woowahan = global.woowahan = new Woowahan;
 
-woowahan.start();
+woowahan.start(siteDesign);
 
 // woowahan.URLMap.create([
 //   {
