@@ -1,7 +1,7 @@
 import Template from './user.hbs';
-import { ListViewRow } from '../../../../';
+import Woowahan from '../../../../';
 
-export default ListViewRow.extend({
+export default Woowahan.ItemView.create('User', {
   namespace: 'View:Users:User',
   tagName: 'tr',
   template: Template,

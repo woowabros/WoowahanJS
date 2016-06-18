@@ -1,10 +1,10 @@
-import Woowahan, { ListView } from '../../../../';
+import Woowahan from '../../../../';
 import { FETCH_USERS, FETCH_ONE_USER } from '../../action';
 import Template from './index.hbs';
 import User from './user';
 import Pager from '../control/pager';
 
-export default ListView.extend({
+export default Woowahan.CollectionView.create('Users', {
   namespace: 'View:Users',
   tagName: 'div',
   template: Template,
