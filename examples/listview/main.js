@@ -1,15 +1,15 @@
 import Woowahan from '../../';
-// import Users from './reducer/users';
-// import OneUser from './reducer/one-user';
+import Users from './reducer/users';
+import OneUser from './reducer/one-user';
 import LayoutView from './view/layout';
 import UsersView from './view/users';
 
 import 'bootstrap';
 
 var app = new Woowahan();
-//
-// app.use(Users);
-// app.use(OneUser);
+
+app.use(Users);
+app.use(OneUser);
 
 app.start({
   design: {
