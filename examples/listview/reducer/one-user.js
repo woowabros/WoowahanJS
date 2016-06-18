@@ -1,7 +1,7 @@
+import Woowahan from '../../../';
 import { FETCH_ONE_USER } from '../action';
-import { ReducerCreator } from '../core';
 
-var OneUser = ReducerCreator(FETCH_ONE_USER, function(options) {
+var OneUser = Woowahan.Reducer.create(FETCH_ONE_USER, function(options) {
   this.onSuccess = function(response) {
     this.finish(response);
   };
