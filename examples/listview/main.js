@@ -14,7 +14,7 @@ app.use(OneUser);
 
 app.start({
   layout: {
-    // container: '#app',
+    container: '#app',
     view: LayoutView
   },
   design: {
