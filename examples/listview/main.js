@@ -14,15 +14,16 @@ app.use(OneUser);
 
 app.start({
   layout: {
+    // container: '#app',
     view: LayoutView
   },
   design: {
     url: '/',
-    container: '#app',
+    container: '.content',
     view: WelcomeView,
     pages: [
       {
-        url: 'users',
+        url: '/users',
         container: '.content',
         view: UsersView
       }
