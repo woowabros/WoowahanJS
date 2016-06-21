@@ -90,6 +90,4 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# Build
-dist
-
+examples/**/dist
