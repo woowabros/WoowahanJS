@@ -16,8 +16,8 @@ export default Woowahan.View.create('Pager', {
   },
 
   render() {
-    this.logStamp(this.model.toJSON());
-    this.$el.html(Template(this.model.toJSON()));
+    this.logStamp(this.getModel());
+    this.$el.html(Template(this.getModel()));
     return this;
   },
 
