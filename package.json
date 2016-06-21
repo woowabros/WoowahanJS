@@ -2,7 +2,7 @@
   "name": "woowahan",
   "version": "0.0.9",
   "description": "Web application framework for BackboneJS",
-  "main": "dist/woowahan.js",
+  "main": "index.js",
   "scripts": {
     "proxy-server": "node ./server/proxy.js",
     "demo-server": "node ./server/demo.js"

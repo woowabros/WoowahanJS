@@ -1,1 +1,1 @@
-export default from './lib/woowahan';
+module.exports = require('./lib/woowahan');
