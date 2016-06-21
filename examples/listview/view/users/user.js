@@ -8,12 +8,12 @@ export default Woowahan.ItemView.create('User', {
 
   initialize(data) {
     this.super();
-    this.model = data;
+    this.setModel(data);
     this.render();
   },
 
   render() {
-    this.$el.html(this.template(this.model.toJSON()));
+    this.$el.html(this.template(this.getModel()));
 
     return this;
   },
