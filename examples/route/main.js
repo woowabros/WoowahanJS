@@ -1,53 +1,40 @@
 import Woowahan from '../../';
-import TmpMain from './template/main.hbs';
-import TmpSub1 from './template/sub1.hbs';
-import TmpSub2 from './template/sub2.hbs';
-import TmpSub2_2 from './template/sub2-2.hbs';
 
-const MainView = Woowahan.View.create('Main', {
-  render() {
-    this.$el.html(TmpMain());
-
-    return this;
-  }
-});
-
-const Sub1View = Woowahan.View.create('Sub1', {
-  render() {
-    this.$el.html(TmpSub1());
-
-    return this;
-  }
-});
-
-const Sub2View = Woowahan.View.create('Main', {
-  render() {
-    this.$el.html(TmpSub2());
-
-    return this;
-  }
-});
-
-const Sub2_2View = Woowahan.View.create('Main', {
-  render() {
-    this.$el.html(TmpSub2_2());
-
-    return this;
-  }
-});
-
-// nextView.setElement(currentView.$('key'));
-
-const siteDesign = {
-  design: { url: '', view: MainView, container: '.wrap', pages: [
-    { url: 'sub1', container: '.wrap', view: Sub1View },
-    { url: 'sub2', container: '.wrap', view: Sub2View, pages: [
-      { url: 'sub2_2', container: '.content', view: Sub2_2View }
-    ] }
-  ] },
-  options: { empty: page => { alert(`${page}는 없는 페이지!!`); } }
-};
+import { 
+  MainView,
+  LayoutView1, LayoutView2, LayoutView3,
+  MainView1, MainView2, MainView3, 
+  ContentView1, ContentView2, ContentView3 } from './view/';
 
 const woowahan = new Woowahan;
 
+/* layout 생성 & 등록 */
+woowahan.use(Woowahan.Layout('.wrap', LayoutView1));
+woowahan.use(Woowahan.Layout('.wrap', LayoutView2));
+woowahan.use(Woowahan.Layout('.wrap', LayoutView3));
+
+/* 사이트맵 디자인 */
+const siteDesign = {
+  design: [
+    { url: '/', view: MainView, container: '.wrap' },
+    { url: '/layout1', view: MainView1, container: '#content', layout: 'LayoutView1', pages: [
+      { url: '/layout1/content1', view: ContentView1, container: '#content' },
+      { url: '/layout1/content2', view: ContentView2, container: '#content' },
+      { url: '/layout1/content3', view: ContentView3, container: '#content' }
+    ] },
+    { url: '/layout2', view: MainView2, container: '#content', layout: 'LayoutView2', pages: [
+      { url: '/layout2/content1', view: ContentView1, container: '#content' },
+      { url: '/layout2/content2', view: ContentView2, container: '#content' },
+      { url: '/layout2/content3', view: ContentView3, container: '#content' }
+    ] },
+    { url: '/layout3', view: MainView3, container: '#content', layout: 'LayoutView3', pages: [
+      { url: '/layout3/content1', view: ContentView1, container: '#content' },
+      { url: '/layout3/content2', view: ContentView2, container: '#content' },
+      { url: '/layout3/content3', view: ContentView3, container: '#content' }
+    ] },
+  ],
+  options: { empty: page => { alert(`${page}는 없는 페이지!!`); } }
+};
+
+/* 웹앱 시작 */
 woowahan.start(siteDesign);
