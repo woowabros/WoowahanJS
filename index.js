@@ -1,3 +1,3 @@
-import Woowahan from './lib/woowahan';
+import woowahan from './lib/woowahan';
 
-export default Woowahan;
+export default woowahan;
