@@ -12,6 +12,10 @@ var app = new Woowahan();
 app.use(Users);
 app.use(OneUser);
 
+console.log(Woowahan.Types.String());
+console.log(Woowahan.Types.Array({ required: true }));
+console.log(Woowahan.Types.Number({ min: 0, max: 100 }));
+
 app.start({
   layout: {
     container: '#app',

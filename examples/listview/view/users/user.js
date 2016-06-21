@@ -19,6 +19,6 @@ export default Woowahan.ItemView.create('User', {
   },
 
   onSelectedRow(event, trigger) {
-    trigger({ id: this.model.get('id') });
+    trigger({ id: this.getModel('id') });
   }
 });
