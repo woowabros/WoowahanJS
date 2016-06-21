@@ -7,12 +7,14 @@ WoowahanJS는 BackboneJS를 기반으로 작성된 SPA 앱 개발용 웹프레�
 프로젝트를 빌드 하기 위해선 다음의 구성요소가 개발자의 PC에 미리 설치되어 있어야합니다
 
 * node.js
+* gulp
 
 ## 설치
 
 ```
 $ git clone https://github.com/woowabros/WoowahanJS.git myapp
 $ cd myapp && npm install
+$ npm install --global gulp-cli
 $ gulp build
 ```
 
