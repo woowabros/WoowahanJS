@@ -6,12 +6,12 @@ import {
   MainView1, MainView2, MainView3, 
   ContentView1, ContentView2, ContentView3 } from './view/';
 
-const woowahan = new Woowahan;
+const app = new Woowahan;
 
 /* layout 생성 & 등록 */
-woowahan.use(Woowahan.Layout('.wrap', LayoutView1));
-woowahan.use(Woowahan.Layout('.wrap', LayoutView2));
-woowahan.use(Woowahan.Layout('.wrap', LayoutView3));
+app.use(Woowahan.Layout('.wrap', LayoutView1));
+app.use(Woowahan.Layout('.wrap', LayoutView2));
+app.use(Woowahan.Layout('.wrap', LayoutView3));
 
 /* 사이트맵 디자인 */
 const siteDesign = {
@@ -37,4 +37,4 @@ const siteDesign = {
 };
 
 /* 웹앱 시작 */
-woowahan.start(siteDesign);
+app.start(siteDesign);
