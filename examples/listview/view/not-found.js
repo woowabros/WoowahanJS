@@ -1,12 +1,13 @@
 import { CoreView } from '../core';
 
 export default CoreView.extend({
+  template: '<strong>Empty Page</strong>',
+
   initialize() {
     this.super();
-    this.render();
-  },
-
-  render() {
-    this.$el.html('<strong>Empty Page</strong>');
   }
+
+  // render() {
+  //   this.$el.html('<strong>Empty Page</strong>');
+  // }
 });

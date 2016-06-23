@@ -2,14 +2,33 @@ import Woowahan from '../../../';
 import Template from './content1.hbs';
 
 export default Woowahan.View.create('ContentView1', {
-  initialize() {
-    this.super();
-    this.render();
+  className: 'big',
+  template: Template,
+  model: {},
+
+  events: {
+    'click': 'onClick'
   },
   
-  render() {
-    this.$el.html(Template());
+  initialize() {
+    this.super();
+
+    this.model.text = 'init';
+  },
+
+  beforeMount: function(renderData) {
+    renderData.text += ' & mount';
     
-    return this;
+    return renderData;
+  },
+
+  afterMount: function(el) {
+    console.log(el);
+
+    el.find('p').css('color', 'red');
+  },
+
+  onClick() {
+    alert('click');
   }
 });

@@ -10,6 +10,7 @@ export default Woowahan.CollectionView.create('Users', {
   template: Template,
   rowContainer: '.list > tbody',
   rowView: User,
+  template: Template,
 
   events: {
     'click [data-action=refresh]': 'onRefresh',
@@ -30,10 +31,10 @@ export default Woowahan.CollectionView.create('Users', {
     this.onRefresh();
   },
 
-  render() {
-    this.$el.html(Template(this.model.toJSON()));
-    return this;
-  },
+  // render() {
+  //   this.$el.html(Template(this.model.toJSON()));
+  //   return this;
+  // },
 
   fetchUsers(data) {
     this.reload(data.resultSet);

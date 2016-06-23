@@ -12,11 +12,11 @@ export default Woowahan.ItemView.create('User', {
     this.render();
   },
 
-  render() {
-    this.$el.html(this.template(this.getModel()));
-
-    return this;
-  },
+  // render() {
+  //   this.$el.html(this.template(this.getModel()));
+  //
+  //   return this;
+  // },
 
   onSelectedRow(event, trigger) {
     trigger({ id: this.getModel('id') });
