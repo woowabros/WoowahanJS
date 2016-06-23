@@ -6,8 +6,4 @@ export default CoreView.extend({
   initialize() {
     this.super();
   }
-
-  // render() {
-  //   this.$el.html('<strong>Empty Page</strong>');
-  // }
 });

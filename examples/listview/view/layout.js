@@ -8,9 +8,4 @@ export default Woowahan.View.create('LayoutView', {
   initialize() {
     this.super();
   }
-
-  // render() {
-  //   this.$el.html(Template());
-  //   return this;
-  // }
 });

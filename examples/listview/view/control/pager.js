@@ -13,14 +13,7 @@ export default Woowahan.View.create('Pager', {
   initialize(model) {
     this.super();
     this.setModel(model);
-    this.render();
   },
-
-  // render() {
-  //   this.logStamp(this.getModel());
-  //   this.$el.html(Template(this.getModel()));
-  //   return this;
-  // },
 
   onPaging(event) {
     this.trigger('paging', +event.target.dataset.page);
