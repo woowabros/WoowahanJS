@@ -15,11 +15,11 @@ var mySchema = Woowahan.Schema.create('hoho', {
   age:    Woowahan.Types.Number({ min: 10, max: 100 })
 });
 
-mySchema.validate({
-  name: '김민태',
-  gender: '수석',
-  age: 4
+var error = mySchema.validate({
+  name: '김민태'
 });
+
+console.log(error);
 
 app.use(myTask);
 
