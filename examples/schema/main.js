@@ -9,14 +9,17 @@ var myTask = Woowahan.Reducer.create('my-task', function (data) {
 });
 
 var mySchema = Woowahan.Schema.create('hoho', {
-  name: Woowahan.Types.String({ required: true, max: 10 }),
-  gender: Woowahan.Types.String({ required: true })
+  name:   Woowahan.Types.String({ required: true, max: 10 }),
+  gender: Woowahan.Types.String({ required: true }),
+  family: Woowahan.Types.Array(),
+  age:    Woowahan.Types.Number({ min: 10, max: 100 })
 });
 
-mySchema.validate({
-  name: '김민태',
-  title: '수석'
+var error = mySchema.validate({
+  name: '김민태'
 });
+
+console.log(error);
 
 app.use(myTask);
 
