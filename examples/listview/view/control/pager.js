@@ -11,8 +11,9 @@ export default Woowahan.View.create('Pager', {
   },
 
   initialize(model) {
-    this.super();
     this.setModel(model);
+    
+    this.super();
   },
 
   onPaging(event) {
