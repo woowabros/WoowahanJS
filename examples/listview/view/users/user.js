@@ -7,15 +7,9 @@ export default Woowahan.ItemView.create('User', {
   template: Template,
 
   initialize(data) {
-    this.super();
     this.setModel(data);
-    this.render();
-  },
-
-  render() {
-    this.$el.html(this.template(this.getModel()));
-
-    return this;
+    
+    this.super();
   },
 
   onSelectedRow(event, trigger) {

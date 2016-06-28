@@ -12,18 +12,13 @@ var app = new Woowahan();
 app.use(Users);
 app.use(OneUser);
 
-console.log(Woowahan.Types.String());
-console.log(Woowahan.Types.Array({ required: true }));
-console.log(Woowahan.Types.Number({ min: 0, max: 100 }));
+app.use(Woowahan.Layout('#app', LayoutView));
 
 app.start({
-  layout: {
-    container: '#app',
-    view: LayoutView
-  },
   design: {
     url: '/',
     container: '.content',
+    layout: 'LayoutView',
     view: WelcomeView,
     pages: [
       {

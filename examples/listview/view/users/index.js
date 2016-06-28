@@ -7,9 +7,9 @@ import Pager from '../control/pager';
 export default Woowahan.CollectionView.create('Users', {
   namespace: 'View:Users',
   tagName: 'div',
-  template: Template,
   rowContainer: '.list > tbody',
   rowView: User,
+  template: Template,
 
   events: {
     'click [data-action=refresh]': 'onRefresh',
@@ -17,22 +17,18 @@ export default Woowahan.CollectionView.create('Users', {
   },
 
   initialize() {
-    this.super();
-
     this.setModel({
       prevPage: 0,
       currentPage: 1,
       nextPage: 2,
       numOfRows: 0
     });
-
-    this.render();
-    this.onRefresh();
+    
+    this.super();
   },
-
-  render() {
-    this.$el.html(Template(this.model.toJSON()));
-    return this;
+  
+  afterMount() {
+    this.onRefresh();
   },
 
   fetchUsers(data) {
