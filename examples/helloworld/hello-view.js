@@ -7,11 +7,11 @@ export default Woowahan.View.create('Index', {
     this.super();
   },
   
-  beforeMount(renderData) {
-    
+  viewWillMount(renderData) {
+    console.log('viewWillMount');
   },
   
-  afterMount($el) {
+  viewDidMount($el) {
     $el.css('font-size', 50);
   }
 });

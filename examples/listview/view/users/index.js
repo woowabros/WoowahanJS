@@ -27,7 +27,7 @@ export default Woowahan.CollectionView.create('Users', {
     this.super();
   },
   
-  afterMount() {
+  viewDidMount() {
     this.onRefresh();
   },
 
