@@ -17,8 +17,6 @@ export default Woowahan.CollectionView.create('Users', {
   },
 
   initialize() {
-    this.super();
-
     this.setModel({
       prevPage: 0,
       currentPage: 1,
@@ -26,6 +24,10 @@ export default Woowahan.CollectionView.create('Users', {
       numOfRows: 0
     });
     
+    this.super();
+  },
+  
+  afterMount() {
     this.onRefresh();
   },
 
