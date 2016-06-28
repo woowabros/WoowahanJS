@@ -1,25 +1,21 @@
 import Woowahan from '../../';
 import HelloView from './hello-view';
 
+import 'bootstrap';
+
 var app = new Woowahan();
 
-var myTask = Woowahan.Reducer.create('my-task', function (data) {
+var joinSchema = Woowahan.Schema.create('JoinSchema', {
+  id:     Woowahan.Types.String({ required: true, min: 4, max: 20 }),
+  name:   Woowahan.Types.String({ required: true, max: 30 }),
+  email:  Woowahan.Types.String({ required: true }),
+  memo:   Woowahan.Types.String()
+});
+
+var myTask = Woowahan.Reducer.create('my-task', joinSchema, function (data) {
   console.log('ok my task', data);
   this.finish();
 });
-
-var mySchema = Woowahan.Schema.create('hoho', {
-  name:   Woowahan.Types.String({ required: true, max: 10 }),
-  gender: Woowahan.Types.String({ required: true }),
-  family: Woowahan.Types.Array(),
-  age:    Woowahan.Types.Number({ min: 10, max: 100 })
-});
-
-var error = mySchema.validate({
-  name: '김민태'
-});
-
-console.log(error);
 
 app.use(myTask);
 

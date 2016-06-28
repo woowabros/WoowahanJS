@@ -1,103 +1,96 @@
-import chai from 'chai';
+import { assert } from 'chai';
 import Woowahan from '../';
-
-chai.should();
 
 describe('Types', () => {
   describe('Create String Type', () => {
-    it('Default Attributes', done => {
-      let stringType = Woowahan.Types.String();
+    it('Default Attributes', () => {
+      let type = Woowahan.Types.String();
 
-      stringType.should.be.an('object');
-      stringType.name.should.equal('string');
-      stringType.defaultValue.should.equal('');
-      stringType.required.should.equal(false);
-
-      done();
+      assert.typeOf(type, 'object');
+      assert.equal(type.name, 'string');
+      assert.equal(type.defaultValue, '');
+      assert.equal(type.required, false);
     });
 
-    it('Set Required Attributes', done => {
-      let stringType = Woowahan.Types.String({ required: true });
+    it('Set Required Attributes', () => {
+      let type = Woowahan.Types.String({ required: true });
 
-      stringType.required.should.equal(true);
-
-      done();
+      assert.equal(type.required, true);
     });
 
-    it('Set DefaultValue Attributes', done => {
+    it('Set DefaultValue Attributes', () => {
       let defaultValue = 'Do Something';
-      let stringType = Woowahan.Types.String({ defaultValue });
+      let type = Woowahan.Types.String({ defaultValue });
 
-      stringType.defaultValue.should.equal(defaultValue);
-
-      done();
+      assert.equal(type.defaultValue, defaultValue);
     });
 
-    it('Set Min, Max Attributes', done => {
-      let stringType = Woowahan.Types.String({ min: 4, max: 20 });
+    it('Set Min, Max Attributes', () => {
+      let type = Woowahan.Types.String({ min: 4, max: 20 });
 
-      stringType.min.should.equal(4);
-      stringType.max.should.equal(20);
-
-      done();
+      assert.equal(type.min, 4);
+      assert.equal(type.max, 20);
     });
   });
 
   describe('Create Number Type', () => {
-    it('Default Attributes', done => {
-      let numberType = Woowahan.Types.Number();
+    it('Default Attributes', () => {
+      let type = Woowahan.Types.Number();
 
-      numberType.should.be.an('object');
-      numberType.name.should.equal('number');
-      numberType.defaultValue.should.equal(0);
-      numberType.required.should.equal(false);
-
-      done();
+      assert.typeOf(type, 'object');
+      assert.equal(type.name, 'number');
+      assert.equal(type.defaultValue, 0);
+      assert.equal(type.required, false);
     });
 
-    it('Set Required Attributes', done => {
-      let numberType = Woowahan.Types.Number({ required: true });
+    it('Set Required Attributes', () => {
+      let type = Woowahan.Types.Number({ required: true });
 
-      numberType.required.should.equal(true);
-
-      done();
+      assert.equal(type.required, true);
     });
 
-    it('Set DefaultValue Attributes', done => {
+    it('Set DefaultValue Attributes', () => {
       let defaultValue = 10;
-      let numberType = Woowahan.Types.Number({ defaultValue });
+      let type = Woowahan.Types.Number({ defaultValue });
 
-      numberType.defaultValue.should.equal(defaultValue);
-
-      done();
+      assert.equal(type.defaultValue, defaultValue);
     });
 
-    it('Set Min, Max Attributes', done => {
-      let numberType = Woowahan.Types.Number({ min: 4, max: 20 });
+    it('Set Min, Max Attributes', () => {
+      let type = Woowahan.Types.Number({ min: 4, max: 20 });
 
-      numberType.min.should.equal(4);
-      numberType.max.should.equal(20);
-
-      done();
+      assert.equal(type.min, 4);
+      assert.equal(type.max, 20);
     });
   });
 
   describe('Create Array Type', () => {
-    it('Default Attributes', done => {
-      let arrayType = Woowahan.Types.Array();
+    it('Default Attributes', () => {
+      let type = Woowahan.Types.Array();
 
-      arrayType.should.be.an('object');
-      arrayType.name.should.equal('array');
-
-      done();
+      assert.typeOf(type, 'object');
+      assert.equal(type.name, 'array');
     });
 
-    it('Set Required Attributes', done => {
-      let arrayType = Woowahan.Types.Array({ required: true });
+    it('Set Required Attributes', () => {
+      let type = Woowahan.Types.Array({ required: true });
 
-      arrayType.required.should.equal(true);
+      assert(type.required, true);
+    });
+  });
 
-      done();
+  describe('Create Email Type', () => {
+    it('Default Attributes', () => {
+      let type = Woowahan.Types.Email();
+
+      assert.typeOf(type, 'object');
+      assert.equal(type.name, 'email');
+    });
+
+    it('Set Required Attributes', () => {
+      let type = Woowahan.Types.Email({ required: true });
+
+      assert(type.required, true);
     });
   });
 });
