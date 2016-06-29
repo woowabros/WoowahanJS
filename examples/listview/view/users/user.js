@@ -11,6 +11,10 @@ export default Woowahan.ItemView.create('User', {
     
     this.super();
   },
+  
+  viewWillUnmount() {
+    console.log(this.getModel());
+  },
 
   onSelectedRow(event, trigger) {
     trigger({ id: this.getModel('id') });
