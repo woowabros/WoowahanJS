@@ -14,27 +14,27 @@ app.use(Woowahan.Layout('.wrap', LayoutView2));
 app.use(Woowahan.Layout('.wrap', LayoutView3));
 
 /* 사이트맵 디자인 */
-const siteDesign = {
-  design: [
-    { url: '/', view: MainView, container: '.wrap' },
-    { url: '/layout1', view: MainView1, container: '#content', layout: 'LayoutView1', pages: [
-      { url: '/layout1/content1', view: ContentView1, container: '#content' },
-      { url: '/layout1/content2', view: ContentView2, container: '#content' },
-      { url: '/layout1/content3', view: ContentView3, container: '#content' }
-    ] },
-    { url: '/layout2', view: MainView2, container: '#content', layout: 'LayoutView2', pages: [
-      { url: '/layout2/content1', view: ContentView1, container: '#content' },
-      { url: '/layout2/content2', view: ContentView2, container: '#content' },
-      { url: '/layout2/content3', view: ContentView3, container: '#content' }
-    ] },
-    { url: '/layout3', view: MainView3, container: '#content', layout: 'LayoutView3', pages: [
-      { url: '/layout3/content1', view: ContentView1, container: '#content' },
-      { url: '/layout3/content2', view: ContentView2, container: '#content' },
-      { url: '/layout3/content3', view: ContentView3, container: '#content' }
-    ] },
-  ],
-  options: { empty: page => { alert(`${page}는 없는 페이지!!`); } }
-};
+const siteDesign = [
+  { url: '/', view: MainView, container: '.wrap' },
+  { url: '/layout1', view: MainView1, container: '#content', layout: 'LayoutView1', pages: [
+    { url: '/layout1/content1', view: ContentView1, container: '#content' },
+    { url: '/layout1/content2', view: ContentView2, container: '#content' },
+    { url: '/layout1/content3', view: ContentView3, container: '#content' }
+  ] },
+  { url: '/layout2', view: MainView2, container: '#content', layout: 'LayoutView2', pages: [
+    { url: '/layout2/content1', view: ContentView1, container: '#content' },
+    { url: '/layout2/content2', view: ContentView2, container: '#content' },
+    { url: '/layout2/content3', view: ContentView3, container: '#content' }
+  ] },
+  { url: '/layout3', view: MainView3, container: '#content', layout: 'LayoutView3', pages: [
+    { url: '/layout3/content1', view: ContentView1, container: '#content' },
+    { url: '/layout3/content2', view: ContentView2, container: '#content' },
+    { url: '/layout3/content3', view: ContentView3, container: '#content' }
+  ] },
+];
+
+/* 사이트 옵션 */
+const siteOption = { empty: page => { alert(`${page}는 없는 페이지!!`); } };
 
 /* 웹앱 시작 */
-app.start(siteDesign);
+app.start(siteDesign, siteOption);

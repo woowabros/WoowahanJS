@@ -15,17 +15,15 @@ app.use(OneUser);
 app.use(Woowahan.Layout('#app', LayoutView));
 
 app.start({
-  design: {
-    url: '/',
-    container: '.content',
-    layout: 'LayoutView',
-    view: WelcomeView,
-    pages: [
-      {
-        url: '/users',
-        container: '.content',
-        view: UsersView
-      }
-    ]
-  }
+  url: '/',
+  container: '.content',
+  layout: 'LayoutView',
+  view: WelcomeView,
+  pages: [
+    {
+      url: '/users',
+      container: '.content',
+      view: UsersView
+    }
+  ]
 });

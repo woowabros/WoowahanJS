@@ -1,3 +1,5 @@
+/*global woowahan*/
+
 import Woowahan from '../../';
 import HelloView from './hello-view';
 
@@ -20,11 +22,9 @@ var myTask = Woowahan.Reducer.create('my-task', joinSchema, function (data) {
 app.use(myTask);
 
 app.start({
-  design: {
-    url: '',
-    container: '#app',
-    view: HelloView
-  }
+  url: '',
+  container: '#app',
+  view: HelloView
 });
 
 woowahan.dispatch({ type: 'my-task'});
