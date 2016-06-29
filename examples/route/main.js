@@ -17,19 +17,19 @@ app.use(Woowahan.Layout('.wrap', LayoutView3));
 const siteDesign = [
   { url: '/', view: MainView, container: '.wrap' },
   { url: '/layout1', view: MainView1, container: '#content', layout: 'LayoutView1', pages: [
-    { url: '/layout1/content1', view: ContentView1, container: '#content' },
-    { url: '/layout1/content2', view: ContentView2, container: '#content' },
-    { url: '/layout1/content3', view: ContentView3, container: '#content' }
+    { url: 'content1', view: ContentView1 },
+    { url: 'content2', view: ContentView2 },
+    { url: 'content3', view: ContentView3 }
   ] },
   { url: '/layout2', view: MainView2, container: '#content', layout: 'LayoutView2', pages: [
-    { url: '/layout2/content1', view: ContentView1, container: '#content' },
-    { url: '/layout2/content2', view: ContentView2, container: '#content' },
-    { url: '/layout2/content3', view: ContentView3, container: '#content' }
+    { url: 'content1', view: ContentView1 },
+    { url: 'content2', view: ContentView2 },
+    { url: 'content3', view: ContentView3 }
   ] },
   { url: '/layout3', view: MainView3, container: '#content', layout: 'LayoutView3', pages: [
-    { url: '/layout3/content1', view: ContentView1, container: '#content' },
-    { url: '/layout3/content2', view: ContentView2, container: '#content' },
-    { url: '/layout3/content3', view: ContentView3, container: '#content' }
+    { url: 'content1', view: ContentView1 },
+    { url: 'content2', view: ContentView2 },
+    { url: 'content3', view: ContentView3 }
   ] },
 ];
 
