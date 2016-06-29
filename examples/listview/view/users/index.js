@@ -28,7 +28,7 @@ export default Woowahan.CollectionView.create('Users', {
   },
   
   viewDidMount() {
-    this.onRefresh();
+    this.dispatch(Woowahan.Action.create(FETCH_USERS), this.fetchUsers);
   },
 
   fetchUsers(data) {
@@ -52,7 +52,7 @@ export default Woowahan.CollectionView.create('Users', {
   },
 
   onRefresh() {
-    this.dispatch(Woowahan.Action.create(FETCH_USERS), this.fetchUsers);
+    this.updateView();
   },
 
   onPaging(page) {
