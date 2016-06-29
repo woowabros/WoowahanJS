@@ -6,7 +6,7 @@ import {
   MainView1, MainView2, MainView3, 
   ContentView1, ContentView2, ContentView3 } from './view/';
 
-const app = new Woowahan;
+const app = Woowahan;
 
 /* layout 생성 & 등록 */
 app.use(Woowahan.Layout('.wrap', LayoutView1));

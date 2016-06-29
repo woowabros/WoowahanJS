@@ -8,9 +8,17 @@ export default Woowahan.View.create('Index', {
     'submit form': 'onSave'
   },
 
-  render() {
-    this.$el.html(Template());
-    return this;
+  initialize() {
+    this.super();
+  },
+
+  viewWillMount(renderData) {
+    this.log('will mount');
+    return Object.assign({}, renderData);
+  },
+
+  viewDidMount($el) {
+    this.log('did mount');
   },
 
   onSave() {
@@ -20,7 +28,7 @@ export default Woowahan.View.create('Index', {
 
     console.log({ id, name, email });
 
-    this.dispatch(Woowahan.Action.create('my-task', { id, name, email }), this.onCompleteSave)
+    this.dispatch(Woowahan.Action.create('my-task', { id, name, email }), this.onCompleteSave);
     return false;
   },
 

@@ -10,13 +10,12 @@ var app = new Woowahan();
 var joinSchema = Woowahan.Schema.create('JoinSchema', {
   id:     Woowahan.Types.String({ required: true, min: 4, max: 20 }),
   name:   Woowahan.Types.String({ required: true, max: 30 }),
-  email:  Woowahan.Types.String({ required: true }),
+  email:  Woowahan.Types.Email({ required: true }),
   memo:   Woowahan.Types.String()
 });
 
-var myTask = Woowahan.Reducer.create('my-task', joinSchema, function (data) {
-  console.log('ok my task', data);
-  this.finish();
+var myTask = Woowahan.Reducer.create('save-user-profile', joinSchema, function (data) {
+  this.finish(data);
 });
 
 app.use(myTask);
@@ -27,4 +26,3 @@ app.start({
   view: HelloView
 });
 
-woowahan.dispatch({ type: 'my-task'});
