@@ -33,6 +33,6 @@ export default Woowahan.View.create('Index', {
   },
 
   onCompleteSave(data) {
-    console.log('complete');
+    alert('저장 완료');
   }
 });
