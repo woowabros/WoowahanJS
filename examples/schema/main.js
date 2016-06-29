@@ -20,6 +20,10 @@ var myTask = Woowahan.Reducer.create('save-user-profile', joinSchema, function (
 
 app.use(myTask);
 
+app.on('error', errors => {
+  alert(_(errors).map(o => o.message).join('\n'));
+});
+
 app.start({
   url: '',
   container: '#app',

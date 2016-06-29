@@ -28,7 +28,7 @@ export default Woowahan.View.create('Index', {
 
     console.log({ id, name, email });
 
-    this.dispatch(Woowahan.Action.create('my-task', { id, name, email }), this.onCompleteSave);
+    this.dispatch(Woowahan.Action.create('save-user-profile', { id, name, email }), this.onCompleteSave);
     return false;
   },
 
