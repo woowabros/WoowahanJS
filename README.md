@@ -12,8 +12,7 @@ WoowahanJS는 퍼블리셔와 프로그래머간 협업이 쉬운 환경을 제�
 
 WoowahanJS는 유명한 [BackboneJS](http://backbonejs.org) 기반 위에서 작성되었습니다. [BackboneJS](http://backbonejs.org)는 [UnderscoreJS](http://underscorejs.org), [jQuery](http://jquery.com) 종속성을 포함하므로 WoowahanJS도 자연스럽게 언제든 [UnderscoreJS](http://underscorejs.org)와 [jQuery](http://jquery.com)를 사용할 수 있습니다.
 
-API 호출에서 촉발되는 상태 흐름과 관리를 위해 [React](https://facebook.github.io/react/) 프로젝트의 [Flux](https://facebook.github.io/flux) 및 [Redux](http://redux.js.org) 아키텍처의 아이디어를 구현했습니다.
-하지만 WoowahanJS를 사용하기 위해 이들을 선행학습 할 필요는 없습니다.
+API 호출에서 촉발되는 상태 흐름과 관리를 위해 [React](https://facebook.github.io/react/) 프로젝트의 [Flux](https://facebook.github.io/flux) 및 [Redux](http://redux.js.org) 아키텍처의 아이디어를 구현했습니다. 하지만 WoowahanJS를 사용하기 위해 이들을 선행학습 할 필요는 없습니다.
 
 ## 빠르게 시작하기
 
@@ -48,4 +47,6 @@ app.start({
 
 다음 링크에서 더 많은 정보를 제공합니다.
 
-[Docs](./docs/);
+* [기초](./docs/basic.md)
+* [심화](./docs/advanced.md)
+* [케이스 스터디](./docs/case-study.md)
