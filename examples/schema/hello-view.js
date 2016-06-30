@@ -26,8 +26,6 @@ export default Woowahan.View.create('Index', {
     let name = this.$el.find('#name').val();
     let email = this.$el.find('#email').val();
 
-    console.log({ id, name, email });
-
     this.dispatch(Woowahan.Action.create('save-user-profile', { id, name, email }), this.onCompleteSave);
     return false;
   },
