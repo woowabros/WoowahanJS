@@ -10,14 +10,14 @@ WoowahanJS는 퍼블리셔와 프로그래머간 협업이 쉬운 환경을 제�
 
 ## 영향을 받은 것들
 
-WoowahanJS는 유명한 BackboneJS 기반 위에서 작성되었습니다. BackboneJS는 UnderscoreJS, jQuery 종속성을 포함하므로 WoowahanJS도 자연스럽게 언제든 jQuery와 UnderscoreJS를 사용할 수 있습니다.
+WoowahanJS는 유명한 [BackboneJS](http://backbonejs.org) 기반 위에서 작성되었습니다. [BackboneJS](http://backbonejs.org)는 [UnderscoreJS](http://underscorejs.org), [jQuery](http://jquery.com) 종속성을 포함하므로 WoowahanJS도 자연스럽게 언제든 [UnderscoreJS](http://underscorejs.org)와 [jQuery](http://jquery.com)를 사용할 수 있습니다.
 
-API 호출에서 촉발되는 상태 흐름과 관리를 위해 React 프로젝트의 Flux 및 Redux 아키텍처의 아이디어를 구현했습니다.
+API 호출에서 촉발되는 상태 흐름과 관리를 위해 [React](https://facebook.github.io/react/) 프로젝트의 [Flux](https://facebook.github.io/flux) 및 [Redux](http://redux.js.org) 아키텍처의 아이디어를 구현했습니다.
 하지만 WoowahanJS를 사용하기 위해 이들을 선행학습 할 필요는 없습니다.
 
 ## 빠르게 시작하기
 
-저장소를 Clone 한 뒤 Example 디렉토리의 셈플들을 살펴보세요. WoowahanJS를 가장 빠르게 시작할 수 있는 기름길입니다.
+저장소를 Clone 한 뒤 [Example](https://github.com/ibare/WoowahanJS/tree/develop/examples) 디렉토리의 셈플들을 살펴보세요. WoowahanJS를 가장 빠르게 시작할 수 있는 지름길입니다.
 
 ## 설치
 
