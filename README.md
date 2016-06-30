@@ -42,6 +42,10 @@ const Main = Woowahan.View.create('Main', {
 const app = Woowahan();
 
 app.start({
-  url: '/', container: '#app', view: Main
+  url: '/', container: 'body', view: Main
 });
 ```
+
+다음 링크에서 더 많은 정보를 제공합니다.
+
+[Docs](./docs/);
