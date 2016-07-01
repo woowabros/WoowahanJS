@@ -13,7 +13,7 @@ export default Woowahan.ItemView.create('User', {
   },
   
   viewWillUnmount() {
-    console.log(this.getModel());
+    // console.log(this.getModel());
   },
 
   onSelectedRow(event, trigger) {

@@ -17,7 +17,8 @@ export default Woowahan.View.create('Pager', {
   },
 
   onPaging(event) {
-    this.trigger('paging', +event.target.dataset.page);
+    this.dispatch(Woowahan.Event.create('paging', +event.target.dataset.page));
+
     return false;
   },
 
