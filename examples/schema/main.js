@@ -1,4 +1,4 @@
-/*global woowahan*/
+/*global _*/
 
 import Woowahan from '../../';
 import HelloView from './hello-view';

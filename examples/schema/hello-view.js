@@ -5,7 +5,7 @@ export default Woowahan.View.create('Index', {
   className: 'container',
   template: Template,
   events: {
-    'submit form': 'onSave'
+    '@submit form': 'onSave(#id, #name, #email)'
   },
 
   initialize() {
@@ -21,14 +21,9 @@ export default Woowahan.View.create('Index', {
     this.log('did mount');
   },
 
-  onSave() {
-    let id = this.$el.find('#id').val();
-    let name = this.$el.find('#name').val();
-    let email = this.$el.find('#email').val();
-
-    console.log({ id, name, email });
-
+  onSave(id, name, email) {
     this.dispatch(Woowahan.Action.create('save-user-profile', { id, name, email }), this.onCompleteSave);
+    
     return false;
   },
 
