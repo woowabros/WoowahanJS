@@ -32,10 +32,7 @@ $ npm install --save https://[github-id]:[github-password]@github.com/woowabros/
 import Woowahan from 'woowahan';
 
 const Main = Woowahan.View.create('Main', {
-  template: '<h1>Hello, WoowahanJs</h1>',
-  initialize() {
-    this.super();
-  }
+  template: '<h1>Hello, WoowahanJs</h1>'
 });
 
 const app = Woowahan();

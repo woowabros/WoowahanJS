@@ -5,6 +5,6 @@ var app = new Woowahan();
 
 app.start({
   url: '',
-  container: '#app',
+  container: 'body',
   view: HelloView
 });
