@@ -7,7 +7,23 @@ import UsersView from './view/users';
 
 import 'bootstrap';
 
-var app = new Woowahan();
+const UserView = Woowahan.View.create('UserView', {
+  template: '<p id="name"></p><button id="btn-back">Back</button>',
+  
+  events: {
+    'click #btn-back': 'onClickBack'
+  },
+  
+  viewDidMount($el) {
+    $el.find('#name').html(this.query.name || 'empty');
+  },
+  
+  onClickBack() {
+    window.history.back();
+  }
+});
+
+const app = new Woowahan();
 
 app.use(Users);
 app.use(OneUser);
@@ -24,6 +40,11 @@ app.start({
       url: '/users',
       container: '.content',
       view: UsersView
+    },
+    {
+      url: '/user/:name',
+      container: '.content',
+      view: UserView
     }
   ]
 });

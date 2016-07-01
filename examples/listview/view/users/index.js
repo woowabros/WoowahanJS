@@ -44,7 +44,8 @@ export default Woowahan.CollectionView.create('Users', {
   },
 
   fetchOneUser(data) {
-    alert(data.name);
+    // alert(data.name);
+    window.location.hash = 'user/' + encodeURIComponent(data.name);
   },
 
   onSelectedRow(row) {
