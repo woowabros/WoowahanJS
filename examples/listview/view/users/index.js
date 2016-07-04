@@ -33,6 +33,7 @@ export default Woowahan.CollectionView.create('Users', {
 
   fetchUsers(data) {
     this.reload(data.resultSet);
+    
     this.setModel({
       prevPage: data.page.page - 1,
       currentPage: data.page.page,
