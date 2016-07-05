@@ -16,10 +16,5 @@ export default Woowahan.View.create('TodoState', {
     renderData.completed = renderData.filter === 'completed';
 
     return renderData;
-  },
-
-  onUpdate(model) {
-    this.setModel(model);
-    this.updateView();
   }
 });

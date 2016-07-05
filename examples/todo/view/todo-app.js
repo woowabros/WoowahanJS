@@ -23,7 +23,6 @@ export default Woowahan.CollectionView.create('TodoApp', {
       filter: this.query.filter
     });
 
-    this.dispatch(Woowahan.Action.create(ALL_TODOS), this.loadTodos);
     this.super();
   },
 
@@ -32,20 +31,22 @@ export default Woowahan.CollectionView.create('TodoApp', {
   },
 
   viewDidMount() {
-    this.updateFooterView();
+    this.dispatch(Woowahan.Action.create(ALL_TODOS), this.loadTodos);
   },
 
   loadTodos(todos) {
     let activeTodos = todos.filter(todo => !todo.completed);
     let completedTodos = todos.filter(todo => todo.completed);
+    let filter = this.query.filter;
 
     this.setModel({
-      remaining: activeTodos.length
+      remaining: activeTodos.length,
+      filter: filter
     });
 
     this.$el.find('.new-todo').val('');
 
-    switch(this.query.filter) {
+    switch(filter) {
       case 'active':
         this.reload(activeTodos);
         break;
