@@ -38,6 +38,7 @@
     "webpack-stream": "^2.1.1"
   },
   "dependencies": {
+    "dexie": "^1.4.1",
     "todomvc-app-css": "^2.0.6",
     "todomvc-common": "^1.0.2"
   }

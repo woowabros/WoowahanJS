@@ -1,29 +1,46 @@
 import Woowahan from '../../../';
-import { ALL_TODOS, NEW_TODO, COMPLETED_TODO, ALL_COMPLETED } from '../action';
+import Dexie from 'dexie';
+import * as Action from '../action';
 
-const AllTodos = Woowahan.Reducer.create(ALL_TODOS, function() {
-    this.finish(this.getStates().todos);
+var TodoDB = new Dexie('todos');
+
+TodoDB.version(1).stores({
+  todos: "++id,title,completed"
 });
 
-const NewTodo = Woowahan.Reducer.create(NEW_TODO, function(title) {
-  this.getStates().todos.push({ id: this.getStates().todos.length + 1, title, completed: false });
+TodoDB.open();
+
+const LoadTodos = Woowahan.Reducer.create(Action.LOAD_TODOS, function() {
+  TodoDB.todos.toCollection().each(todo =>{
+    this.getStates().todos.push(todo);
+  }).then(() => this.finish(this.getStates().todos));
+});
+
+const AllTodos = Woowahan.Reducer.create(Action.ALL_TODOS, function() {
   this.finish(this.getStates().todos);
 });
 
-const CompletedTodo = Woowahan.Reducer.create(COMPLETED_TODO, function(options) {
-  let matchIndex = -1;
+const NewTodo = Woowahan.Reducer.create(Action.NEW_TODO, function(title) {
+  let todo = { title, completed: false };
 
-  this.getStates().todos.forEach((item, index) => {
-    if (item.id === options.id) {
-      matchIndex = index;
-      item.completed = !item.completed;
-    }
+  TodoDB.todos.add(todo).then( newTodo => {
+    this.getStates().todos.push(todo);
+    this.finish(this.getStates().todos);
   });
-
-  this.finish(this.getStates().todos[matchIndex]);
 });
 
-const AllCompleted = Woowahan.Reducer.create(ALL_COMPLETED, function(options) {
+const CompletedTodo = Woowahan.Reducer.create(Action.COMPLETED_TODO, function(todo) {
+  let todos = this.getStates().todos;
+
+  todos.forEach(item => {
+    if (item.id === todo.id) item.completed = todo.completed;
+  });
+
+  TodoDB.todos.put(todo);
+  this.finish(todo);
+});
+
+const AllCompleted = Woowahan.Reducer.create(Action.ALL_COMPLETED, function(options) {
   this.getStates().todos.forEach(item => {
     if (!item.completed) {
       item.completed = true;
@@ -33,9 +50,39 @@ const AllCompleted = Woowahan.Reducer.create(ALL_COMPLETED, function(options) {
   this.finish(this.getStates().todos);
 });
 
+const DeleteTodo = Woowahan.Reducer.create(Action.DELETE_TODO, function(todo) {
+  let matchIndex = -1;
+  let todos = this.getStates().todos;
+
+  todos.forEach((item, index) => {
+    if (item.id === todo.id) {
+      matchIndex = index;
+    }
+  });
+
+  TodoDB.todos.delete(todos[matchIndex].id);
+  todos.slice(matchIndex, 1);
+
+  this.finish();
+});
+
+const EditTodo = Woowahan.Reducer.create(Action.EDIT_TODO, function(todo) {
+  let todos = this.getStates().todos;
+
+  todos.forEach(item => {
+    if (item.id === todo.id) item.title = todo.title;
+  });
+
+  TodoDB.todos.put(todo);
+  this.finish(todo);
+});
+
 export {
+  LoadTodos,
   AllTodos,
   NewTodo,
   CompletedTodo,
-  AllCompleted
+  AllCompleted,
+  DeleteTodo,
+  EditTodo
 };

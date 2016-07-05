@@ -1,13 +1,15 @@
 import Woowahan from '../../';
 import TodoApp from './view/todo-app';
-import { AllTodos, NewTodo, CompletedTodo, AllCompleted } from './reducer/todos';
+import { LOAD_TODOS } from './action';
+import * as Reducers from './reducer/todos';
 
 const app = new Woowahan();
-const store = Woowahan.Store.create({ todos: [] });
 
-app.use(store);
-app.use([AllTodos, NewTodo, CompletedTodo, AllCompleted]);
+app.use(Woowahan.Store.create({ todos: [] }));
+app.use(Reducers);
 
-app.start({
-  url: '*filter', container: '.todoapp', view: TodoApp
+app.dispatch(Woowahan.Action.create(LOAD_TODOS), () => {
+  app.start({
+    url: '*filter', container: '.todoapp', view: TodoApp
+  });
 });
