@@ -14,7 +14,7 @@ export default Woowahan.ItemView.create('TodoItem', {
     'blur .edit': 'closeEdit'
   },
 
-  myUpdate(todo) {
+  selfUpdate(todo) {
     this.dispatch(Woowahan.Event.create('toggle'));
     this.setModel(todo);
     this.updateView();
@@ -22,7 +22,7 @@ export default Woowahan.ItemView.create('TodoItem', {
 
   toggleCompleted() {
     this.setModel({ completed: !this.getModel('completed') });
-    this.dispatch(Woowahan.Action.create(COMPLETED_TODO, this.getModel()), this.myUpdate);
+    this.dispatch(Woowahan.Action.create(COMPLETED_TODO, this.getModel()), this.selfUpdate);
   },
 
   edit() {
@@ -34,7 +34,7 @@ export default Woowahan.ItemView.create('TodoItem', {
   },
 
   clear() {
-    this.dispatch(Woowahan.Action.create(DELETE_TODO, this.getModel()), this.remove);
+    this.dispatch(Woowahan.Action.create(DELETE_TODO, this.getModel()), this.close);
   },
 
   revertOnEscape(value, event) {
@@ -51,7 +51,11 @@ export default Woowahan.ItemView.create('TodoItem', {
   updateOnEnter(value, event) {
     if (event.keyCode === KeyCode.ENTER) {
       this.setModel({ title: value });
-      this.dispatch(Woowahan.Action.create(EDIT_TODO, this.getModel()), this.myUpdate);
+      this.dispatch(Woowahan.Action.create(EDIT_TODO, this.getModel()), this.selfUpdate);
     }
+  },
+
+  viewWillUnmount() {
+    this.dispatch(Woowahan.Event.create('removetodo'));
   }
 });

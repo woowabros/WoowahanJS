@@ -10,7 +10,8 @@ export default Woowahan.CollectionView.create('TodoApp', {
   template: Template,
   events: {
     '@keypress .new-todo': 'createOnEnter(.new-todo)',
-    '@toggle': 'updateState'
+    '@toggle': 'updateState',
+    '@removetodo': 'updateState'
   },
 
   rowContainer: '.todo-list',

@@ -52,17 +52,16 @@ const AllCompleted = Woowahan.Reducer.create(Action.ALL_COMPLETED, function(opti
 
 const DeleteTodo = Woowahan.Reducer.create(Action.DELETE_TODO, function(todo) {
   let matchIndex = -1;
-  let todos = this.getStates().todos;
+  let states = this.getStates();
 
-  todos.forEach((item, index) => {
+  states.todos.forEach((item, index) => {
     if (item.id === todo.id) {
       matchIndex = index;
     }
   });
 
-  TodoDB.todos.delete(todos[matchIndex].id);
-  todos.slice(matchIndex, 1);
-
+  TodoDB.todos.delete(states.todos[matchIndex].id);
+  states.todos.splice(matchIndex, 1);
   this.finish();
 });
 
