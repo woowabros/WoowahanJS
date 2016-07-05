@@ -15,6 +15,13 @@ export default Woowahan.View.create('Pager', {
     
     this.super();
   },
+  
+  viewDidMount($el) {
+    var index = this.getModel('currentPage');
+    
+    $el.find('.pagination li').removeClass('active');
+    $el.find('[data-page=' + index + ']').closest('li').addClass('active');
+  },
 
   onPaging(event) {
     this.dispatch(Woowahan.Event.create('paging', +event.target.dataset.page));
@@ -23,6 +30,6 @@ export default Woowahan.View.create('Pager', {
   },
 
   onUpdate(model) {
-
+    console.log('model', model);
   }
 });
