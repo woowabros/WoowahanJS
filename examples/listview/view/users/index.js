@@ -40,7 +40,7 @@ export default Woowahan.CollectionView.create('Users', {
       nextPage: data.page.page + 1,
       numOfRows: data.resultSet.length
     });
-
+console.log('reload');
     this.updateView('.pager-container', Pager, this.model);
   },
 
@@ -55,6 +55,8 @@ export default Woowahan.CollectionView.create('Users', {
 
   onRefresh() {
     this.updateView();
+    
+    return false;
   },
 
   onPaging(page) {
