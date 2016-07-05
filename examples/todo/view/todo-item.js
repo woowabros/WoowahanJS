@@ -1,6 +1,7 @@
 import Woowahan from '../../../';
-import Template from './todo-item.hbs';
+import Template from '../template/todo-item.hbs';
 import { COMPLETED_TODO, DELETE_TODO, EDIT_TODO } from '../action';
+import * as KeyCode from '../keycode';
 
 export default Woowahan.ItemView.create('TodoItem', {
   template: Template,
@@ -37,7 +38,7 @@ export default Woowahan.ItemView.create('TodoItem', {
   },
 
   revertOnEscape(value, event) {
-    if (event.keyCode === 27) {
+    if (event.keyCode === KeyCode.ESC) {
       let title = this.getModel('title');
 
       this.setModel({ title: value });
@@ -48,7 +49,7 @@ export default Woowahan.ItemView.create('TodoItem', {
   },
 
   updateOnEnter(value, event) {
-    if (event.keyCode === 13) {
+    if (event.keyCode === KeyCode.ENTER) {
       this.setModel({ title: value });
       this.dispatch(Woowahan.Action.create(EDIT_TODO, this.getModel()), this.myUpdate);
     }

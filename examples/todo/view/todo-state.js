@@ -1,5 +1,5 @@
 import Woowahan from '../../../';
-import Template from './todo-state.hbs';
+import Template from '../template/todo-state.hbs';
 
 export default Woowahan.View.create('TodoState', {
   template: Template,
