@@ -1,6 +1,7 @@
 import Woowahan from '../../../';
 import Dexie from 'dexie';
 import * as Action from '../action';
+import TodoSchema from '../schema/todo';
 
 var TodoDB = new Dexie('todos');
 
@@ -11,7 +12,7 @@ TodoDB.version(1).stores({
 TodoDB.open();
 
 const LoadTodos = Woowahan.Reducer.create(Action.LOAD_TODOS, function() {
-  TodoDB.todos.toCollection().each(todo =>{
+  TodoDB.todos.toCollection().each(todo => {
     this.getStates().todos.push(todo);
   }).then(() => this.finish(this.getStates().todos));
 });
@@ -20,11 +21,11 @@ const AllTodos = Woowahan.Reducer.create(Action.ALL_TODOS, function() {
   this.finish(this.getStates().todos);
 });
 
-const NewTodo = Woowahan.Reducer.create(Action.NEW_TODO, function(title) {
-  let todo = { title, completed: false };
+const NewTodo = Woowahan.Reducer.create(Action.NEW_TODO, TodoSchema, function(todo) {
+  todo.completed = false;
 
-  TodoDB.todos.add(todo).then( newTodo => {
-    this.getStates().todos.push(todo);
+  TodoDB.todos.add(todo).then(newTodo => {
+    this.getStates().todos.push(newTodo);
     this.finish(this.getStates().todos);
   });
 });

@@ -23,6 +23,10 @@ export default Woowahan.CollectionView.create('TodoApp', {
       filter: this.query.filter
     });
 
+    global.woowahan.on('error', errors => {
+      alert(errors[0].message);
+    });
+
     this.super();
   },
 
@@ -68,9 +72,9 @@ export default Woowahan.CollectionView.create('TodoApp', {
     this.updateFooterView();
   },
 
-  createOnEnter(value, event) {
+  createOnEnter(title, event) {
     if (event.keyCode === KeyCode.ENTER) {
-      this.dispatch(Woowahan.Action.create(NEW_TODO, value), this.loadTodos);
+      this.dispatch(Woowahan.Action.create(NEW_TODO, { title }), this.loadTodos);
     }
   },
 
