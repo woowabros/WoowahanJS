@@ -23,9 +23,11 @@ const AllTodos = Woowahan.Reducer.create(Action.ALL_TODOS, function() {
 
 const NewTodo = Woowahan.Reducer.create(Action.NEW_TODO, TodoSchema, function(todo) {
   todo.completed = false;
-
-  TodoDB.todos.add(todo).then(newTodo => {
-    this.getStates().todos.push(newTodo);
+  
+  TodoDB.todos.add(todo).then(id => {
+    todo.id = id;
+    
+    this.getStates().todos.push(todo);
     this.finish(this.getStates().todos);
   });
 });
