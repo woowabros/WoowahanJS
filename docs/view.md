@@ -176,7 +176,66 @@ viewWillMount(renderData) {
 
 ## 이벤트
 
+UI에서 발생하는 이벤트는 events 속성으로 손쉽게 이벤트와 이벤트 핸들러를 연결할 수 있습니다. events 속성은 뷰 생성시 정의하며 기본 형식은 다음과 같습니다.
+
+```Javascript
+Woowahan.View.create('ViewName', {
+
+  events: {
+    "eventName DOM-Selector":            "EventHandler", // 기본 형태 설명
+    "click .btn.btn-save":               "onSave",
+    "dbclick .nav.ico-logout":           "onLogout",
+    "keypress .form-control.txt-search": "onAutoSearch"
+  },
+  
+  onSave(event) { 
+    // Do something
+  },
+  
+  onLogout(event) { 
+    // Do something
+  },
+  
+  onAutoSearch(event) {
+    // Do something
+  }
+  
+});
+```
+
+자식 뷰의 이벤트를 받거나 이벤트와 함께 사용자 데이타를 수집하고자 할 때 "@" 이벤트를 사용할 수 있습니다. 
+
 ## 자식 뷰
 
+모든 뷰는 자식 뷰 즉, 하위 뷰 요소를 포함할 수 있습니다. UI를 구성함에 있어 하나의 거대한 단일 뷰로 디자인할 것인지, 아니면 좀 더 작은 단위의 UI요소로 분해하여 조립할지는 전적으로 개발자의 디자인 방식에 의존합니다.
+
+그러나 아주 단순한 앱이 아니라면 대부분의 앱은 여러개의 뷰로 구성됩니다. 이렇게 복수개의 뷰로 구성될 때 필연적으로 뷰와 뷰 사이에 상위 뷰와 하위 뷰 관계가 만들어집니다. 상위 뷰 즉, 부모 뷰는 자식 뷰를 포함하기 위한 컨테이너를 제공하여야 하며 동시에 추가되는 자식 뷰가 1개 이상이라면 1개 이상의 컨테이너를 가진 HTML 구성을 가져야 합니다.
+
+다음과 같이 updateView 메소드로 자식뷰를 추가할 수 있습니다.
+
+```Javascript
+import ChildView1 from './child1';
+import CHildView2 from './child2';
+
+Woowahan.View.create('ParentView', {
+
+  initialize() {
+    this.updateView('.nav', ChildView1);
+    this.updateView('.dashboard', ChildView2);
+  }
+  
+});
+```
+
+자식 뷰에게 데이타를 넘겨줄 필요가 있다면 updateView의 세번째 인수로 전달할 수 있습니다.
+
+```Javascript
+this.updateView('.nav', ChildView, { current: 'main' });
+```
+
+만약 부모 뷰의 무언가 변경사항이 생겨 자식 뷰를 업데이트해야 한다면 어떻게 해야할까요? 자식 뷰를 추가하는 메소드 이름이 updateView인 것은 이것 때문입니다. 자식 뷰의 변경사항이 발생한다면 최초 추가할 때와 같은 방식으로 updateView를 호출하면 됩니다. 이것은 updateView 메소드가 자식의 라이프사이클을 완전히 통제한다는 것을 보여줍니다.
+
 ## 자식 뷰와의 커뮤니케이션
+
+## 이벤트와 함께 입력 데이타 수집
 
