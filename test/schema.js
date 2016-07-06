@@ -72,4 +72,15 @@ describe('Schema & Validation:', () => {
     assert.lengthOf(attrsSchema.validate({ name: 'kim', age: 30, email: '@@test' }), 1);
     assert.lengthOf(attrsSchema.validate({ name: 'kim', age: 30, email: 'foo' }), 1);
   });
+
+  describe('Default value', () => {
+    it('Default String', () => {
+      let defaultString = 'my xyz string';
+      let schema = Woowahan.Schema.create('schema', {
+        name: Woowahan.Types.String({ defaultValue: defaultString })
+      });
+
+      
+    });
+  });
 });
