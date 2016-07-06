@@ -133,7 +133,7 @@ tagName의 class 속성입니다.
 
 ## 뷰 라이프사이클
 
-뷰 컴포넌트는 initialize -> viewWillMount -> (rendering) -> viewDidMount -> viewWillUnmount 와 같은 라이프사이클을 가집니다.
+뷰 컴포넌트는 initialize -> viewWillMount -> (rendering) -> viewDidMount -> viewWillUnmount -> close 와 같은 라이프사이클을 가집니다.
 initialize 는 단 한번만 호출되며 viewWillMount ---- viewWillUnmount 는 1번 이상 반복되어 실행될 수 있습니다.
 
 개발자는 랜더링에 직접적으로 관여할 수 없지만 랜더링 되기 전과 랜더링 완료후에 필요한 작업을 할 수 있습니다.
@@ -233,9 +233,97 @@ Woowahan.View.create('ParentView', {
 this.updateView('.nav', ChildView, { current: 'main' });
 ```
 
-만약 부모 뷰의 무언가 변경사항이 생겨 자식 뷰를 업데이트해야 한다면 어떻게 해야할까요? 자식 뷰를 추가하는 메소드 이름이 updateView인 것은 이것 때문입니다. 자식 뷰의 변경사항이 발생한다면 최초 추가할 때와 같은 방식으로 updateView를 호출하면 됩니다. 이것은 updateView 메소드가 자식의 라이프사이클을 완전히 통제한다는 것을 보여줍니다.
+만약 부모 뷰의 무언가 변경사항이 생겨 자식 뷰를 업데이트해야 한다면 어떻게 해야할까요? 자식 뷰를 추가하는 메소드 이름이 updateView인 것은 이것 때문입니다. 자식 뷰의 변경사항이 발생한다면 최초 추가할 때와 같은 방식으로 updateView를 호출하면 됩니다. 이것은 updateView 메소드가 자식의 라이프사이클을 완전히 통제한다는 것을 보여주며 자식뷰를 생성하여 다음과 같이 updateView를 사용하면 동작을 보장하지 않습니다.
+
+```Javascript
+/* 
+ * 정상 동작하지 않음
+ */
+var childView = new ChildView({ current: 'main' });
+ 
+this.updateView('.nav', childView);
+```
+
+### 뷰 새로 그리기
+
+updateView는 자식 뷰 관련 기능 뿐만 아니라 현재 뷰의 UI를 다시 랜더링할 수 있는 기능도 제공합니다. 뷰가 자신을 다시 그려야하는 경우는 언제 발생할까요? 뷰 데이타가 변경되고 변경사항이 UI에 반영되어야 할 때 뷰를 새로 그려야할 것입니다. 이런 경우 this.updateView() 처럼 인수 없이 호출하면 현재 뷰를 다시 그리게되며 자식 뷰가 있을 경우 자동으로 새로 그려지게 됩니다.
+
+다시 랜더링된다는 것의 보다 정확한 의미는 뷰의 생애 주기인 initialize -> viewWillMount -> (rendering) -> viewDidMount -> viewWillUnmount -> close 에서 viewWillMount -> (rendering) -> viewDidMount 주기를 다시 실행하는 것을 의미합니다.
 
 ## 자식 뷰와의 커뮤니케이션
 
+뷰의 모든 행위가 뷰 내에서 모두 다루어지는 경우도 있지만 뷰 밖의 영역으로 뷰 내의 행위를 알려야하는 경우도 있습니다. 부모 뷰와 자식 뷰간에는 더욱 더 빈번할 수 있습니다. 이를 간편히 처리하기 위해 "@" 이벤트 방식이 제공됩니다.
+
+events 정의 방식과 동일하게 자식 뷰가 발생시키는 이벤트를 수신받기 위해서 부모 뷰는 events에 동일하게 작성할 수 있습니다. 한 가지 다른 점은 이벤트 이름 앞에 @를 붙이는 것입니다. 다음과 같습니다.
+
+```Javascript
+var ChildView = Woowahan.View.create('ChildView', {
+  doSomething() {
+    this.trigger('save', { name: 'KIM', age: 10 }); // 자식 뷰의 이벤트를 부모 뷰가 수신받는다.
+  }
+});
+
+Woowahan.View.create('ParentView', {
+  events: {
+    '@save .nav': 'onSave'
+  },
+  
+  initialize() {
+    this.updateView('.nav', ChildView1);
+  },
+  
+  onSave(data) {
+    // Do something
+  }
+});
+```
+
+이벤트를 발생시키는 자식 뷰는 this.trigger 메소드로 이벤트를 발생시킬 수 있습니다. 첫 번째 인수는 이벤트 이름, 두 번째 인수는 이벤트와 함께 전달할 데이타입니다. 이벤트 이름은 평범한 문자열이며 데이타에 대한 형식 제한은 특별히 없습니다.
+
 ## 이벤트와 함께 입력 데이타 수집
 
+사용자가 입력한 데이타를 이벤트와 함께 수집해야하는 경우가 있습니다. 검색창에 검색어를 입력한 후 검색 버튼을 클릭하는 UI 라면 검색 버튼의 클릭 이벤트 핸들러에선 검색창의 데이타를 가져오는 코드가 필요합니다. 떄로는 회원가입 입력 폼과 수집되어야 하는 데이타가 수십개에 이를 수 도 있습니다.
+
+웹 UI는 사용자 데이타를 입력받기 위한 다양한 폼 요소를 지원하며 요소의 타입에 따라 값을 얻어오는 방식이 다릅니다. 각각의 방식을 개발자가 학습해야할 필요가 있고 데이타를 수집하는 반복적인 코드를 작성해야만 합니다.
+
+"@" 이벤트 방식의 두 번째 기능은 이벤트와 데이타를 함께 묶어주는 것입니다. 검색창 예를 떠올려 봅시다. 검색창은 keyword란 이름을 가지고 있는 input text 요소이며 btn-search 버튼이 검색 버튼입니다. btn-search 버튼이 클릭되면 검색을 수행하게 됩니다. 이를 다음과 같이 표현할 수 있습니다.
+
+```Javascript
+  events: {
+    '@click .btn-search': 'onSearch(input[name=keyword])'
+  }
+  
+  onSearch(keyword) {
+    // keyword === 사용자가 입력한 검색 키워드 문자열
+  }
+```
+
+만약 검색 옵션도 있다면 다음과 같이 되겠죠.
+
+```Javascript
+  events: {
+    '@click .btn-search': 'onSearch(input[name=keyword], .search.option)'
+  }
+  
+  onSearch(keyword, option) {
+    // Do search
+  }
+```
+
+모든 폼 데이타를 수집해야 한다면 다음과 같이 작성합니다.
+
+```Javascript
+  events: {
+    '@submit .join-form': 'onJoin()'
+  }
+  
+  onJoin(form) {
+    /*
+     form.name
+     form.password
+     form.gender
+     ...
+    */
+    // Do Something
+  }
+```
