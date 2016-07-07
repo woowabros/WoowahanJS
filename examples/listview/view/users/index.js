@@ -5,8 +5,6 @@ import User from './user';
 import Pager from '../control/pager';
 
 export default Woowahan.CollectionView.create('Users', {
-  namespace: 'View:Users',
-  tagName: 'div',
   rowContainer: '.list > tbody',
   rowView: User,
   template: Template,
@@ -40,13 +38,12 @@ export default Woowahan.CollectionView.create('Users', {
       nextPage: data.page.page + 1,
       numOfRows: data.resultSet.length
     });
-console.log('reload');
+
     this.updateView('.pager-container', Pager, this.model);
   },
 
   fetchOneUser(data) {
-    // alert(data.name);
-    window.location.hash = 'user/' + encodeURIComponent(data.name);
+    window.location.hash = '/users/' + encodeURIComponent(data.name);
   },
 
   onSelectedRow(row) {

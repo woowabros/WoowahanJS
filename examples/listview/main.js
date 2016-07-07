@@ -4,24 +4,9 @@ import OneUser from './reducer/one-user';
 import LayoutView from './view/layout';
 import WelcomeView from './view/welcome';
 import UsersView from './view/users';
+import UserDetailView from './view/users/user-detail';
 
 import 'bootstrap';
-
-const UserView = Woowahan.View.create('UserView', {
-  template: '<p id="name"></p><button id="btn-back">Back</button>',
-  
-  events: {
-    'click #btn-back': 'onClickBack'
-  },
-  
-  viewDidMount($el) {
-    $el.find('#name').html(this.query.name || 'empty');
-  },
-  
-  onClickBack() {
-    window.history.back();
-  }
-});
 
 const app = new Woowahan();
 
@@ -36,15 +21,7 @@ app.start({
   layout: 'LayoutView',
   view: WelcomeView,
   pages: [
-    {
-      url: '/users',
-      container: '.content',
-      view: UsersView
-    },
-    {
-      url: '/user/:name',
-      container: '.content',
-      view: UserView
-    }
+    { url: '/users', view: UsersView },
+    { url: '/users/:name', view: UserDetailView }
   ]
 });
