@@ -23,11 +23,6 @@ export default Woowahan.CollectionView.create('TodoApp', {
       filter: this.query.filter
     });
 
-    // TODO: Error 처리
-    global.woowahan.on('error', errors => {
-      alert(errors[0].message);
-    });
-
     this.super();
   },
 
