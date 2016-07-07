@@ -1,6 +1,6 @@
 {
   "name": "woowahan",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "Web application framework for BackboneJS",
   "main": "index.js",
   "scripts": {
