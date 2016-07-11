@@ -7,7 +7,8 @@
     "test": "./node_modules/mocha/bin/mocha --require babel-core/register",
     "build": "./node_modules/gulp/bin/gulp.js build",
     "proxy-server": "node ./server/proxy.js",
-    "demo-server": "node ./server/demo.js"
+    "demo-server": "node ./server/demo.js",
+    "version-patch": "npm version patch"
   },
   "repository": {
     "type": "git",
