@@ -5,7 +5,8 @@ WoowahanJS로 작성된 단일 페이지 어플리케이션은 1개 이상의 �
 다음 예제는 하나의 뷰와 하나의 어플리케이션 만으로 작동되는 아주 간단한 예제 코드입니다.
 
 #### hello-view.js
-```Javascript
+
+```javascript
 import Woowahan from 'woowahan';
 
 export default Woowahan.View.create('Hello', {
@@ -14,7 +15,8 @@ export default Woowahan.View.create('Hello', {
 ```
 
 #### main.js
-```Javascript
+
+```javascript
 import Woowahan from 'woowahan';
 import HelloView from './hello-view';
 
@@ -63,7 +65,7 @@ app.start({
 
 `Woowahan.View.create`로 만들어진 뷰의 UI 는 HTML로 생성할 수 있으며 Woowahan.View는 이를 template 으로 기술합니다. 만약 UI 가 없는 뷰를 만든다면 아래와 같이 할 수 있습니다.
 
-```Javascript
+```javascript
 const emptyView = Woowahan.View.create('EmptyView');
 ```
 
