@@ -12,9 +12,13 @@ import ContentView1 from './content1';
 import ContentView2 from './content2';
 import ContentView3 from './content3';
 
+import SubContentView1 from './sub-content1';
+import SubContentView2 from './sub-content2';
+
 export {
   LayoutView1, LayoutView2, LayoutView3,
   MainView,
   MainView1, MainView2, MainView3,
-  ContentView1, ContentView2, ContentView3
+  ContentView1, ContentView2, ContentView3,
+  SubContentView1, SubContentView2
 };

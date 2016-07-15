@@ -4,7 +4,8 @@ import {
   MainView,
   LayoutView1, LayoutView2, LayoutView3,
   MainView1, MainView2, MainView3, 
-  ContentView1, ContentView2, ContentView3 } from './view/';
+  ContentView1, ContentView2, ContentView3,
+  SubContentView1, SubContentView2 } from './view/';
 
 const app = new Woowahan();
 
@@ -17,19 +18,46 @@ app.use(Woowahan.Layout('.wrap', LayoutView3));
 const siteDesign = [
   { url: '/', view: MainView, container: '.wrap' },
   { url: '/layout1', view: MainView1, container: '#content', layout: 'LayoutView1', pages: [
-    { url: 'content1', view: ContentView1 },
-    { url: 'content2', view: ContentView2 },
-    { url: 'content3', view: ContentView3 }
+    { url: 'content1', view: ContentView1, pages: [
+      { url: 'sub1', view: SubContentView1 },
+      { url: 'sub2', view: SubContentView2 }
+    ] },
+    { url: 'content2', view: ContentView2, pages: [
+      { url: 'sub1', view: SubContentView1 },
+      { url: 'sub2', view: SubContentView2 }
+    ]  },
+    { url: 'content3', view: ContentView3, pages: [
+      { url: 'sub1', view: SubContentView1 },
+      { url: 'sub2', view: SubContentView2 }
+    ]  }
   ] },
   { url: '/layout2', view: MainView2, container: '#content', layout: 'LayoutView2', pages: [
-    { url: 'content1', view: ContentView1 },
-    { url: 'content2', view: ContentView2 },
-    { url: 'content3', view: ContentView3 }
+    { url: 'content1', view: ContentView1, pages: [
+      { url: 'sub1', view: SubContentView1 },
+      { url: 'sub2', view: SubContentView2 }
+    ]  },
+    { url: 'content2', view: ContentView2, pages: [
+      { url: 'sub1', view: SubContentView1 },
+      { url: 'sub2', view: SubContentView2 }
+    ]  },
+    { url: 'content3', view: ContentView3, pages: [
+      { url: 'sub1', view: SubContentView1 },
+      { url: 'sub2', view: SubContentView2 }
+    ]  }
   ] },
   { url: '/layout3', view: MainView3, container: '#content', layout: 'LayoutView3', pages: [
-    { url: 'content1', view: ContentView1 },
-    { url: 'content2', view: ContentView2 },
-    { url: 'content3', view: ContentView3 }
+    { url: 'content1', view: ContentView1, pages: [
+      { url: 'sub1', view: SubContentView1 },
+      { url: 'sub2', view: SubContentView2 }
+    ]  },
+    { url: 'content2', view: ContentView2, pages: [
+      { url: 'sub1', view: SubContentView1 },
+      { url: 'sub2', view: SubContentView2 }
+    ]  },
+    { url: 'content3', view: ContentView3, pages: [
+      { url: 'sub1', view: SubContentView1 },
+      { url: 'sub2', view: SubContentView2 }
+    ]  }
   ] },
 ];
 
