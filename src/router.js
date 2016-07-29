@@ -1,40 +1,35 @@
-'use strict';
-
 /*global _ Backbone*/
 
-var MD5 = require('md5');
+const MD5 = require('md5');
 
 module.exports = {
   settings: null,
   layouts: [],
   views: {},
   currentLayout: '',
-
-  bindLayout: function bindLayout(layout) {
+  
+  bindLayout(layout) {
     this.layouts.push(layout);
   },
-  design: function design(pages) {
-    var settings = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
+  design(pages, settings = {}) {
     this.settings = settings;
 
     this.router = null;
 
     this.bindRouter(Array.isArray(pages) ? pages : [pages]);
   },
-  bindRouter: function bindRouter(pages) {
-    var _this = this;
 
-    var options = { routes: {} };
+  bindRouter(pages) {
+    const options = { routes: {} };
 
-    var page = void 0,
-        routeId = void 0;
-
+    let page, routeId;
+    
     pages = _.cloneDeep(pages);
 
     while (!!pages.length) {
       page = pages.pop();
-
+      
       if (!!page.url.startsWith('/')) {
         page.url = page.url.substr(1);
       }
@@ -43,35 +38,31 @@ module.exports = {
 
       options.routes[page.url] = routeId;
 
-      options[routeId] = _.bind(function (page) {
-        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-          args[_key - 1] = arguments[_key];
-        }
-
-        var query = {};
-
-        var idx = 0;
-
+      options[routeId] = _.bind(function(page, ...args) {
+        const query = {};
+        
+        let idx = 0;
+        
         if (page.url.startsWith('*')) {
           query[page.url.split('*')[1]] = args[0];
         } else {
-          _.each(page.url.split('/'), function (part) {
+          _.each(page.url.split('/'), function(part) {
             if (part.startsWith(':')) {
               query[part.substr(1)] = args[idx++];
             }
           });
         }
-
+        
         if (!!page.layout) {
           if (!this.currentLayout || this.currentLayout != page.layout) {
-            var layout = _.find(this.layouts, { viewName: page.layout });
-
+            const layout = _.find(this.layouts, { viewName: page.layout });
+            
             if (!!layout) {
               layout.view.prototype.query = query;
               layout.view.prototype.container = layout.container;
-
+          
               new layout.view();
-
+              
               this.currentLayout = page.layout;
             }
           }
@@ -79,7 +70,7 @@ module.exports = {
 
         page.view.prototype.query = query;
         page.view.prototype.container = page.container;
-
+        
         if (!!this.views[page.url]) {
           this.views[page.url].close();
         }
@@ -87,37 +78,35 @@ module.exports = {
       }, this, page);
 
       if (!!page.pages && !!page.pages.length) {
-        (function () {
-          var url = page.url || '';
-          var container = page.container || '';
-          var layout = page.layout || '';
-
-          _.each(page.pages, function (subPage) {
-            if (!subPage.url.startsWith('/')) {
-              subPage.url = url + '/' + subPage.url;
-            }
-
-            if (!subPage.container) {
-              subPage.container = container;
-            }
-
-            if (!subPage.layout) {
-              subPage.layout = layout;
-            }
-
-            pages.push(subPage);
-          });
-        })();
+        const url = page.url || '';
+        const container = page.container || '';
+        const layout = page.layout || '';
+        
+        _.each(page.pages, subPage => {
+          if (!subPage.url.startsWith('/')) {
+            subPage.url = `${url}/${subPage.url}`;
+          }
+          
+          if (!subPage.container) {
+            subPage.container = container;
+          }
+          
+          if (!subPage.layout) {
+            subPage.layout = layout;
+          }
+          
+          pages.push(subPage);
+        });
       }
     }
 
     options.routes['*actions'] = '___NOT_FOUND___';
-    options['___NOT_FOUND___'] = function (actions) {
-      if ('empty' in _this.settings) {
-        _this.settings.empty(actions);
+    options['___NOT_FOUND___'] = actions => {
+      if ('empty' in this.settings) {
+        this.settings.empty(actions);
       }
     };
 
-    this.router = new (Backbone.Router.extend(options))();
+    this.router = new (Backbone.Router.extend(options));
   }
 };
