@@ -15,7 +15,9 @@ gulp.task('scripts', () => {
     .pipe(gulp.dest(path.resolve(__dirname, 'lib')));
 
   gulp.src(webpackConfig.entry)
+      .pipe($.plumber())
       .pipe($.webpackStream(webpackConfig))
+      .pipe($.plumber.stop())
       .pipe(gulp.dest(path.resolve(__dirname, 'dist')));
 });
 

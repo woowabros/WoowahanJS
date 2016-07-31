@@ -1,1 +1,1 @@
-module.exports = require('./src/woowahan');
+module.exports = require('./lib/woowahan');

@@ -1,5 +1,7 @@
 var webpack = require('webpack');
-var entry = './index.js';
+
+var entry = './webpack-index.js';
+
 var output = {
   path: __dirname,
   filename: 'woowahan.js'
@@ -17,6 +19,7 @@ var uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
 
 module.exports = {
   debug: false,
+  devtool: 'cheap-module-eval-source-map',
   entry: entry,
   output: output,
   module : {
