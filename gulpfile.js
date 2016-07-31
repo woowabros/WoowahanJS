@@ -1,20 +1,27 @@
-var path = require('path');
-var gulp = require('gulp');
-var del = require('del');
-var $ = require('gulp-load-plugins')({
+const path = require('path');
+const gulp = require('gulp');
+const del = require('del');
+const $ = require('gulp-load-plugins')({
   pattern: '*'
 });
 
+const webpackConfig = require('./webpack.config');
+
 gulp.task('scripts', () => {
-  return gulp.src(path.resolve(__dirname, './src/**/*js'))
+  gulp.src(path.resolve(__dirname, './src/**/*js'))
     .pipe($.babel({
       presets: ['es2015']
     }))
     .pipe(gulp.dest(path.resolve(__dirname, 'lib')));
+
+  gulp.src(webpackConfig.entry)
+      .pipe($.webpackStream(webpackConfig))
+      .pipe(gulp.dest(path.resolve(__dirname, 'dist')));
 });
 
 gulp.task('clean', (cb) => {
-  del(['lib'], cb);
+  del(['lib', 'dist'], cb);
 });
 
 gulp.task('build', ['clean'], () => gulp.start(['scripts']));
+gulp.task('default', ['build']);
