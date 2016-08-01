@@ -1,6 +1,6 @@
 var webpack = require('webpack');
 
-var entry = './webpack-index.js';
+var entry = './index.js';
 
 var output = {
   path: __dirname,
