@@ -15,6 +15,6 @@ export default Woowahan.View.create('ModalViewNormal', {
   },
 
   onClickClose() {
-
+    this.dispatch(Woowahan.Event.create('closed'));
   }
 });

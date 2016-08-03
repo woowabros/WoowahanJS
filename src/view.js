@@ -152,6 +152,14 @@ View = Backbone.View.extend({
       return;
     }
 
+    if (!!container && !ChildView) {
+      this._views[container].close();
+
+      delete this._views[container];
+
+      return;
+    }
+
     if (!!this._views[container]) {
       this._views[container].setModel.apply(this._views[container], _.concat(args, { silent: true }));
       
@@ -172,7 +180,7 @@ View = Backbone.View.extend({
   },
 
   getComponent(name) {
-    return app.getComponent(name);
+    return app.getComponent(name).extend({});
   },
 
   dispatch(action, subscriber, options) {
@@ -249,8 +257,6 @@ View = Backbone.View.extend({
     
     if (remove + '' != 'false' && !!this) {
       this.remove();
-
-      console.log(this);
     }
   },
 

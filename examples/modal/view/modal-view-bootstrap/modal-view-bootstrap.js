@@ -14,10 +14,6 @@ export default Woowahan.View.create('ModalViewBootstrap', {
     this.super();
   },
 
-  viewWillUnmount() {
-    console.log('test');
-  },
-
   show() {
     if (!!this.modal) return;
 
@@ -39,6 +35,8 @@ export default Woowahan.View.create('ModalViewBootstrap', {
       this.modal.off('hidden.bs.modal', '**');
 
       this.modal = null;
+
+      this.dispatch(Woowahan.Event.create('closed'));
     }
   }
 });

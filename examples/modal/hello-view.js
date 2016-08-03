@@ -8,20 +8,45 @@ export default Woowahan.View.create('Hello', {
 
   events: {
     'click #btn-modal-normal': 'onClickModalNormal',
-    'click #btn-modal-bootstrap': 'onClickModalBootstrap'
+    'click #btn-modal-bootstrap': 'onClickModalBootstrap',
+    '@closed #popup-wrap': 'onCloseModal'
+  },
+
+  initialize() {
+    this.modalNormal = null;
+    this.modalBootstrap = null;
+
+    this.super();
   },
 
   onClickModalNormal() {
+    if (!!this.modalNormal) return;
+
+    this.onCloseModal();
+
     const ModalViewNormal = this.getComponent('ModalComponentNormal');
 
-    this.updateView('#popup-wrap', ModalViewNormal, { label: '팝업 컨테이너에 추가' });
+    this.modalNormal = this.updateView('#popup-wrap', ModalViewNormal, { label: '팝업 컨테이너에 추가' });
   },
 
   onClickModalBootstrap() {
+    if (!!this.modalBootstrap) return;
+
+    this.onCloseModal();
+
     const ModalViewBootstrap = this.getComponent('ModalComponentBootstrap');
 
-    const modalView = this.updateView('#popup-wrap', ModalViewBootstrap);
+    this.modalBootstrap = this.updateView('#popup-wrap', ModalViewBootstrap);
 
-    modalView.show();
+    this.modalBootstrap.show();
+  },
+
+  onCloseModal() {
+    if (!!this.modalNormal || !!this.modalBootstrap) {
+      this.updateView('#popup-wrap');
+
+      this.modalNormal = null;
+      this.modalBootstrap = null;
+    }
   }
 });
