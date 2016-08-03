@@ -1,4 +1,4 @@
-import Woowahan from '../../../';
+import Woowahan from '../../../index';
 import Template from './content1.hbs';
 
 export default Woowahan.View.create('ContentView1', {
