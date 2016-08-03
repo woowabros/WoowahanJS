@@ -26,7 +26,6 @@ const toolset = {
   }
 };
 
-let Woowahan;
 let instance;
 
 global._ = _;
@@ -37,7 +36,7 @@ if (global.__backboneAgent) {
   global.__backboneAgent.handleBackbone(Backbone);
 }
 
-module.exports = Woowahan = class Woowahan {
+class Woowahan {
   constructor(settings = {}) {
     this.reducers = settings.reducers || {};
     this.store = null;
@@ -193,13 +192,11 @@ module.exports = Woowahan = class Woowahan {
   numberOfWorkAction() {
     return Object.keys(this.actionObject).length;
   }
-};
+}
 
 _.extend(Woowahan.prototype, Backbone.Events);
 
 Woowahan.View           = require('./view')(toolset);
-Woowahan.CollectionView = require('./collection-view')(toolset);
-Woowahan.ItemView       = require('./item-view')(toolset);
 Woowahan.Reducer        = require('./reducer')(toolset);
 Woowahan.Error          = require('./error');
 Woowahan.Types          = require('./types');
@@ -208,3 +205,9 @@ Woowahan.Action         = require('./action');
 Woowahan.Event          = require('./event');
 Woowahan.Schema         = require('./schema');
 Woowahan.Layout         = require('./layout');
+
+module.exports = global.Woowahan = Woowahan;
+
+/** components */
+Woowahan.CollectionView = require('./collection-view')(toolset);
+Woowahan.ItemView       = require('./item-view')(toolset);
