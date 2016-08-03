@@ -1,4 +1,4 @@
-import Woowahan from '../../../';
+import Woowahan from '../../../index';
 import Template from '../template/todo-app.hbs';
 import TodoItem from './todo-item';
 import TodoState from './todo-state';

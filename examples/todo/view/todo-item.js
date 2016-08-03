@@ -1,4 +1,4 @@
-import Woowahan from '../../../';
+import Woowahan from '../../../index';
 import Template from '../template/todo-item.hbs';
 import { COMPLETED_TODO, DELETE_TODO, EDIT_TODO } from '../action';
 import * as KeyCode from '../keycode';

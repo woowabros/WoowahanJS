@@ -1,4 +1,4 @@
-import Woowahan from '../../';
+import Woowahan from '../../index';
 import TodoApp from './view/todo-app';
 import { LOAD_TODOS } from './action';
 import * as Reducers from './reducer/todos';

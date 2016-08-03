@@ -1,4 +1,4 @@
-import Woowahan from '../../../';
+import Woowahan from '../../../index';
 import Dexie from 'dexie';
 import * as Action from '../action';
 import TodoSchema from '../schema/todo';
