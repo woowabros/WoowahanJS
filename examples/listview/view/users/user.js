@@ -1,5 +1,5 @@
 import Template from './user.hbs';
-import Woowahan from '../../../../';
+import Woowahan from '../../../../index';
 
 export default Woowahan.ItemView.create('User', {
   tagName: 'tr',

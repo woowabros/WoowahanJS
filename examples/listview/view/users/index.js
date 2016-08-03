@@ -1,4 +1,4 @@
-import Woowahan from '../../../../';
+import Woowahan from '../../../../index';
 import { FETCH_USERS, FETCH_ONE_USER } from '../../action';
 import Template from './index.hbs';
 import User from './user';

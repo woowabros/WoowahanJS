@@ -1,4 +1,4 @@
-import Woowahan from '../../';
+import Woowahan from '../../index';
 import Users from './reducer/users';
 import OneUser from './reducer/one-user';
 import LayoutView from './view/layout';

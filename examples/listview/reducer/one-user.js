@@ -1,4 +1,4 @@
-import Woowahan from '../../../';
+import Woowahan from '../../../index';
 import { FETCH_ONE_USER } from '../action';
 
 var OneUser = Woowahan.Reducer.create(FETCH_ONE_USER, function(options) {

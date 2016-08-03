@@ -1,4 +1,4 @@
-import Woowahan from '../../../../';
+import Woowahan from '../../../../index';
 import Template from './pager.hbs';
 
 export default Woowahan.View.create('Pager', {

@@ -1,4 +1,4 @@
-import Woowahan from '../../../../';
+import Woowahan from '../../../../index';
 
 export default Woowahan.View.create('UserDetail', {
   template: '<p id="name"></p><button id="btn-back" class="btn btn-default">Back</button>',
