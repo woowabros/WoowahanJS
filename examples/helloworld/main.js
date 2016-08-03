@@ -1,4 +1,4 @@
-import Woowahan from '../../';
+import Woowahan from '../../index';
 import HelloView from './hello-view';
 
 var app = new Woowahan();
