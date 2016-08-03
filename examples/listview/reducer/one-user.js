@@ -6,7 +6,7 @@ var OneUser = Woowahan.Reducer.create(FETCH_ONE_USER, function(options) {
     this.finish(response);
   };
 
-  this.getData('/users/'+options.id);
+  this.getData('/users/' + options.id);
 });
 
 export default OneUser;

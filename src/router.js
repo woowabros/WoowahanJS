@@ -39,16 +39,31 @@ module.exports = {
       options.routes[page.url] = routeId;
 
       options[routeId] = _.bind(function(page, ...args) {
+        const params = {};
         const query = {};
         
         let idx = 0;
         
         if (page.url.startsWith('*')) {
-          query[page.url.split('*')[1]] = args[0];
+          params[page.url.split('*')[1]] = args[0];
         } else {
           _.each(page.url.split('/'), function(part) {
             if (part.startsWith(':')) {
-              query[part.substr(1)] = args[idx++];
+              params[part.substr(1)] = args[idx++];
+            }
+          });
+        }
+
+        const queryStr = args[args.length - 1];
+
+        if (!!queryStr && !!~queryStr.indexOf('=')) {
+          const queryArr = queryStr.split('&');
+
+          _.each(queryArr, function(q) {
+            const arr = q.split('=');
+
+            if (arr.length == 2) {
+              query[arr[0]] = arr[1];
             }
           });
         }
@@ -58,6 +73,7 @@ module.exports = {
             const layout = _.find(this.layouts, { viewName: page.layout });
             
             if (!!layout) {
+              layout.view.prototype.params = params;
               layout.view.prototype.query = query;
               layout.view.prototype.container = layout.container;
           
@@ -68,6 +84,7 @@ module.exports = {
           }
         }
 
+        page.view.prototype.params = params;
         page.view.prototype.query = query;
         page.view.prototype.container = page.container;
         
