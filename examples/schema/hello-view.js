@@ -1,4 +1,4 @@
-import Woowahan from '../../';
+import Woowahan from '../../index';
 import Template from './schema.hbs';
 
 export default Woowahan.View.create('Index', {

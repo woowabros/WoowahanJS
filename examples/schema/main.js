@@ -1,6 +1,6 @@
 /*global _*/
 
-import Woowahan from '../../';
+import Woowahan from '../../index';
 import HelloView from './hello-view';
 
 import 'bootstrap';
