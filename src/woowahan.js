@@ -15,6 +15,9 @@ const toolset = {
   get getStates() {
     return _.bind(instance.getStates, instance);
   },
+  get getComponent() {
+    return _.bind(instance.getComponent, instance);
+  },
   get addAction() {
     return _.bind(instance.addAction, instance);
   },
@@ -39,6 +42,7 @@ if (global.__backboneAgent) {
 class Woowahan {
   constructor(settings = {}) {
     this.reducers = settings.reducers || {};
+    this.components = settings.components || {};
     this.store = null;
     this.queue = [];
     this.actionObject = {};
@@ -122,6 +126,10 @@ class Woowahan {
     this.reducers[reducer.actionName] = reducer;
   }
 
+  bindComponent(component) {
+    this.components[component.name] = component;
+  }
+
   combineReducer(reducers) {
     if (!reducers) return;
 
@@ -132,6 +140,14 @@ class Woowahan {
 
   getStates() {
     return this.store;
+  }
+
+  getComponent(name) {
+    const component = this.components[name];
+
+    if (!!component) {
+      return component.view;
+    }
   }
 
   dispatch(action, subscriber) {
@@ -164,6 +180,9 @@ class Woowahan {
         break;
       case 'store':
         this.bindStore(module.store);
+        break;
+      case 'component':
+        this.bindComponent(module);
         break;
     }
   }
@@ -205,6 +224,7 @@ Woowahan.Action         = require('./action');
 Woowahan.Event          = require('./event');
 Woowahan.Schema         = require('./schema');
 Woowahan.Layout         = require('./layout');
+Woowahan.Component      = require('./component');
 
 module.exports = global.Woowahan = Woowahan;
 

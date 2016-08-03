@@ -151,8 +151,8 @@ View = Backbone.View.extend({
       
       return;
     }
-    
-    if (this._views[container]) {
+
+    if (!!this._views[container]) {
       this._views[container].setModel.apply(this._views[container], _.concat(args, { silent: true }));
       
       viewMount.apply(this._views[container]);
@@ -163,10 +163,16 @@ View = Backbone.View.extend({
       
       this._views[container] = view;
     }
+
+    return this._views[container];
   },
 
   getStates() {
     return app.getStates();
+  },
+
+  getComponent(name) {
+    return app.getComponent(name);
   },
 
   dispatch(action, subscriber, options) {
@@ -241,8 +247,10 @@ View = Backbone.View.extend({
     this._unbindModel();
     this._removeChild();
     
-    if (remove + '' != 'false') {
+    if (remove + '' != 'false' && !!this) {
       this.remove();
+
+      console.log(this);
     }
   },
 
