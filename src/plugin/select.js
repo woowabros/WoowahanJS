@@ -8,14 +8,14 @@ module.exports = function(element, value) {
   $(element).empty();
 
   opts.forEach(function(opt, index) {
-    let text;
+    let label;
     let val;
 
     if (typeof opt === 'string') {
-      text = opt;
+      label = opt;
       val = opt;
     } else {
-      text = opt.text;
+      label = opt.label;
       val = opt.value;
 
       if (!!opt.selected) {
@@ -23,7 +23,7 @@ module.exports = function(element, value) {
       }
     }
 
-    $(element).append(`<option value="${val}">${text}</option>`);
+    $(element).append(`<option value="${val}">${label}</option>`);
   });
 
   $(element).children('option').eq(selectedIndex).attr('selected', 'selected');

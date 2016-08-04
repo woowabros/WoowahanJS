@@ -4,7 +4,7 @@ import Template from './hello-view.hbs';
 const sampleData = {
   'korean': ['맛집', '산들애 송파점', '본가 한식 전문'],
   'chinese': ['일공중식', '청 한남점', '태가원'],
-  'western': [{ text: 'LA 청국장', value: 'la' }, { text: '뉴욕 비지찌개', value: 'ny', selected: true }],
+  'western': [{ label: 'LA 청국장', value: 'la' }, { label: '뉴욕 비지찌개', value: 'ny', selected: true }],
   'etc': '없음'
 };
 
