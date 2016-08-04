@@ -7,6 +7,7 @@ const Backbone = require('backbone');
 const PluginText = require('./plugin/text');
 const PluginInputText = require('./plugin/input-text');
 const PluginCheckbox = require('./plugin/checkbox');
+const PluginSelect = require('./plugin/select');
 
 const delegateEventSplitter = /^(\S+)\s*(.*)$/;
 const childEventSplitter = /^\@(\w+)\s*(.*)$/;
@@ -89,7 +90,8 @@ View = Backbone.View.extend({
   _plugins: {
     'text': PluginText,
     'input-text': PluginInputText,
-    'checkbox': PluginCheckbox
+    'checkbox': PluginCheckbox,
+    'select': PluginSelect
   },
 
   delegateEvents(events) {
