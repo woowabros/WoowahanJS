@@ -160,6 +160,10 @@ View = Backbone.View.extend({
       return;
     }
 
+    if (typeof ChildView != 'function') {
+      args = ChildView;
+    }
+
     if (!!this._views[container]) {
       this._views[container].setModel.apply(this._views[container], _.concat(args, { silent: true }));
       
@@ -173,6 +177,14 @@ View = Backbone.View.extend({
     }
 
     return this._views[container];
+  },
+
+  addView(container, ChildView, ...args) {
+    return this.updateView(container, ChildView, ...args);
+  },
+
+  removeView(container) {
+    this.updateView(container);
   },
 
   getStates() {
