@@ -14,13 +14,15 @@ app.get('/users', (req, res) => {
   var limit = +(req.query.l || 15);
   var resultSet = [];
 
+  var total = +(req.query.t || users.length);
+
   for(var start=(page-1)*limit, i=0; i<limit; i++) {
-    resultSet.push(users[start+i]);
+    resultSet.push(users[start + i]);
   }
 
   res.json({
     page: {
-      total: users.length,
+      total: 100,
       page: page,
       limit: limit
     },

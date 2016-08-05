@@ -7,7 +7,7 @@ export default Woowahan.View.create('Pager', {
   template: Template,
   
   events: {
-    'click [data-page]': 'onPaging'
+    'click a[data-page]': 'onPaging'
   },
 
   initialize(model) {
@@ -15,16 +15,33 @@ export default Woowahan.View.create('Pager', {
     
     this.super();
   },
-  
-  viewDidMount($el) {
-    var index = this.getModel('currentPage');
-    
-    $el.find('.pagination li').removeClass('active');
-    $el.find('[data-page=' + index + ']').closest('li').addClass('active');
+
+  viewWillMount(renderData) {
+    const numOfRows = renderData.numOfRows;
+    const currentPage = renderData.currentPage; // 10
+    const total = renderData.total;
+
+    const totalPage = Math.ceil(total / numOfRows);
+
+    let start = parseInt((currentPage - 1) / 10) * 10;
+    let count = Math.min(10, totalPage - start);
+
+    renderData.prevPage = start - 9;
+    renderData.nextPage = start + 11;
+
+    const numbers = Array.from({ length: count }, () => {
+      return { num: ++start, active: currentPage == start }
+    });
+
+    renderData.prev = currentPage > 10;
+    renderData.numbers = numbers;
+    renderData.next = count == 10;
+
+    return renderData;
   },
 
   onPaging(event) {
-    this.dispatch(Woowahan.Event.create('paging', +event.target.dataset.page));
+    this.dispatch(Woowahan.Event.create('paging', +$(event.currentTarget).data('page')));
 
     return false;
   }

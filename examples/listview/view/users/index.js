@@ -16,9 +16,8 @@ export default Woowahan.CollectionView.create('Users', {
 
   initialize() {
     this.setModel({
-      prevPage: 0,
       currentPage: 1,
-      nextPage: 2,
+      total: 0,
       numOfRows: 0
     });
     
@@ -33,9 +32,8 @@ export default Woowahan.CollectionView.create('Users', {
     this.reload(data.resultSet);
     
     this.setModel({
-      prevPage: data.page.page - 1,
       currentPage: data.page.page,
-      nextPage: data.page.page + 1,
+      total: data.page.total,
       numOfRows: data.resultSet.length
     });
 
