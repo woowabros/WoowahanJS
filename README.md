@@ -23,7 +23,7 @@ API 호출에서 촉발되는 상태 흐름과 관리를 위해 [React](https://
 ```
 $ mkdir hello-woowa && cd hello-woowa
 $ npm init
-$ npm install --save https://[github-id]:[github-password]@github.com/woowabros/WoowahanJS
+$ npm install --save git+https://github.com/woowabros/WoowahanJS
 ```
 
 ## Hello, WoowahanJS
