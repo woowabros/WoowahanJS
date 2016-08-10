@@ -3,6 +3,8 @@ import TodoApp from './view/todo-app';
 import { LOAD_TODOS } from './action';
 import * as Reducers from './reducer/todos';
 
+global.$ = global.jQuery = Woowahan.$;
+
 const app = new Woowahan();
 
 app.use(Woowahan.Store.create({ todos: [] }));

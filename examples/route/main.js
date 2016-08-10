@@ -1,5 +1,7 @@
 import Woowahan from '../../index';
 
+global.$ = global.jQuery = Woowahan.$;
+
 import { 
   MainView,
   LayoutView1, LayoutView2, LayoutView3,

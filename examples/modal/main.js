@@ -3,6 +3,8 @@ import HelloView from './hello-view';
 import ModalViewNormal from './view/modal-view-normal/modal-view-normal';
 import ModalViewBootstrap from './view/modal-view-bootstrap/modal-view-bootstrap'
 
+global.$ = global.jQuery = Woowahan.$;
+
 var app = new Woowahan();
 
 app.use(Woowahan.Component('ModalComponentNormal', ModalViewNormal));

@@ -3,7 +3,7 @@
 import Woowahan from '../../index';
 import HelloView from './hello-view';
 
-import 'bootstrap';
+global.$ = global.jQuery = Woowahan.$;
 
 var app = new Woowahan();
 

@@ -6,7 +6,7 @@ import WelcomeView from './view/welcome';
 import UsersView from './view/users';
 import UserDetailView from './view/users/user-detail';
 
-import 'bootstrap';
+global.$ = global.jQuery = Woowahan.$;
 
 const app = new Woowahan();
 

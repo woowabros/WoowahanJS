@@ -1,5 +1,4 @@
 const _ = require('lodash');
-const $ = require('jquery');
 const format = require('util').format;
 const Debug = require('debug');
 const Backbone = require('backbone');
@@ -31,13 +30,12 @@ const toolset = {
 
 let instance;
 
-global._ = _;
-global.$ = global.jQuery = $;
-
 /* Enable backbone.js devtools for chrome */
 if (global.__backboneAgent) {
   global.__backboneAgent.handleBackbone(Backbone);
 }
+
+global._ = _;
 
 class Woowahan {
   constructor(settings = {}) {
@@ -188,6 +186,12 @@ class Woowahan {
   }
 
   start(design, options) {
+    if (typeof jQuery === 'undefined') {
+      throw new Error('jQuery is not loaded!!');
+
+      return;
+    }
+
     let wait = setInterval(_ => {
       switch (document.readyState) {
         case 'complete': case 'loaded': break;
@@ -214,6 +218,8 @@ class Woowahan {
 }
 
 _.extend(Woowahan.prototype, Backbone.Events);
+
+Woowahan.$ = Backbone.$;
 
 Woowahan.View           = require('./view')(toolset);
 Woowahan.Reducer        = require('./reducer')(toolset);
