@@ -22,45 +22,49 @@ viewMount = function() {
   
   let renderData = this.getModel();
   let container = this.container;
-  let template = this.template || '';
+  let template = this.template;
   let domStr;
   let $dom;
-  
+
   if (!container) {
     throw '필수값 [container] 누락';
+  } else {
+    if (typeof container === 'string') {
+      container = $(container);
+    }
   }
   
   if (typeof this.viewWillMount === 'function') {
     renderData = this.viewWillMount(renderData) || renderData;
   }
-  
-  if (typeof template === 'string') {
-    domStr = template;
-  } else {
-    domStr = template(renderData);
-  }
-  
-  $dom = $(`<${tagName}>${domStr}</${tagName}>`);
-  
-  if (!!this.className) {
-    $dom.addClass(this.className);
-  }
-  
-  if (typeof container === 'string') {
-    container = $(container);
-  }
-  
-  if (!!this._viewMounted) {
-    this.$el.replaceWith($dom);
-  } else {
-    if (!!this.append) {
-      container.append($dom);
+
+  if (!!template) {
+    if (typeof template === 'string') {
+      domStr = template;
     } else {
-      container.html($dom);
+      domStr = template(renderData);
     }
+
+    $dom = $(`<${tagName}>${domStr}</${tagName}>`);
+
+    if (!!this.className) {
+      $dom.addClass(this.className);
+    }
+
+    if (!!this._viewMounted) {
+      this.$el.replaceWith($dom);
+    } else {
+      if (!!this.append) {
+        container.append($dom);
+      } else {
+        container.html($dom);
+      }
+    }
+
+    this.setElement($dom);
+  } else {
+    this.setElement(container);
   }
-  
-  this.setElement($dom);
   
   this._viewMounted = true;
   this._bindModel();
