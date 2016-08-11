@@ -43,10 +43,18 @@ CollectionView = Woowahan.View.create('CollectionView', {
 
   reload(data) {
     if (this.collection instanceof Backbone.Collection) {
-      this.collection.remove(this.collection.map(model => model));
+      let model;
+
+      while (model = this.collection.first()) {
+        this.collection.remove(model);
+      }
     }
 
-    this.collection.add(data);
+    if (Array.isArray(data)) {
+      _.each(data, _.bind(function(item) { this.collection.add(item); }, this));
+    } else {
+      this.collection.add(data);
+    }
   },
 
   onSelectedRow() {
