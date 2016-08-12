@@ -73,6 +73,8 @@ module.exports = {
             const layout = _.find(this.layouts, { viewName: page.layout });
             
             if (!!layout) {
+              !!this.currentLayout && this.currentLayout.close();
+
               layout.view.prototype.params = params;
               layout.view.prototype.query = query;
               layout.view.prototype.container = layout.container;
@@ -80,13 +82,10 @@ module.exports = {
               this.currentLayout = new layout.view();
             }
           } else {
+            this.currentLayout.params = params;
+            this.currentLayout.query = query;
 
-            // debugger;
-            //
-            // this.currentLayout.params = params;
-            // this.currentLayout.query = query;
-            //
-            // this.currentLayout.updateView();
+            this.currentLayout.updateView();
           }
         }
 
