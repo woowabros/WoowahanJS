@@ -37,6 +37,8 @@ if (global.__backboneAgent) {
 
 global._ = _;
 
+Backbone.Model.prototype.idAttribute = '___ID_ATTR___';
+
 class Woowahan {
   constructor(settings = {}) {
     this.reducers = settings.reducers || {};
