@@ -67,7 +67,7 @@ Reducer = {
       script.src = path;
     };
 
-    fn.getData = function(url, settings) {
+    fn.requestData = function(url, settings, method = 'get') {
       if (typeof url === 'object') {
         settings = Object.assign(defaultConfiguration, url);
       } else {
@@ -78,21 +78,25 @@ Reducer = {
       let success = this.onSuccess || this.success;
       let fail = this.onFail || this.fail;
 
-      $.get(settings)
+      return $[method](settings)
         .done(success.bind(this))
         .fail(fail.bind(this));
     };
 
-    fn.putData = function(url, settings) {
+    fn.getData = function(url, settings) {
+      return this.requestData(url, settings, 'get');
+    };
 
+    fn.putData = function(url, settings) {
+      return this.requestData(url, settings, 'put');
     };
 
     fn.postData = function(url, settings) {
-
+      return this.requestData(url, settings, 'post');
     };
 
     fn.deleteData = function(url, settings) {
-
+      return this.requestData(url, settings, 'delete');
     };
 
     fn.success = function(data) {
