@@ -69,7 +69,7 @@ module.exports = {
         }
         
         if (!!page.layout) {
-          if (!this.currentLayout || this.currentLayout != page.layout) {
+          if (!this.currentLayout || this.currentLayout.viewname != page.layout) {
             const layout = _.find(this.layouts, { viewName: page.layout });
             
             if (!!layout) {
@@ -77,10 +77,16 @@ module.exports = {
               layout.view.prototype.query = query;
               layout.view.prototype.container = layout.container;
           
-              new layout.view();
-              
-              this.currentLayout = page.layout;
+              this.currentLayout = new layout.view();
             }
+          } else {
+
+            // debugger;
+            //
+            // this.currentLayout.params = params;
+            // this.currentLayout.query = query;
+            //
+            // this.currentLayout.updateView();
           }
         }
 
