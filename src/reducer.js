@@ -67,7 +67,7 @@ Reducer = {
       script.src = path;
     };
 
-    fn.requestData = function(url, settings, method = 'get') {
+    fn.requestData = function(url, settings, method = 'GET') {
       if (typeof url === 'object') {
         settings = Object.assign(defaultConfiguration, url);
       } else {
@@ -75,10 +75,12 @@ Reducer = {
         settings.url = url;
       }
 
+      settings.method = method.toUpperCase();
+
       let success = this.onSuccess || this.success;
       let fail = this.onFail || this.fail;
 
-      return $[method](settings)
+      return $.ajax(settings)
         .done(success.bind(this))
         .fail(fail.bind(this));
     };
