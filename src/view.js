@@ -51,10 +51,18 @@ viewMount = function() {
       $dom.addClass(this.className);
     }
 
-    if (!!this.append) {
-      container.append($dom);
+    if (!!this._viewMounted) {
+      if ($.contains(container[0], this.el)) {
+        this.$el.replaceWith($dom);
+      } else {
+        container.html($dom);
+      }
     } else {
-      container.html($dom);
+      if (!!this.append) {
+        container.append($dom);
+      } else {
+        container.html($dom);
+      }
     }
 
     this.setElement($dom);

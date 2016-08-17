@@ -20,7 +20,7 @@ export default Woowahan.CollectionView.create('TodoApp', {
   initialize() {
     this.setModel({
       remaining: 0,
-      filter: this.query.filter
+      filter: this.params.filter
     });
 
     this.super();
@@ -37,7 +37,7 @@ export default Woowahan.CollectionView.create('TodoApp', {
   loadTodos(todos) {
     let activeTodos = todos.filter(todo => !todo.completed);
     let completedTodos = todos.filter(todo => todo.completed);
-    let filter = this.query.filter;
+    let filter = this.params.filter;
 
     this.setModel({
       remaining: activeTodos.length,
