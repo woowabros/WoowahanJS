@@ -51,14 +51,10 @@ viewMount = function() {
       $dom.addClass(this.className);
     }
 
-    if (!!this._viewMounted) {
-      this.$el.replaceWith($dom);
+    if (!!this.append) {
+      container.append($dom);
     } else {
-      if (!!this.append) {
-        container.append($dom);
-      } else {
-        container.html($dom);
-      }
+      container.html($dom);
     }
 
     this.setElement($dom);
@@ -172,7 +168,8 @@ View = Backbone.View.extend({
 
     if (!!this._views[container]) {
       this._views[container].setModel.apply(this._views[container], _.concat(args, { silent: true }));
-      
+      this._views[container].container = (typeof container === 'string') ? this.$(container) : container;
+
       viewMount.apply(this._views[container]);
     } else {
       ChildView.prototype.container = (typeof container === 'string') ? this.$(container) : container;

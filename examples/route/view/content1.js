@@ -1,5 +1,6 @@
 import Woowahan from '../../../index';
 import Template from './content1.hbs';
+import ChildView from './child';
 
 export default Woowahan.View.create('ContentView1', {
   className: 'big',
@@ -25,9 +26,13 @@ export default Woowahan.View.create('ContentView1', {
 
   viewDidMount: function(el) {
     el.find('p').css('color', 'red');
+
+    this.addView('#child-container', ChildView);
   },
 
   onClick() {
-    alert('click');
+    // alert('click');
+
+    this.updateView('#child-container', ChildView);
   }
 });

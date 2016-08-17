@@ -75,7 +75,7 @@ Reducer = {
         settings.url = url;
       }
 
-      settings.method = method.toUpperCase();
+      settings.type = method.toUpperCase();
 
       let success = this.onSuccess || this.success;
       let fail = this.onFail || this.fail;
