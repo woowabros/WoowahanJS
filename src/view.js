@@ -27,11 +27,15 @@ viewMount = function() {
   let $dom;
 
   if (!container) {
-    throw '필수값 [container] 누락';
+    throw 'Required attribute "container" is missing.';
   } else {
     if (typeof container === 'string') {
       container = $(container);
     }
+  }
+
+  if (!container || !container.length) {
+    throw '"container" is undefined.';
   }
   
   if (typeof this.viewWillMount === 'function') {
