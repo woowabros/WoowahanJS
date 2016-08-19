@@ -2,6 +2,7 @@ import Woowahan from '../../../../index';
 import Template from './modal-view-bootstrap.hbs';
 
 export default Woowahan.View.create('ModalViewBootstrap', {
+  tagName: 'div',
   template: Template,
 
   events: {

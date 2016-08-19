@@ -18,8 +18,7 @@ let viewMount;
 let app;
 
 viewMount = function() {
-  const tagName = this.tagName || 'div';
-  
+  let tagName = this.tagName;
   let renderData = this.getModel();
   let container = this.container;
   let template = this.template;
@@ -49,7 +48,24 @@ viewMount = function() {
       domStr = template(renderData);
     }
 
-    $dom = $(`<${tagName}>${domStr}</${tagName}>`);
+    if (tagName === 'div') {
+      let proto = this;
+
+      tagName = '';
+
+      do {
+        if (proto.hasOwnProperty('tagName') && !!proto.tagName) {
+          tagName = proto.tagName;
+          break;
+        }
+      } while((proto = proto.__proto__) && (proto.viewname !== '___WOOWA_VIEW___'));
+    }
+
+    if (!!tagName || $(domStr).length > 1) {
+      $dom = $(`<${tagName || 'div'}>${domStr}</${tagName || 'div'}>`);
+    } else {
+      $dom = $(domStr);
+    }
 
     if (!!this.className) {
       $dom.addClass(this.className);

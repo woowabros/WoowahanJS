@@ -38,6 +38,7 @@ if (global.__backboneAgent) {
 global._ = _;
 
 Backbone.Model.prototype.idAttribute = '___ID_ATTR___';
+Backbone.View.prototype.viewname = '___WOOWA_VIEW___';
 
 class Woowahan {
   constructor(settings = {}) {
