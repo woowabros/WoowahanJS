@@ -10,6 +10,9 @@ let Reducer;
 let app;
 
 Reducer = {
+  extend(protoProps) {
+    return _.extend(this, protoProps);
+  },
   create(actionName, schema, handler) {
     if (typeof schema === 'function') {
       handler = schema;
@@ -19,6 +22,8 @@ Reducer = {
         throw new Error('The second argument of reducer will only function, or schema objects.');
       }
     }
+
+    const _this = this;
 
     let Reducer = function(data, subscriber) {
       this._timestamp = Date.now();
@@ -32,11 +37,15 @@ Reducer = {
     Reducer.actionName = actionName;
     Reducer.schema = schema;
 
-    let fn = Reducer.prototype;
+    let fn = _.extend(Reducer.prototype, {
+      onSuccess: _this.onSuccess,
+      onFail: _this.onFail
+    });
     
     fn.useraction = handler;
 
     fn.id = () => this._id;
+    fn.actionName = actionName;
     fn.createtime = () => this._timestamp;
     fn.addAction = (id) => app.addAction(id);
     fn.addError = (err) => app.addError(err);
