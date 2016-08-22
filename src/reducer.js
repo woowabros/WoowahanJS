@@ -11,7 +11,7 @@ let app;
 
 Reducer = {
   extend(protoProps) {
-    return _.extend(this, protoProps);
+    return _.extend({}, this, protoProps);
   },
   create(actionName, schema, handler) {
     if (typeof schema === 'function') {
