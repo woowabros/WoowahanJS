@@ -10,8 +10,20 @@ let Reducer;
 let app;
 
 Reducer = {
+  queueSuccess: [],
+  queueFail: [],
   extend(protoProps) {
-    return _.extend({}, this, protoProps);
+    const child = _.extend({}, this);
+
+    if (!!protoProps.onSuccess) {
+      child.queueSuccess.push(protoProps.onSuccess);
+    }
+
+    if (!!protoProps.onFail) {
+      child.queueFail.push(protoProps.onFail);
+    }
+
+    return child;
   },
   create(actionName, schema, handler) {
     if (typeof schema === 'function') {
@@ -86,8 +98,33 @@ Reducer = {
 
       settings.type = method.toUpperCase();
 
-      let success = this.onSuccess || this.success;
-      let fail = this.onFail || this.fail;
+      let success = function(...args) {
+        if (!!_this.queueSuccess.length) {
+          for (const item of _this.queueSuccess) {
+            item.apply(this, args);
+          }
+        }
+
+        if (!!this.onSuccess) {
+          this.onSuccess.apply(this, args);
+        } else {
+          this.success.apply(this, args);
+        }
+      };
+
+      let fail = function(...args) {
+        if (!!_this.queueFail.length) {
+          for (const item of _this.queueFail) {
+            item.apply(this, args);
+          }
+        }
+
+        if (!!this.onFail) {
+          this.onFail.apply(this, args);
+        } else {
+          this.fail.apply(this, args);
+        }
+      };
 
       return $.ajax(settings)
         .done(success.bind(this))
