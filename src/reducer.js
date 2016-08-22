@@ -13,7 +13,7 @@ Reducer = {
   queueSuccess: [],
   queueFail: [],
   extend(protoProps) {
-    const child = _.extend({}, this);
+    const child = _.extend({}, _.cloneDeep(this));
 
     if (!!protoProps.onSuccess) {
       child.queueSuccess.push(protoProps.onSuccess);
@@ -99,28 +99,24 @@ Reducer = {
       settings.type = method.toUpperCase();
 
       let success = function(...args) {
-        if (!!_this.queueSuccess.length) {
+        if (!!_this.queueSuccess.length || !!this.onSuccess) {
           for (const item of _this.queueSuccess) {
             item.apply(this, args);
           }
-        }
 
-        if (!!this.onSuccess) {
-          this.onSuccess.apply(this, args);
+          !!this.onSuccess && this.onSuccess.apply(this, args);
         } else {
           this.success.apply(this, args);
         }
       };
 
       let fail = function(...args) {
-        if (!!_this.queueFail.length) {
+        if (!!_this.queueFail.length || !!this.onFail) {
           for (const item of _this.queueFail) {
             item.apply(this, args);
           }
-        }
 
-        if (!!this.onFail) {
-          this.onFail.apply(this, args);
+          !!this.onFail && this.onFail.apply(this, args);
         } else {
           this.fail.apply(this, args);
         }
