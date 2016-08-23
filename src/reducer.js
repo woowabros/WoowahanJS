@@ -25,7 +25,7 @@ Reducer = {
 
     return child;
   },
-  create(actionName, schema, handler) {
+  create(actionName, schema, handler, successHandlers, failHandlers) {
     if (typeof schema === 'function') {
       handler = schema;
       schema = void 0;
@@ -43,6 +43,9 @@ Reducer = {
       this.subscriber = subscriber;
       this.useraction(data);
       this.addAction(this._id);
+
+      this.queueSuccess = _.cloneDeep(successHandlers);
+      this.queueFail = _.cloneDeep(failHandlers);
     };
 
     Reducer.wwtype = 'reducer';
@@ -99,8 +102,10 @@ Reducer = {
       settings.type = method.toUpperCase();
 
       let success = function(...args) {
-        if (!!_this.queueSuccess.length || !!this.onSuccess) {
-          for (const item of _this.queueSuccess) {
+        const queueSuccess = _.concat(_this.queueSuccess, this.queueSuccess);
+
+        if (!!queueSuccess.length || !!this.onSuccess) {
+          for (const item of queueSuccess) {
             item.apply(this, args);
           }
 
@@ -111,8 +116,10 @@ Reducer = {
       };
 
       let fail = function(...args) {
-        if (!!_this.queueFail.length || !!this.onFail) {
-          for (const item of _this.queueFail) {
+        const queueFail = _.concat(_this.queueFail, this.queueFail);
+
+        if (!!queueFail.length || !!this.onFail) {
+          for (const item of queueFail) {
             item.apply(this, args);
           }
 
