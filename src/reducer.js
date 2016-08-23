@@ -44,16 +44,16 @@ Reducer = {
       this.useraction(data);
       this.addAction(this._id);
 
-      if (Array.isArray(successHandlers)) {
-        this.queueSuccess = _.cloneDeep(successHandlers);
+      if (!!successHandlers) {
+        this.queueSuccess = Array.isArray(successHandlers) ? _.cloneDeep(successHandlers) : [successHandlers];
       } else {
-        this.queueSuccess = [successHandlers];
+        this.queueSuccess = [];
       }
 
-      if (Array.isArray(failHandlers)) {
-        this.queueFail = _.cloneDeep(failHandlers);
+      if (!!failHandlers) {
+        this.queueFail = Array.isArray(failHandlers) ? _.cloneDeep(failHandlers) : [failHandlers];
       } else {
-        this.queueFail = [failHandlers];
+        this.queueFail = [];
       }
     };
 
