@@ -10,6 +10,8 @@ let Reducer;
 let app;
 
 Reducer = {
+  SUCCESS: 'SUCCESS',
+  FAIL: 'FAIL',
   queueSuccess: [],
   queueFail: [],
   extend(protoProps) {
@@ -41,8 +43,6 @@ Reducer = {
       this._timestamp = Date.now();
       this._id = MD5(actionName.toLowerCase()+this._timestamp);
       this.subscriber = subscriber;
-      this.useraction(data);
-      this.addAction(this._id);
 
       if (!!successHandlers) {
         this.queueSuccess = Array.isArray(successHandlers) ? _.cloneDeep(successHandlers) : [successHandlers];
@@ -55,6 +55,9 @@ Reducer = {
       } else {
         this.queueFail = [];
       }
+
+      this.useraction(data);
+      this.addAction(this._id);
     };
 
     Reducer.wwtype = 'reducer';
@@ -75,6 +78,31 @@ Reducer = {
     fn.addError = (err) => app.addError(err);
     fn.removeAction = (id) => app.removeAction(id);
     fn.getStates = () => app.getStates();
+
+    fn.use = function(key, handlers) {
+      switch(key) {
+        case this.SUCCESS:
+          if (!handlers) return;
+
+          if (Array.isArray(handlers)) {
+            Array.prototype.push.apply(this.queueSuccess, handlers);
+          } else {
+            this.queueSuccess.push(handlers);
+          }
+          break;
+        case this.FAIL:
+          if (!handlers) return;
+
+          if (Array.isArray(handlers)) {
+            Array.prototype.push.apply(this.queueFail, handlers);
+          } else {
+            this.queueFail.push(handlers);
+          }
+          break;
+        default:
+          throw 'undefined key';
+      }
+    };
     
     fn.loadScript = function(path, id) {
       if (!id) {
