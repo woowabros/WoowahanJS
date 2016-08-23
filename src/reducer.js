@@ -27,7 +27,7 @@ Reducer = {
 
     return child;
   },
-  create(actionName, schema, handler, successHandlers, failHandlers) {
+  create(actionName, schema, handler) {
     if (typeof schema === 'function') {
       handler = schema;
       schema = void 0;
@@ -43,18 +43,8 @@ Reducer = {
       this._timestamp = Date.now();
       this._id = MD5(actionName.toLowerCase()+this._timestamp);
       this.subscriber = subscriber;
-
-      if (!!successHandlers) {
-        this.queueSuccess = Array.isArray(successHandlers) ? _.cloneDeep(successHandlers) : [successHandlers];
-      } else {
-        this.queueSuccess = [];
-      }
-
-      if (!!failHandlers) {
-        this.queueFail = Array.isArray(failHandlers) ? _.cloneDeep(failHandlers) : [failHandlers];
-      } else {
-        this.queueFail = [];
-      }
+      this.queueSuccess = [];
+      this.queueFail = [];
 
       this.useraction(data);
       this.addAction(this._id);
