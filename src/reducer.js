@@ -47,13 +47,13 @@ Reducer = {
       if (Array.isArray(successHandlers)) {
         this.queueSuccess = _.cloneDeep(successHandlers);
       } else {
-        this.queueSuccess = [_.cloneDeep(successHandlers)];
+        this.queueSuccess = [successHandlers];
       }
 
       if (Array.isArray(failHandlers)) {
         this.queueFail = _.cloneDeep(failHandlers);
       } else {
-        this.queueFail = [_.cloneDeep(failHandlers)];
+        this.queueFail = [failHandlers];
       }
     };
 
