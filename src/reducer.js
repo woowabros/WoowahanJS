@@ -81,7 +81,7 @@ Reducer = {
 
     fn.use = function(key, handlers) {
       switch(key) {
-        case this.SUCCESS:
+        case _this.SUCCESS:
           if (!handlers) return;
 
           if (Array.isArray(handlers)) {
@@ -90,7 +90,7 @@ Reducer = {
             this.queueSuccess.push(handlers);
           }
           break;
-        case this.FAIL:
+        case _this.FAIL:
           if (!handlers) return;
 
           if (Array.isArray(handlers)) {
