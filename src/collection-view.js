@@ -58,6 +58,8 @@ CollectionView = Woowahan.View.create('CollectionView', {
       while (model = this.collection.first()) {
         this.collection.remove(model);
       }
+
+      this.rowViews = [];
     }
 
     if (Array.isArray(data)) {
@@ -65,6 +67,10 @@ CollectionView = Woowahan.View.create('CollectionView', {
     } else {
       this.collection.add(data);
     }
+  },
+
+  getCollection() {
+    return this.rowViews.map(view => view.getModel());
   },
 
   onSelectedRow() {
