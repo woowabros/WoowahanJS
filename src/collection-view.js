@@ -29,6 +29,16 @@ CollectionView = Woowahan.View.create('CollectionView', {
   },
 
   addRowView(model) {
+    let container = this.$(this.rowContainer);
+
+    if (!container.length) {
+      container = this.$el;
+
+      if (!this.$el.is(this.rowContainer)) {
+        throw('undefined rowContainer');
+      }
+    }
+
     this.rowView.prototype.container = this.$(this.rowContainer);
     this.rowView.prototype.append = true;
 
