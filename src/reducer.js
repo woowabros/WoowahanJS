@@ -144,6 +144,15 @@ Reducer = {
 
       let fail = function(...args) {
         const queueFail = _.concat(_this.queueFail, this.queueFail);
+        const jqXHR = args[0];
+
+        if (!!jqXHR) {
+          args = [{
+            status: jqXHR.status,
+            statusText: jqXHR.statusText || '',
+            response: jqXHR.responseJSON || jqXHR.responseText
+          }];
+        }
 
         if (!!queueFail.length || !!this.onFail) {
           for (const item of queueFail) {
