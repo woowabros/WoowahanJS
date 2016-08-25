@@ -107,10 +107,14 @@ View = Backbone.View.extend({
     View.prototype.initialize.apply(this, arguments);
   },
 
-  initialize() {
+  initialize(model) {
     this._viewMounted = false;
     this._views = {};
     this.debug = Debug(`View:${this.viewname}`);
+
+    if (!!model) {
+      this.setModel(model);
+    }
 
     viewMount.apply(this);
   },

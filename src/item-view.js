@@ -15,9 +15,7 @@ ItemView = Woowahan.View.create('ItemView', {
     ItemView.prototype.initialize.apply(this, arguments);
   },
 
-  initialize(model) {
-    this.setModel(model);
-    
+  initialize() {
     Woowahan.View.prototype.initialize.apply(this, arguments);
   },
 
