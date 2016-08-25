@@ -253,7 +253,7 @@ View = Backbone.View.extend({
       return;
     }
     
-    if (!this.model || !(this.model instanceof Backbone.Model)) {
+    if (_.isNull(attrs) || !this.model || !(this.model instanceof Backbone.Model)) {
       this.model = new Backbone.Model();
       
       if (this._viewMounted) {
