@@ -28,7 +28,7 @@ module.exports = {
     pages = _.cloneDeep(pages);
 
     while (!!pages.length) {
-      page = pages.pop();
+      page = pages.shift();
       
       if (!!page.url.startsWith('/')) {
         page.url = page.url.substr(1);
