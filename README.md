@@ -16,7 +16,7 @@ API 호출에서 촉발되는 상태 흐름과 관리를 위해 [React](https://
 
 ## 빠르게 시작하기
 
-저장소를 Clone 한 뒤 [Example](https://github.com/ibare/WoowahanJS/tree/develop/examples) 디렉토리의 셈플들을 살펴보세요. WoowahanJS를 가장 빠르게 시작할 수 있는 지름길입니다.
+저장소를 Clone 한 뒤 [Example](./examples) 디렉토리의 셈플들을 살펴보세요. WoowahanJS를 가장 빠르게 시작할 수 있는 지름길입니다.
 
 ## 설치
 
@@ -44,6 +44,4 @@ app.start({
 
 다음 링크에서 더 많은 정보를 제공합니다.
 
-* [기초](./docs/basic.md)
-* [심화](./docs/advanced.md)
-* [케이스 스터디](./docs/case-study.md)
+* [WoowahanJS 시작하기](./docs/basic.md)

@@ -1,7 +1,7 @@
 # 액션과 리듀서
 
 UI 관련 코드와 상태(데이타) 및 상태 관리 코드를 분리하기 위해 Action & Reducer를 제공합니다.
-Action은 특정 작업을 시작하게하는 "키"로서 정의되며 Reducer와 1:1 관계를 가집니다. 
+Action은 특정 작업을 시작하게하는 "키"로서 정의되며 Reducer와 1:1 관계를 가집니다.
 Action을 Reducer에 전달하기 위해서 dispatch를 제공하며 어떤 View에서도 호출할 수 있습니다.
 
 ## 액션
@@ -12,7 +12,7 @@ Action을 Reducer에 전달하기 위해서 dispatch를 제공하며 어떤 View
 {
   type: 'ActionName',
   data: {
-  
+
   }
 }
 ```
@@ -26,7 +26,7 @@ Woowahan.Action.create('ActionName', data);
 
 ## Dispatch
 
-모든 뷰는 dispatch를 제공합니다. dispatch로 액션을 보낼 수 있으며 액션의 수행 결과는 지정한 핸들러를 통해 받을 수 있습니다. 
+모든 뷰는 dispatch를 제공합니다. dispatch로 액션을 보낼 수 있으며 액션의 수행 결과는 지정한 핸들러를 통해 받을 수 있습니다.
 핸들러가 없는 액션이 있을 수도 있기 때문에 핸들러는 옵션입니다.
 다음과 같이 사용할 수 있습니다.
 
@@ -58,15 +58,15 @@ Woowahan.Reducer.create(FETCH_USER_INFO, function(data) {
   this.onSuccess = function(response) {
     this.finish(response);
   };
-  
+
   this.getData('/api/users/'+data.userid);
 });
 ```
 
 getData는 GET XHR 요청을 보내는 함수이며 첫 번째 인자로 URL을 받습니다.
 HTTP 메소드 타입에 대응하는 postData, putData, deleteData가 제공됩니다.
-XHR 요청이 완료되면 this.onSuccess로 결과 값이 반환됩니다. 
-응답 처리를 위해 onSuccess 구현은 필수 요소입니다. 
+XHR 요청이 완료되면 this.onSuccess로 결과 값이 반환됩니다.
+응답 처리를 위해 onSuccess 구현은 필수 요소입니다.
 
 요청 실패시 필요한 작업이 있다면 onFail을 구현하면 됩니다.
 onFail이 구현되지 않았다면 WoowahanJS 는 error 이벤트를 글로벌 이벤트로 생성합니다.
@@ -78,7 +78,7 @@ onFail이 구현되지 않았다면 WoowahanJS 는 error 이벤트를 글로벌 
 ## 리듀서 등록
 
 만들어진 리듀서가 사용되기 위해선 등록 과정이 필요합니다.
-리듀서 등록은 어플리케이션이 처리합니다. 
+리듀서 등록은 어플리케이션이 처리합니다.
 
 ```javascript
 import Woowahan from 'woowahan';
@@ -92,3 +92,5 @@ app.start();
 ```
 
 이제 어떤 뷰에서든 dispatch를 통하여 FetchUserReducer를 이용할 수 있습니다.
+
+## 스키마

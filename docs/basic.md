@@ -9,6 +9,5 @@
 * [뷰모델 및 데이타 바인딩](./view-model.md)
 * [이벤트](./event.md)
 * [액션과 리듀서](./action-reducer.md)
-* [스키마](./schema.md)
 * [스토어](./store.md)
 * [라우터](./route.md)
