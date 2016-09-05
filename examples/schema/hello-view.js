@@ -21,9 +21,13 @@ export default Woowahan.View.create('Index', {
     this.log('did mount');
   },
 
-  onSave(id, name, email) {
-    this.dispatch(Woowahan.Action.create('save-user-profile', { id, name, email }), this.onCompleteSave);
-    
+  onSave(id, name, email, inputs) {
+    this.dispatch(Woowahan.Action.create('save-user-profile', {
+      id: inputs['id'],
+      name: inputs['name'],
+      email: inputs['email']
+    }), this.onCompleteSave);
+
     return false;
   },
 

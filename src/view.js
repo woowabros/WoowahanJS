@@ -154,14 +154,24 @@ View = Backbone.View.extend({
           method = method.substring(0, index);
         }
         
-        listener = _.bind(function(method, params, event, ...args) {
+        listener = _.bind(function(eventName, selector, method, params, event, ...args) {
           const _this = this;
           const values = _.map(params, function(param) { return _this.$(param).val(); });
-          
+
+          if (eventName === 'submit') {
+            const inputs = {};
+
+            _.each(_this.$(selector).find('input, select'), function(el) {
+              inputs[$(el).attr('name')] = $(el).val();
+            });
+
+            values.push(inputs);
+          }
+
           if (!_.isFunction(method)) method = this[method];
           
           return method.apply(this, _.concat(values, args, event));
-        }, this, method, params);
+        }, this, eventName, selector, method, params);
       } else {
         if (!_.isFunction(method)) method = this[method];
         if (!method) continue;
