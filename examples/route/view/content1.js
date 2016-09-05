@@ -18,16 +18,20 @@ export default Woowahan.View.create('ContentView1', {
     this.super();
   },
 
-  viewWillMount: function(renderData) {
+  viewWillMount(renderData) {
     renderData.text += ' & mount';
     
     return renderData;
   },
 
-  viewDidMount: function(el) {
+  viewDidMount(el) {
     el.find('p').css('color', 'red');
 
     this.addView('#child-container', ChildView);
+  },
+
+  viewWillUnmount() {
+    console.log('content1 unmount');
   },
 
   onClick() {
