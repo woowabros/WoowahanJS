@@ -1,6 +1,6 @@
 # WooWahanJS Docs
 
-* [프로젝트 환경 구성](./project-setup.md)
+* [프로젝트 환경 구성](./project-steup.md)
 * [WoowahanJS 기초](./basic.md)
 * [첫 번째 앱 만들기](./first-app.md)
 * [뷰](./view.md)
