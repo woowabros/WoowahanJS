@@ -44,4 +44,4 @@ app.start({
 
 다음 링크에서 더 많은 정보를 제공합니다.
 
-* [WoowahanJS 시작하기](./docs/basic.md)
+* [WoowahanJS 시작하기](./docs/README.md)
