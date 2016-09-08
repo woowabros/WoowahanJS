@@ -131,6 +131,10 @@ class Woowahan {
     this.components[component.name] = component;
   }
 
+  bindPlugin(plugin) {
+    Woowahan.View.prototype._plugins[plugin.type] = plugin.plugin;
+  }
+
   combineReducer(reducers) {
     if (!reducers) return;
 
@@ -185,6 +189,9 @@ class Woowahan {
       case 'component':
         this.bindComponent(module);
         break;
+      case 'plugin':
+        this.bindPlugin(module);
+        break;
     }
   }
 
@@ -234,6 +241,7 @@ Woowahan.Event          = require('./event');
 Woowahan.Schema         = require('./schema');
 Woowahan.Layout         = require('./layout');
 Woowahan.Component      = require('./component');
+Woowahan.Plugin         = require('./plugin');
 
 module.exports = global.Woowahan = Woowahan;
 
