@@ -1,9 +1,7 @@
-module.exports = {
-  create(type, plugin) {
-    return {
-      wwtype: 'plugin',
-      type: type,
-      plugin: plugin
-    };
-  }
+module.exports = (type, plugin) => {
+  return {
+    type: type,
+    plugin: plugin,
+    wwtype: 'plugin'
+  };
 };

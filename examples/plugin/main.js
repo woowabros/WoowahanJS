@@ -6,7 +6,7 @@ global.$ = global.jQuery = Woowahan.$;
 
 var app = new Woowahan();
 
-app.use(Woowahan.Plugin.create('list', ListPlugin));
+app.use(Woowahan.Plugin('list', ListPlugin));
 
 app.start({
   url: '/',
