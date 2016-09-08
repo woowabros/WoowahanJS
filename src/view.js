@@ -156,7 +156,15 @@ View = Backbone.View.extend({
         
         listener = _.bind(function(eventName, selector, method, params, event, ...args) {
           const _this = this;
-          const values = _.map(params, function(param) { return _this.$(param).val(); });
+          const values = _.map(params, function(param) {
+            const el = _this.$(param);
+
+            if (el.is('input[type=checkbox]') || el.is('input[type=radio]')) {
+              return el.is(':checked');
+            } else {
+              return el.val();
+            }
+          });
 
           if (eventName === 'submit') {
             const inputs = {};

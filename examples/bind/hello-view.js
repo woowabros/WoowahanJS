@@ -13,13 +13,15 @@ export default Woowahan.View.create('Hello', {
 
   events: {
     '@change #sel-depth1': 'onChangeDepth1(#sel-depth1)',
-    '@change #sel-depth2': 'onChangeDepth2(#sel-depth2)'
+    '@change #sel-depth2': 'onChangeDepth2(#sel-depth2)',
+    '@change #ckb-sel': 'onChangeSel(#ckb-sel)'
   },
 
   viewDidMount() {
     this.setModel({
       depth1: 'korean',
-      depth2: sampleData['korean']
+      depth2: sampleData['korean'],
+      selectAll: false
     });
   },
 
@@ -29,5 +31,9 @@ export default Woowahan.View.create('Hello', {
 
   onChangeDepth2(val) {
     this.setModel({ selectedMenu: val });
+  },
+
+  onChangeSel(val) {
+    this.setModel({ selectAll: val });
   }
 });

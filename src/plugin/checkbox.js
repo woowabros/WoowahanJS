@@ -1,5 +1,5 @@
 /*global $*/
 
 module.exports = function(element, value) {
-  $(element).val(value);
+  $(element).prop('checked', !!value);
 };
