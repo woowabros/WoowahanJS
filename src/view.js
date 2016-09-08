@@ -26,7 +26,7 @@ viewMount = function() {
   let $dom;
 
   if (!container) {
-    throw 'Required attribute "container" is missing.';
+    throw `[${this.viewname}] Required attribute "container" is missing.`;
   } else {
     if (typeof container === 'string') {
       container = $(container);
@@ -34,7 +34,7 @@ viewMount = function() {
   }
 
   if (!container || !container.length) {
-    throw '"container" is undefined.';
+    throw `[${this.viewname}] "container" is undefined.`;
   }
   
   if (typeof this.viewWillMount === 'function') {
