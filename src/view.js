@@ -298,10 +298,10 @@ View = Backbone.View.extend({
     }
     
     if (!key) {
-      return this.model.toJSON();
+      return _.cloneDeep(this.model.toJSON());
     }
 
-    return this.model.get(key);
+    return _.cloneDeep(this.model.get(key));
   },
 
   log() {
