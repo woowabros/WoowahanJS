@@ -336,11 +336,11 @@ View = Backbone.View.extend({
     let targetElements = this.$el.find('[data-role=bind]');
     
     _.each(targetElements, _.bind(function(element) {
-      let key = element.dataset.name;
+      let key = $(element).data('name');
       let eventName = `change:${key}`;
       this.listenTo(this.model, eventName, _.bind(function(element, key) {
         let value = this.model.get(key);
-        let type = (element.dataset.type || DEFAULT_ATTR_TYPE).toLowerCase();
+        let type = ($(element).data('type') || DEFAULT_ATTR_TYPE).toLowerCase();
         this._plugins[type].call(this, element, value);
       }, this, element, key));
     }, this));
