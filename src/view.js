@@ -156,21 +156,26 @@ View = Backbone.View.extend({
         
         listener = _.bind(function(eventName, selector, method, params, event, ...args) {
           const _this = this;
-          const values = _.map(params, function(param) {
-            const el = _this.$(param);
 
-            if (el.is('input[type=checkbox]') || el.is('input[type=radio]')) {
-              return el.is(':checked');
+          const getVal = function($el) {
+            if ($el.is('input[type=checkbox]') || $el.is('input[type=radio]')) {
+              return $el.is(':checked');
             } else {
-              return el.val();
+              return $el.val();
             }
+          };
+
+          const values = _.map(params, function(param) {
+            const $el = _this.$(param);
+
+            return getVal($el);
           });
 
           if (eventName === 'submit') {
             const inputs = {};
 
-            _.each(_this.$(selector).find('input, select'), function(el) {
-              inputs[$(el).attr('name')] = $(el).val();
+            _.each(_this.$(selector).find('input, select, textarea'), function(el) {
+              inputs[$(el).attr('name')] = getVal($(el));
             });
 
             values.push(inputs);
@@ -298,10 +303,10 @@ View = Backbone.View.extend({
     }
     
     if (!key) {
-      return this.model.toJSON();
+      return _.cloneDeep(this.model.toJSON());
     }
 
-    return this.model.get(key);
+    return _.cloneDeep(this.model.get(key));
   },
 
   log() {
