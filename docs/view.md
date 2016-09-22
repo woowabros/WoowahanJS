@@ -221,7 +221,7 @@ setModel로 수정도 가능하며 viewWillMount 의 renderData는 부모로 부
 ```javascript
 this.getModel(); // 전체 데이타 반환
 this.getModel('address'); // address 값 반환
-this.setModel({ age: 10 }); // age 갑 변경
+this.setModel({ age: 10 }); // age 값 변경
 ```
 
 updateView는 뷰의 추가 뿐만 아니라 업데이트도 관장합니다.
