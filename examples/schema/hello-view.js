@@ -14,7 +14,7 @@ export default Woowahan.View.create('Index', {
 
   viewWillMount(renderData) {
     this.log('will mount');
-    return Object.assign({}, renderData);
+    return _.assign({}, renderData);
   },
 
   viewDidMount($el) {
