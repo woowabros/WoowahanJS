@@ -80,6 +80,8 @@ viewMount = function() {
     } else {
       if (!!this.append) {
         container.append($dom);
+      } else if (!!this.after) {
+        container.after($dom);
       } else {
         container.html($dom);
       }
