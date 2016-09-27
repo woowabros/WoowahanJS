@@ -80,6 +80,8 @@ viewMount = function() {
     } else {
       if (!!this.append) {
         container.append($dom);
+      } else if (!!this.after) {
+        container.after($dom);
       } else {
         container.html($dom);
       }
@@ -161,7 +163,7 @@ View = Backbone.View.extend({
             if ($el.is('input[type=checkbox]') || $el.is('input[type=radio]')) {
               return $el.is(':checked');
             } else {
-              return $el.val();
+              return $el.val() || $el.text();
             }
           };
 
