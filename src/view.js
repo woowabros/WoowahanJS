@@ -223,13 +223,19 @@ View = Backbone.View.extend({
       args = ChildView;
     }
 
+    let viewContainer = (typeof container === 'string') ? this.$(container) : container;
+
+    if (!viewContainer.length) {
+      viewContainer = $(container);
+    }
+
     if (!!this._views[container]) {
       this._views[container].setModel.apply(this._views[container], _.concat(args, { silent: true }));
-      this._views[container].container = (typeof container === 'string') ? this.$(container) : container;
+      this._views[container].container = viewContainer;
 
       viewMount.apply(this._views[container]);
     } else {
-      ChildView.prototype.container = (typeof container === 'string') ? this.$(container) : container;
+      ChildView.prototype.container = viewContainer;
       
       let view = new (Function.prototype.bind.apply(ChildView, _.concat(ChildView, args)));
       
