@@ -120,10 +120,9 @@ Reducer = {
 
     fn.requestData = function(url, settings, method = 'GET') {
       if (typeof url === 'object') {
-        settings = Object.assign(defaultConfiguration, url);
+        settings = Object.assign({}, defaultConfiguration, { url });
       } else {
-        settings = Object.assign(defaultConfiguration, settings);
-        settings.url = url;
+        settings = Object.assign({}, defaultConfiguration, settings, { url });
       }
 
       settings.type = method.toUpperCase();
