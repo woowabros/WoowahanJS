@@ -54,7 +54,7 @@ const typeGenerator = function(name, supportOptions, options) {
     defaults[option] = defaultTypeOptions[option];
   });
 
-  type = _.assign({ name: name }, defaults, options);
+  type = Object.assign({ name: name }, defaults, options);
   type.__validate__ = validator;
 
   return type;
@@ -122,7 +122,7 @@ module.exports = {
       MIN,
       MAX,
       FORMAT
-    ], _.assign({ defaultValue: '' }, options));
+    ], Object.assign({ defaultValue: '' }, options));
   },
 
   Number(options) {
@@ -131,19 +131,19 @@ module.exports = {
       DEFAULT_VALUE,
       MIN,
       MAX
-    ], _.assign({ defaultValue: 0 }, options));
+    ], Object.assign({ defaultValue: 0 }, options));
   },
 
   Array(options) {
     return typeGenerator(TYPE.ARRAY, [
       REQUIRED,
       DEFAULT_VALUE
-    ], _.assign({ defaultValue: [] }, options));
+    ], Object.assign({ defaultValue: [] }, options));
   },
 
   Email(options) {
     return typeGenerator(TYPE.EMAIL, [
       REQUIRED
-    ], _.assign({}, options));
+    ], Object.assign({}, options));
   }
 };
