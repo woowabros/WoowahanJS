@@ -162,6 +162,8 @@ View = Backbone.View.extend({
           const getVal = function($el) {
             if ($el.is('input[type=checkbox]') || $el.is('input[type=radio]')) {
               return $el.is(':checked');
+            } else if ($el.is('select')) {
+              return $el.val();
             } else {
               return $el.val() || $el.text();
             }
