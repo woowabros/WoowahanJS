@@ -93,6 +93,7 @@ viewMount = function() {
   }
   
   this._viewMounted = true;
+  this._bindRef();
   this._bindModel();
   
   if (typeof this.viewDidMount === 'function') {
@@ -338,6 +339,21 @@ View = Backbone.View.extend({
     if (remove + '' != 'false' && !!this) {
       this.remove();
     }
+  },
+
+  _bindRef() {
+    if (this.ref) {
+      _.each(this.ref, key => {
+        this.ref[key] = null;
+        delete this.ref[key]
+      });
+    } else {
+      this.ref = {}
+    }
+
+    _.each(this.$el.find('[data-role=ref]'), _.bind(function(element) {
+      this.ref[$(element).data('refName')] = $(element);
+    }, this));
   },
 
   _bindModel() {
