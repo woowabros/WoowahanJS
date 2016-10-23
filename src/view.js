@@ -332,27 +332,57 @@ View = Backbone.View.extend({
     if (typeof this.viewWillUnmount === 'function') {
       this.viewWillUnmount();
     }
-    
+
     this._unbindModel();
     this._removeChild();
     
     if (remove + '' != 'false' && !!this) {
+      this._unbindRef();
       this.remove();
     }
   },
 
-  _bindRef() {
-    if (this.ref) {
-      _.each(this.ref, key => {
-        this.ref[key] = null;
-        delete this.ref[key]
-      });
+  _syncElement(source, target) {
+    let $source = $(source);
+    let $target = $(target);
+
+    if ($source.is('input[type=text]') || $source.is('input[type=number]')) {
+      $target.val($source.val());
+    } else if ($source.is('input[type=checkbox]') || $source.is('input[type=radio]')) {
+      return $el.is(':checked');
+    } else if ($source.is('select')) {
+      $target.val($source.val());
     } else {
-      this.ref = {}
+      return $el.val() || $el.text();
+    }
+  },
+
+  _bindRef() {
+    if (!this.refs) {
+      this.refs = {};
     }
 
     _.each(this.$el.find('[data-role=ref]'), _.bind(function(element) {
-      this.ref[$(element).data('refName')] = $(element);
+      let refName = element.dataset.refName;
+      let refGroup = element.dataset.refGroup;
+
+      if (refGroup) {
+        if (this.refs[refGroup]) {
+          this.refs[refGroup].push(element);
+        } else {
+          this.refs[refGroup] = [element];
+        }
+      } else {
+        let currentElement = this.refs[refName];
+        let restore = element.dataset.refRestore && element.dataset.refRestore.toLowerCase() === 'true';
+
+        this.refs[refName] = element;
+
+        if (currentElement) {
+          restore && this._syncElement(currentElement, this.refs[refName]);
+          currentElement = null;
+        }
+      }
     }, this));
   },
 
@@ -370,6 +400,14 @@ View = Backbone.View.extend({
         this._plugins[type].call(this, element, value);
       }, this, element, key));
     }, this));
+  },
+
+  _unbindRef() {
+    _.each(this.refs, ref => {
+      ref = null;
+    });
+
+    this.refs = null;
   },
 
   _unbindModel() {
