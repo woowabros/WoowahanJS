@@ -1,24 +1,20 @@
 <div class="container">
     <h1>뷰의 DOM 참조</h1>
 
-    <div class="alert alert-success" role="alert" data-role="ref" data-ref-name="alertMessage">이 메세지가 보이나요? 토글 버튼을 눌러 사라지게 해 보세요.</div>
+    <div class="alert alert-success" role="alert" data-ref="alertMessage">이 메세지가 보이나요? 토글 버튼을 눌러 사라지게 해 보세요.</div>
 
-    <input type="text" class="form-control" data-role="ref" data-ref-name="text1">
-    <input type="text" class="form-control" data-role="ref" data-ref-name="text2" data-ref-restore="true">
+    <input type="text" class="form-control" data-ref="text1">
+    <input type="text" class="form-control" data-ref="text2" data-ref-form-restore="true">
 
-    <select class="form-control" data-role="ref" data-ref-name="rgb" data-ref-restore="true">
-        <option value="">전체</option>
-        <option value="r">Red</option>
-        <option value="g">Green</option>
-        <option value="b">Blue</option>
+    <select class="form-control" name="skinColor" data-ref="skinColor" data-ref-form-restore="true">
+        <option value="white">White</option>
+        <option value="yellow">Yellow</option>
+        <option value="black">Black</option>
     </select>
 
-    <div class="form-group">
-        <input type="radio" class="form-contorl" name="cmyk" data-role="ref" data-ref-group="cmyk" value="c">
-        <input type="radio" class="form-contorl" name="cmyk" data-role="ref" data-ref-group="cmyk" value="m">
-        <input type="radio" class="form-contorl" name="cmyk" data-role="ref" data-ref-group="cmyk" value="y">
-        <input type="radio" class="form-contorl" name="cmyk" data-role="ref" data-ref-group="cmyk" value="k">
-    </div>
+    <textarea class="form-control" data-ref="text3" data-ref-form-restore="true"></textarea>
+
+    <select class="form-control" data-role="bind" data-name="peopleColor" data-type="select" data-ref="peopleColor" data-ref-form-restore="true"></select>
 
     <button type="button" class="btn btn-default btn-toggle">Toggle</button>
     <button type="button" class="btn btn-default btn-update-view">Update View</button>

@@ -13,9 +13,9 @@ const delegateEventSplitter = /^(\S+)\s*(.*)$/;
 const childEventSplitter = /^\@(\w+)\s*(.*)$/;
 const DEFAULT_ATTR_TYPE = 'text';
 
-let View;
-let viewMount;
-let app;
+let View = null;
+let viewMount = null;
+let app = null;
 
 viewMount = function() {
   let tagName = this.tagName;
@@ -346,14 +346,12 @@ View = Backbone.View.extend({
     let $source = $(source);
     let $target = $(target);
 
-    if ($source.is('input[type=text]') || $source.is('input[type=number]')) {
+    if ($source.is('input[type=text]') || $source.is('input[type=number]') || $source.is('textarea')) {
       $target.val($source.val());
     } else if ($source.is('input[type=checkbox]') || $source.is('input[type=radio]')) {
       return $el.is(':checked');
     } else if ($source.is('select')) {
       $target.val($source.val());
-    } else {
-      return $el.val() || $el.text();
     }
   },
 
@@ -362,24 +360,25 @@ View = Backbone.View.extend({
       this.refs = {};
     }
 
-    _.each(this.$el.find('[data-role=ref]'), _.bind(function(element) {
-      let refName = element.dataset.refName;
-      let refGroup = element.dataset.refGroup;
+    _.each(this.$el.find('[data-ref]'), _.bind(function(element) {
+      let $element = $(element);
+      let refName = $element.data('ref');
+      let refGroup = $element.data('refGroup') || false;
+      let refFormRestore = $element.data('refFormRestore') || false;
 
       if (refGroup) {
-        if (this.refs[refGroup]) {
-          this.refs[refGroup].push(element);
+        if (this.refs[refName]) {
+          this.refs[refName].push(element);
         } else {
-          this.refs[refGroup] = [element];
+          this.refs[refName] = [element];
         }
       } else {
         let currentElement = this.refs[refName];
-        let restore = element.dataset.refRestore && element.dataset.refRestore.toLowerCase() === 'true';
 
         this.refs[refName] = element;
 
         if (currentElement) {
-          restore && this._syncElement(currentElement, this.refs[refName]);
+          refFormRestore && this._syncElement(currentElement, this.refs[refName]);
           currentElement = null;
         }
       }

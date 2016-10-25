@@ -7,6 +7,7 @@
 * [첫 번째 앱 만들기](./first-app.md)
 * [뷰](./view.md)
 * [뷰모델 및 데이타 바인딩](./view-model.md)
+* [뷰의 DOM 참조](./dom-refs.md)
 * [이벤트](./event.md)
 * [액션과 리듀서](./action-reducer.md)
 * [스토어](./store.md)
