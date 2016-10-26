@@ -23,7 +23,7 @@ export default Woowahan.CollectionView.create('Users', {
     
     this.super();
   },
-  
+
   viewDidMount() {
     this.dispatch(Woowahan.Action.create(FETCH_USERS), this.fetchUsers);
   },
@@ -41,7 +41,7 @@ export default Woowahan.CollectionView.create('Users', {
   },
 
   fetchOneUser(data) {
-    window.location.hash = `/users/${encodeURIComponent(data.name)}?company=${encodeURIComponent(data.company)}`
+    window.location.hash = this.getRouteTables('UserDetailView', { name: data.name }, `company=${data.company}`);
   },
 
   onSelectedRow(row) {

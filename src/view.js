@@ -264,6 +264,29 @@ View = Backbone.View.extend({
     return app.getComponent(name).extend({});
   },
 
+  getRouteTables(routeName, params, query) {
+    if (routeName === void 0) {
+      return app.getRouteTables();
+    }
+
+    let path = app.getRouteTables()[routeName];
+
+    if (!path) {
+      console.error(`"${routeName}" not found`);
+      return;
+    }
+
+    if (typeof params === 'string') {
+      return `${path()}?${encodeURIComponent(params)}`;
+    } else {
+      if (typeof query === 'string') {
+        return `${path(params)}?${encodeURIComponent(query)}`;
+      } else {
+        return path(params);
+      }
+    }
+  },
+
   dispatch(action, subscriber, options) {
     action.__options = options || {};
     

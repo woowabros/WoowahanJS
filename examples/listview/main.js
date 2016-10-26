@@ -22,6 +22,6 @@ app.start({
   view: WelcomeView,
   pages: [
     { url: '/users', view: UsersView },
-    { url: '/users/:name', view: UserDetailView }
+    { url: '/users/:name', view: UserDetailView, routeName: 'UserDetailView' }
   ]
 });

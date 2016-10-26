@@ -2,7 +2,45 @@
 
 const MD5 = require('md5');
 
+function urlBuilder(path) {
+  return function(params) {
+    let url = path;
+
+    if (!params) {
+      return url;
+    }
+
+    if (Array.isArray(params)) {
+      let keys = path.match(/\:\w+/g);
+
+      if (keys.length !== params.length) {
+        console.error('It does not match the required input values.');
+        return url;
+      }
+
+      keys.forEach((key, index) => {
+        url = url.replace(key, encodeURIComponent(params[index]));
+      });
+
+      return url;
+    }
+
+    if (typeof params === 'object') {
+      for (let key in params) {
+        url = url.replace(':'+key, encodeURIComponent(params[key]));
+      }
+
+      return url;
+    }
+
+
+    console.error('Invalid params type');
+    return url;
+  };
+}
+
 module.exports = {
+  routeTables: {},
   settings: null,
   layouts: [],
   currentView: '',
@@ -29,7 +67,9 @@ module.exports = {
 
     while (!!pages.length) {
       page = pages.shift();
-      
+
+      this.routeTables[page.routeName || page.view.viewname] = urlBuilder(page.url);
+
       if (!!page.url.startsWith('/')) {
         page.url = page.url.substr(1);
       }

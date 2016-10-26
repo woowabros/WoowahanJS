@@ -17,6 +17,9 @@ const toolset = {
   get getComponent() {
     return _.bind(instance.getComponent, instance);
   },
+  get getRouteTables() {
+    return _.bind(instance.getRouteTables, instance);
+  },
   get addAction() {
     return _.bind(instance.addAction, instance);
   },
@@ -155,6 +158,10 @@ class Woowahan {
     }
   }
 
+  getRouteTables() {
+    return Router.routeTables;
+  }
+
   dispatch(action, subscriber) {
     debug(format('dispatch action %s', action.type));
     this.queue.push({ action, subscriber });
@@ -202,7 +209,7 @@ class Woowahan {
       return;
     }
 
-    let wait = setInterval(_ => {
+    let wait = setInterval(() => {
       switch (document.readyState) {
         case 'complete': case 'loaded': break;
         default: return;
