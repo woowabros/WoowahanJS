@@ -6,7 +6,8 @@ export default Woowahan.View.create('ModalViewBootstrap', {
   template: Template,
 
   events: {
-    'click #tabs a': 'onClickTab'
+    'click #tabs a': 'onClickTab',
+    'click .btn-close': 'onClickClose'
   },
 
   initialize() {
@@ -27,6 +28,12 @@ export default Woowahan.View.create('ModalViewBootstrap', {
 
   onClickTab(event) {
     $(event.currentTarget).tab('show');
+
+    return false;
+  },
+
+  onClickClose() {
+    this.modal.modal('hide');
 
     return false;
   },
