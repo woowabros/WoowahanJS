@@ -251,6 +251,8 @@ View = Backbone.View.extend({
   },
 
   addView(container, ChildView, ...args) {
+    this.removeView(container);
+
     return this.updateView(container, ChildView, ...args);
   },
 
