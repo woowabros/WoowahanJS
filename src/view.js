@@ -215,9 +215,11 @@ View = Backbone.View.extend({
     }
 
     if (!!container && !ChildView) {
-      this._views[container].close();
+      if (!!this._views[container]) {
+        this._views[container].close();
 
-      delete this._views[container];
+        delete this._views[container];
+      }
 
       return;
     }
