@@ -219,7 +219,9 @@ class Woowahan {
         Router.design(design, options);
       }
 
-      Backbone.history.start();
+      Backbone.history.start({
+        pushState: !!options.pushState
+      });
     }, 1);
   }
 
