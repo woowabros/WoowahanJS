@@ -205,8 +205,6 @@ class Woowahan {
   start(design, options) {
     if (typeof jQuery === 'undefined') {
       throw new Error('jQuery is not loaded!!');
-
-      return;
     }
 
     let wait = setInterval(() => {

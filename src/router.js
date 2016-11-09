@@ -70,6 +70,8 @@ module.exports = {
 
       this.routeTables[page.routeName || page.view.viewname] = urlBuilder(page.url);
 
+      page.originUrl = page.url;
+
       if (!!page.url.startsWith('/')) {
         page.url = page.url.substr(1);
       }
@@ -143,7 +145,7 @@ module.exports = {
       }, this, page);
 
       if (!!page.pages && !!page.pages.length) {
-        const url = page.url || '';
+        const url = page.originUrl || '';
         const container = page.container || '';
         const layout = page.layout || '';
         
