@@ -104,7 +104,7 @@ module.exports = {
           // });
         }
 
-        const queryStr = args[args.length - 1];
+        const queryStr = decodeURIComponent(args[args.length - 1]);
 
         if (!!queryStr && !!~queryStr.indexOf('=')) {
           const queryArr = queryStr.split('&');
