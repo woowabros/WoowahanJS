@@ -390,10 +390,14 @@ View = Backbone.View.extend({
     }
     
     if (!key) {
-      return _.cloneDeep(this.model.toJSON());
+      return Object.assign({}, this.model.toJSON());
+
+      // return _.cloneDeep(this.model.toJSON());
     }
 
-    return _.cloneDeep(this.model.get(key));
+    return Object.assign({}, this.model.get(key));
+
+    // return _.cloneDeep(this.model.get(key));
   },
 
   log() {
@@ -436,7 +440,7 @@ View = Backbone.View.extend({
       this.refs = {};
     }
 
-    _.each(this.$el.find('[data-ref]'), _.bind(function(element) {
+    for (const element of this.$el.find('[data-ref]')) {
       let $element = $(element);
       let refName = $element.data('ref');
       let refGroup = $element.data('refGroup') || false;
@@ -458,29 +462,68 @@ View = Backbone.View.extend({
           currentElement = null;
         }
       }
-    }, this));
+    }
+
+    // _.each(this.$el.find('[data-ref]'), _.bind(function(element) {
+    //   let $element = $(element);
+    //   let refName = $element.data('ref');
+    //   let refGroup = $element.data('refGroup') || false;
+    //   let refFormRestore = $element.data('refFormRestore') || false;
+    //
+    //   if (refGroup) {
+    //     if (this.refs[refName]) {
+    //       this.refs[refName].push(element);
+    //     } else {
+    //       this.refs[refName] = [element];
+    //     }
+    //   } else {
+    //     let currentElement = this.refs[refName];
+    //
+    //     this.refs[refName] = element;
+    //
+    //     if (currentElement) {
+    //       refFormRestore && this._syncElement(currentElement, this.refs[refName]);
+    //       currentElement = null;
+    //     }
+    //   }
+    // }, this));
   },
 
   _bindModel() {
     this._unbindModel();
     
     let targetElements = this.$el.find('[data-role=bind]');
-    
-    _.each(targetElements, _.bind(function(element) {
+
+    for (const element of targetElements) {
       let key = $(element).data('name');
       let eventName = `change:${key}`;
-      this.listenTo(this.model, eventName, _.bind(function(element, key) {
+
+      this.listenTo(this.model, eventName, function(element, key) {
         let value = this.model.get(key);
         let type = ($(element).data('type') || DEFAULT_ATTR_TYPE).toLowerCase();
         this._plugins[type].call(this, element, value);
-      }, this, element, key));
-    }, this));
+      }.bind(this, element, key));
+    }
+    
+    // _.each(targetElements, _.bind(function(element) {
+    //   let key = $(element).data('name');
+    //   let eventName = `change:${key}`;
+    //   this.listenTo(this.model, eventName, _.bind(function(element, key) {
+    //     let value = this.model.get(key);
+    //     let type = ($(element).data('type') || DEFAULT_ATTR_TYPE).toLowerCase();
+    //     this._plugins[type].call(this, element, value);
+    //   }, this, element, key));
+    // }, this));
   },
 
   _unbindRef() {
-    _.each(this.refs, ref => {
+    for (let ref of this.refs) {
       ref = null;
-    });
+    }
+
+    // _.each(this.refs, ref => {
+    //   ref = null;
+    // });
 
     this.refs = null;
   },

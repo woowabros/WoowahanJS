@@ -1,4 +1,4 @@
-const _ = require('lodash');
+// const _ = require('lodash');
 const format = require('util').format;
 const Debug = require('debug');
 const Backbone = require('backbone');
@@ -9,25 +9,45 @@ const INTERVAL = 1000/60;
 
 const toolset = {
   get dispatch() {
-    return _.bind(instance.dispatch, instance);
+    return instance.dispatch.bind(instance);
+
+    // return _.bind(instance.dispatch, instance);
   },
+
   get getStates() {
-    return _.bind(instance.getStates, instance);
+    return instance.getStates.bind(instance);
+
+    // return _.bind(instance.getStates, instance);
   },
+
   get getComponent() {
-    return _.bind(instance.getComponent, instance);
+    return instance.getComponent.bind(instance);
+
+    // return _.bind(instance.getComponent, instance);
   },
+
   get getRouteTables() {
-    return _.bind(instance.getRouteTables, instance);
+    return instance.getRouteTables.bind(instance);
+
+    // return _.bind(instance.getRouteTables, instance);
   },
+
   get addAction() {
-    return _.bind(instance.addAction, instance);
+    return instance.addAction.bind(instance);
+
+    // return _.bind(instance.addAction, instance);
   },
+
   get removeAction() {
-    return _.bind(instance.removeAction, instance);
+    return instance.removeAction.bind(instance);
+
+    // return _.bind(instance.removeAction, instance);
   },
+
   get addError() {
-    return _.bind(instance.addError, instance);
+    return instance.addError.bind(instance);
+
+    // return _.bind(instance.addError, instance);
   }
 };
 
@@ -38,7 +58,7 @@ if (global.__backboneAgent) {
   global.__backboneAgent.handleBackbone(Backbone);
 }
 
-global._ = _;
+// global._ = _;
 
 Backbone.Model.prototype.idAttribute = '___ID_ATTR___';
 Backbone.View.prototype.viewname = '___WOOWA_VIEW___';
@@ -58,7 +78,9 @@ class Woowahan {
   }
 
   enableQueue() {
-    this.queuemonitor = setInterval(_.bind(this.queuing, this), INTERVAL);
+    this.queuemonitor = setInterval(this.queuing.bind(this), INTERVAL);
+
+    // this.queuemonitor = setInterval(_.bind(this.queuing, this), INTERVAL);
   }
 
   disableQueue() {
@@ -112,10 +134,14 @@ class Woowahan {
         if (errors) {
           this.trigger('error', errors);
         } else {
-          new (Function.prototype.bind.apply(reducer, _.concat(reducer, item.action.data, _.bind(item.subscriber, this))))();
+          new (Function.prototype.bind.apply(reducer, Array.prototype.concat.call(reducer, item.action.data, item.subcriber.bind(this))))();
+
+          // new (Function.prototype.bind.apply(reducer, _.concat(reducer, item.action.data, _.bind(item.subscriber, this))))();
         }
       } else {
-        new (Function.prototype.bind.apply(reducer, _.concat(reducer, item.action.data, _.bind(item.subscriber, this))))();
+        new (Function.prototype.bind.apply(reducer, Array.prototype.concat.call(reducer, item.action.data, item.subscriber.bind(this))))();
+
+        // new (Function.prototype.bind.apply(reducer, _.concat(reducer, item.action.data, _.bind(item.subscriber, this))))();
       }
     }
 
@@ -234,7 +260,9 @@ class Woowahan {
   }
 }
 
-_.extend(Woowahan.prototype, Backbone.Events);
+Object.assign(Woowahan.prototype, Backbone.Events);
+
+// _.extend(Woowahan.prototype, Backbone.Events);
 
 Woowahan.$ = Backbone.$;
 
