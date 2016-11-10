@@ -91,7 +91,7 @@ module.exports = {
         } else {
           _.each(page.url.split('/'), function(part) {
             if (part.startsWith(':')) {
-              params[part.substr(1)] = args[idx++];
+              params[part.substr(1)] = decodeURIComponent(args[idx++]);
             }
           });
         }
