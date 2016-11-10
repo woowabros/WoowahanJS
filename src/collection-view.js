@@ -63,7 +63,11 @@ CollectionView = Woowahan.View.create('CollectionView', {
     }
 
     if (Array.isArray(data)) {
-      _.each(data, _.bind(function(item) { this.collection.add(item); }, this));
+      for (const item of data) {
+        this.collection.add(item);
+      }
+
+      // _.each(data, _.bind(function(item) { this.collection.add(item); }, this));
     } else {
       this.collection.add(data);
     }

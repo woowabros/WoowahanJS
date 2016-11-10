@@ -62,8 +62,10 @@ module.exports = {
     const options = { routes: {} };
 
     let page, routeId;
-    
-    pages = _.cloneDeep(pages);
+
+    pages = Object.assign({}, pages);
+
+    // pages = _.cloneDeep(pages);
 
     while (!!pages.length) {
       page = pages.shift();
@@ -89,11 +91,17 @@ module.exports = {
         if (page.url.startsWith('*')) {
           params[page.url.split('*')[1]] = args[0];
         } else {
-          _.each(page.url.split('/'), function(part) {
+          for (const part of page.url.split('/')) {
             if (part.startsWith(':')) {
               params[part.substr(1)] = args[idx++];
             }
-          });
+          }
+
+          // _.each(page.url.split('/'), function(part) {
+          //   if (part.startsWith(':')) {
+          //     params[part.substr(1)] = args[idx++];
+          //   }
+          // });
         }
 
         const queryStr = args[args.length - 1];
@@ -101,18 +109,28 @@ module.exports = {
         if (!!queryStr && !!~queryStr.indexOf('=')) {
           const queryArr = queryStr.split('&');
 
-          _.each(queryArr, function(q) {
+          for (const q of queryArr) {
             const arr = q.split('=');
 
-            if (arr.length == 2) {
+            if (arr.length === 2) {
               query[arr[0]] = arr[1];
             }
-          });
+          }
+
+          // _.each(queryArr, function(q) {
+          //   const arr = q.split('=');
+          //
+          //   if (arr.length == 2) {
+          //     query[arr[0]] = arr[1];
+          //   }
+          // });
         }
         
         if (!!page.layout) {
           if (!this.currentLayout || this.currentLayout.viewname != page.layout) {
-            const layout = _.find(this.layouts, { viewName: page.layout });
+            const layout = this.layouts.find(layout => layout.viewName === page.layout);
+
+            // const layout = _.find(this.layouts, { viewName: page.layout });
             
             if (!!layout) {
               !!this.currentLayout && this.currentLayout.close();
@@ -148,22 +166,39 @@ module.exports = {
         const url = page.originUrl || '';
         const container = page.container || '';
         const layout = page.layout || '';
-        
-        _.each(page.pages, subPage => {
+
+        for (const subPage of page.pages) {
           if (!subPage.url.startsWith('/')) {
             subPage.url = `${url}/${subPage.url}`;
           }
-          
+
           if (!subPage.container) {
             subPage.container = container;
           }
-          
+
           if (!subPage.layout) {
             subPage.layout = layout;
           }
-          
+
           pages.push(subPage);
-        });
+        }
+
+        
+        // _.each(page.pages, subPage => {
+        //   if (!subPage.url.startsWith('/')) {
+        //     subPage.url = `${url}/${subPage.url}`;
+        //   }
+        //
+        //   if (!subPage.container) {
+        //     subPage.container = container;
+        //   }
+        //
+        //   if (!subPage.layout) {
+        //     subPage.layout = layout;
+        //   }
+        //
+        //   pages.push(subPage);
+        // });
       }
     }
 

@@ -99,10 +99,14 @@ viewMount = function() {
   if (typeof this.viewDidMount === 'function') {
     this.viewDidMount($dom);
   }
-  
-  _.delay(_.bind(function(){
+
+  setTimeout(function() {
     this.trigger('viewDidMount');
-  }, this), 1);
+  }.bind(this), 1);
+  
+  // _.delay(_.bind(function(){
+  //   this.trigger('viewDidMount');
+  // }, this), 1);
 };
 
 View = Backbone.View.extend({
@@ -130,7 +134,9 @@ View = Backbone.View.extend({
   },
 
   delegateEvents(events) {
-    events || (events = _.result(this, 'events'));
+    events = events || this.events;
+
+    // events || (events = _.result(this, 'events'));
 
     if (!events) return this;
 
@@ -145,7 +151,9 @@ View = Backbone.View.extend({
       let listener;
       
       if (!!childMatch) {
-        const index = _.indexOf(method, '(');
+        const index = method.indexOf('(');
+
+        // const index = _.indexOf(method, '(');
         
         let params = [];
         
@@ -157,7 +165,7 @@ View = Backbone.View.extend({
           method = method.substring(0, index);
         }
         
-        listener = _.bind(function(eventName, selector, method, params, event, ...args) {
+        listener = function(eventName, selector, method, params, event, ...args) {
           const _this = this;
 
           const getVal = function($el) {
@@ -170,33 +178,54 @@ View = Backbone.View.extend({
             }
           };
 
-          const values = _.map(params, function(param) {
-            const $el = _this.$(param);
+          const values = params.map(param => getVal(_this.$(param)));
 
-            return getVal($el);
-          });
+          // const values = _.map(params, function(param) {
+          //   const $el = _this.$(param);
+          //
+          //   return getVal($el);
+          // });
 
           if (eventName === 'submit') {
             const inputs = {};
 
-            _.each(_this.$(selector).find('input, select, textarea'), function(el) {
+            for (const el of _this.$(selector).find('input, select, textarea')) {
               inputs[$(el).attr('name')] = getVal($(el));
-            });
+            }
+
+            // _.each(_this.$(selector).find('input, select, textarea'), function(el) {
+            //   inputs[$(el).attr('name')] = getVal($(el));
+            // });
 
             values.push(inputs);
           }
 
-          if (!_.isFunction(method)) method = this[method];
-          
-          return method.apply(this, _.concat(values, args, event));
-        }, this, eventName, selector, method, params);
+          if (Object.prototype.toString.call(method) !== '[object Function]') {
+            method = this[method];
+          }
+
+          // if (!_.isFunction(method)) method = this[method];
+
+          return method.apply(this, Array.prototype.concat.call(values, args, event));
+
+          // return method.apply(this, _.concat(values, args, event));
+        }.bind(this, eventName, selector, method, params);
       } else {
-        if (!_.isFunction(method)) method = this[method];
+        if (Object.prototype.toString.call(method) !== '[object Function]') {
+          method = this[method];
+        }
+
         if (!method) continue;
+
+        // if (!_.isFunction(method)) method = this[method];
+        // if (!method) continue;
       
         eventName = match[1];
         selector = match[2];
-        listener = _.bind(method, this);
+
+        listener = method.bind(this);
+
+        // listener = _.bind(method, this);
       }
       
       this.delegate(eventName, selector, listener);
@@ -237,7 +266,9 @@ View = Backbone.View.extend({
     let view = this._views[container];
 
     if (!!view) {
-      view.setModel.apply(view, _.concat(args, { silent: true }));
+      view.setModel.apply(view, Array.prototype.concat.call(args, { silent: true }));
+
+      // view.setModel.apply(view, _.concat(args, { silent: true }));
       view.container = viewContainer;
 
       if (typeof view.viewWillUnmount === 'function') {
@@ -247,8 +278,10 @@ View = Backbone.View.extend({
       viewMount.apply(this._views[container]);
     } else {
       ChildView.prototype.container = viewContainer;
-      
-      view = new (Function.prototype.bind.apply(ChildView, _.concat(ChildView, args)));
+
+      view = new (Function.prototype.bind.apply(ChildView, Array.prototype.concat.call(ChildView, args)));
+
+      // view = new (Function.prototype.bind.apply(ChildView, _.concat(ChildView, args)));
       
       this._views[container] = view;
     }
@@ -305,7 +338,9 @@ View = Backbone.View.extend({
         this.$el.trigger(action.type, ...action.data);
         break;
       case 'action':
-        app.dispatch(action, _.bind(subscriber, this));
+        app.dispatch(action, subscriber.bind(this));
+
+        // app.dispatch(action, _.bind(subscriber, this));
         break;
     }
   },
@@ -323,14 +358,22 @@ View = Backbone.View.extend({
       }
       return;
     }
-    
-    if (_.isNull(attrs) || !this.model || !(this.model instanceof Backbone.Model)) {
+
+    if (Object.prototype.toString.call(attrs) === '[object Null]' || !this.model || !(this.model instanceof Backbone.Model)) {
       this.model = new Backbone.Model();
-      
+
       if (this._viewMounted) {
         this._bindModel();
       }
     }
+    
+    // if (_.isNull(attrs) || !this.model || !(this.model instanceof Backbone.Model)) {
+    //   this.model = new Backbone.Model();
+    //
+    //   if (this._viewMounted) {
+    //     this._bindModel();
+    //   }
+    // }
 
     for(let attr in attrs) {
       let value = this.model.get(attr);

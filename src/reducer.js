@@ -15,7 +15,9 @@ Reducer = {
   queueSuccess: [],
   queueFail: [],
   extend(protoProps) {
-    const child = _.extend({}, _.cloneDeep(this));
+    // const child = _.extend({}, _.cloneDeep(this));
+
+    const child = Object.assign({}, this);
 
     if (!!protoProps.onSuccess) {
       child.queueSuccess.push(protoProps.onSuccess);
@@ -41,7 +43,7 @@ Reducer = {
 
     let Reducer = function(data, subscriber) {
       this._timestamp = Date.now();
-      this._id = MD5(actionName.toLowerCase()+this._timestamp);
+      this._id = MD5(actionName.toLowerCase() + this._timestamp);
       this.subscriber = subscriber;
       this.queueSuccess = [];
       this.queueFail = [];
@@ -54,10 +56,15 @@ Reducer = {
     Reducer.actionName = actionName;
     Reducer.schema = schema;
 
-    let fn = _.extend(Reducer.prototype, {
+    let fn = Object.assign(Reducer.prototype, {
       onSuccess: _this.onSuccess,
       onFail: _this.onFail
     });
+
+    // let fn = _.extend(Reducer.prototype, {
+    //   onSuccess: _this.onSuccess,
+    //   onFail: _this.onFail
+    // });
     
     fn.useraction = handler;
 
@@ -128,7 +135,9 @@ Reducer = {
       settings.type = method.toUpperCase();
 
       let success = function(...args) {
-        const queueSuccess = _.concat(_this.queueSuccess, this.queueSuccess);
+        const queueSuccess = Array.prototype.concat.call(_this.queueSuccess, this.queueSuccess);
+
+        // const queueSuccess = _.concat(_this.queueSuccess, this.queueSuccess);
 
         if (!!queueSuccess.length || !!this.onSuccess) {
           for (const item of queueSuccess) {
@@ -142,7 +151,9 @@ Reducer = {
       };
 
       let fail = function(...args) {
-        const queueFail = _.concat(_this.queueFail, this.queueFail);
+        const queueFail = Array.prototype.concat.call(_this.queueFail, this.queueFail);
+
+        // const queueFail = _.concat(_this.queueFail, this.queueFail);
         const jqXHR = args[0];
 
         if (!!jqXHR) {
