@@ -134,7 +134,7 @@ class Woowahan {
         if (errors) {
           this.trigger('error', errors);
         } else {
-          new (Function.prototype.bind.apply(reducer, Array.prototype.concat.call(reducer, item.action.data, item.subcriber.bind(this))))();
+          new (Function.prototype.bind.apply(reducer, Array.prototype.concat.call(reducer, item.action.data, item.subscriber.bind(this))))();
 
           // new (Function.prototype.bind.apply(reducer, _.concat(reducer, item.action.data, _.bind(item.subscriber, this))))();
         }
