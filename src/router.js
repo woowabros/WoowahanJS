@@ -63,7 +63,7 @@ module.exports = {
 
     let page, routeId;
 
-    pages = Object.assign({}, pages);
+    pages = Array.from(pages);
 
     // pages = _.cloneDeep(pages);
 
@@ -82,18 +82,20 @@ module.exports = {
 
       options.routes[page.url] = routeId;
 
-      options[routeId] = _.bind(function(page, ...args) {
+      options[routeId] = function(page, ...args) {
         const params = {};
         const query = {};
         
         let idx = 0;
-        
+
         if (page.url.startsWith('*')) {
           params[page.url.split('*')[1]] = args[0];
         } else {
           for (const part of page.url.split('/')) {
             if (part.startsWith(':')) {
-              params[part.substr(1)] = args[idx++];
+              params[part.substr(1)] = decodeURIComponent(args[idx]);
+
+              ++idx;
             }
           }
 
@@ -160,7 +162,7 @@ module.exports = {
         }
 
         this.currentView = view;
-      }, this, page);
+      }.bind(this, page);
 
       if (!!page.pages && !!page.pages.length) {
         const url = page.originUrl || '';

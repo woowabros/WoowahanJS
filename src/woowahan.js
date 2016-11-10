@@ -1,4 +1,4 @@
-// const _ = require('lodash');
+const _ = require('lodash');
 const format = require('util').format;
 const Debug = require('debug');
 const Backbone = require('backbone');
@@ -58,7 +58,7 @@ if (global.__backboneAgent) {
   global.__backboneAgent.handleBackbone(Backbone);
 }
 
-// global._ = _;
+global._ = _;
 
 Backbone.Model.prototype.idAttribute = '___ID_ATTR___';
 Backbone.View.prototype.viewname = '___WOOWA_VIEW___';

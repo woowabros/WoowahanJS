@@ -385,17 +385,19 @@ View = Backbone.View.extend({
   },
 
   getModel(key) {
+    let data;
+
     if (!this.model || !(this.model instanceof Backbone.Model)) {
       this.model = new Backbone.Model();
     }
     
     if (!key) {
-      return Object.assign({}, this.model.toJSON());
+      return this.model.clone().toJSON();
 
       // return _.cloneDeep(this.model.toJSON());
     }
 
-    return Object.assign({}, this.model.get(key));
+    return this.model.clone().get(key);
 
     // return _.cloneDeep(this.model.get(key));
   },
@@ -517,8 +519,8 @@ View = Backbone.View.extend({
   },
 
   _unbindRef() {
-    for (let ref of this.refs) {
-      ref = null;
+    for (const ref in this.refs) {
+      this.refs[ref] = null;
     }
 
     // _.each(this.refs, ref => {
