@@ -202,7 +202,7 @@ class Woowahan {
     }
   }
 
-  start(design, options) {
+  start(design, options = {}) {
     if (typeof jQuery === 'undefined') {
       throw new Error('jQuery is not loaded!!');
     }
