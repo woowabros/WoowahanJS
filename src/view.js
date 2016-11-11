@@ -101,6 +101,8 @@ viewMount = function() {
   }
   
   _.delay(_.bind(function(){
+    this.dispatch(Woowahan.Event.create('viewDidMount', this));
+
     this.trigger('viewDidMount');
   }, this), 1);
 };
