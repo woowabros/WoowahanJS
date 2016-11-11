@@ -129,9 +129,11 @@ viewMount = function() {
   }
 
   setTimeout(function() {
+    this.dispatch(Woowahan.Event.create('viewDidMount', this));
+
     this.trigger('viewDidMount');
   }.bind(this), 1);
-  
+
   // _.delay(_.bind(function(){
   //   this.trigger('viewDidMount');
   // }, this), 1);
@@ -253,7 +255,7 @@ View = Backbone.View.extend({
 
         // if (!_.isFunction(method)) method = this[method];
         // if (!method) continue;
-      
+
         eventName = match[1];
         selector = match[2];
 
@@ -400,7 +402,7 @@ View = Backbone.View.extend({
         this._bindModel();
       }
     }
-    
+
     // if (_.isNull(attrs) || !this.model || !(this.model instanceof Backbone.Model)) {
     //   this.model = new Backbone.Model();
     //
@@ -540,7 +542,7 @@ View = Backbone.View.extend({
         this._plugins[type].call(this, element, value);
       }.bind(this, element, key));
     }
-    
+
     // _.each(targetElements, _.bind(function(element) {
     //   let key = $(element).data('name');
     //   let eventName = `change:${key}`;
