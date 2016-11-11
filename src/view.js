@@ -25,15 +25,17 @@ viewMount = function() {
   let domStr;
   let $dom;
 
+  let dom;
+
   if (!container) {
     throw `[${this.viewname}] Required attribute "container" is missing.`;
   } else {
     if (typeof container === 'string') {
-      container = $(container);
+      container = document.querySelector(container);
     }
   }
 
-  if (!container || !container.length) {
+  if (!container) {
     throw `[${this.viewname}] "container" is undefined.`;
   }
   
@@ -62,32 +64,58 @@ viewMount = function() {
     }
 
     if (!!tagName || $(domStr).length > 1) {
-      $dom = $(`<${tagName || 'div'}>${domStr}</${tagName || 'div'}>`);
+      dom = `<${tagName || 'div'}>${domStr}</${tagName || 'div'}>`
+
+      // $dom = $(`<${tagName || 'div'}>${domStr}</${tagName || 'div'}>`);
     } else {
-      $dom = $(domStr);
+      dom = domStr;
+
+      // $dom = $(domStr);
     }
 
     if (!!this.className) {
-      $dom.addClass(this.className);
+      if (dom.classList) {
+        dom.classList.add(this.className);
+      } else {
+        dom.className += ' ' + this.className;
+      }
+
+      // $dom.addClass(this.className);
     }
 
     if (!!this._viewMounted) {
-      if ($.contains(container[0], this.el)) {
-        this.$el.replaceWith($dom);
+      if (container !== this.el && container.contains(this.el)) {
+        this.el.outerHTML = dom;
+
+        // this.$el.replaceWith($dom);
       } else {
-        container.html($dom);
+        container.innerHTML = dom;
+
+        // container.html($dom);
       }
+
+      // if ($.contains(container[0], this.el)) {
+      //   this.$el.replaceWith($dom);
+      // } else {
+      //   container.html($dom);
+      // }
     } else {
       if (!!this.append) {
-        container.append($dom);
+        container.appendChild(dom);
+
+        // container.append($dom);
       } else if (!!this.after) {
-        container.after($dom);
+        container.insertAdjacentHTML('afterend', dom);
+
+        // container.after($dom);
       } else {
-        container.html($dom);
+        container.innerHTML = dom;
+
+        // container.html($dom);
       }
     }
 
-    this.setElement($dom);
+    this.setElement(dom);
   } else {
     this.setElement(container);
   }
@@ -97,7 +125,7 @@ viewMount = function() {
   this._bindModel();
   
   if (typeof this.viewDidMount === 'function') {
-    this.viewDidMount($dom);
+    this.viewDidMount($(dom));
   }
 
   setTimeout(function() {
@@ -161,24 +189,30 @@ View = Backbone.View.extend({
         selector = childMatch[2];
         
         if (!!~index) {
-          params = method.substring(index + 1, method.length - 1).split(',').map(el => $.trim(el));
+          params = method.substring(index + 1, method.length - 1).split(',').map(el => el.trim());
           method = method.substring(0, index);
         }
         
         listener = function(eventName, selector, method, params, event, ...args) {
           const _this = this;
 
-          const getVal = function($el) {
-            if ($el.is('input[type=checkbox]') || $el.is('input[type=radio]')) {
-              return $el.is(':checked');
-            } else if ($el.is('select')) {
-              return $el.val();
+          const getVal = function(el) {
+            if (isMatch(el, 'input[type=checkbox]') || isMatch(el, 'input[type=radio]')) {
+              return isMatch(el, ':checked');
+
+              // return $el.is(':checked');
+            } else if (isMatch(el, 'select')) {
+              return el.value;
+
+              // return $el.val();
             } else {
-              return $el.val() || $el.text();
+              return el.value || el.textContent
+
+              // return $el.val() || $el.text();
             }
           };
 
-          const values = params.map(param => getVal(_this.$(param)));
+          const values = params.map(param => getVal(_this.querySelector(param)));
 
           // const values = _.map(params, function(param) {
           //   const $el = _this.$(param);
@@ -189,8 +223,8 @@ View = Backbone.View.extend({
           if (eventName === 'submit') {
             const inputs = {};
 
-            for (const el of _this.$(selector).find('input, select, textarea')) {
-              inputs[$(el).attr('name')] = getVal($(el));
+            for (const el of _this.querySelector(selector).querySelectorAll('input, select, textarea')) {
+              inputs[el.getAttribute('name')] = getVal(el);
             }
 
             // _.each(_this.$(selector).find('input, select, textarea'), function(el) {
@@ -257,11 +291,11 @@ View = Backbone.View.extend({
       args = ChildView;
     }
 
-    let viewContainer = (typeof container === 'string') ? this.$(container) : container;
+    let viewContainer = (typeof container === 'string') ? this.el.querySelector(container) : container;
 
-    if (!viewContainer.length) {
-      viewContainer = $(container);
-    }
+    // if (!viewContainer.length) {
+    //   viewContainer = $(container);
+    // }
 
     let view = this._views[container];
 
