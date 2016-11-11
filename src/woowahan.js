@@ -63,7 +63,7 @@ global._ = _;
 Backbone.Model.prototype.idAttribute = '___ID_ATTR___';
 Backbone.View.prototype.viewname = '___WOOWA_VIEW___';
 
-require('./polyfill');
+require('./core');
 
 class Woowahan {
   constructor(settings = {}) {
