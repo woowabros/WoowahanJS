@@ -151,7 +151,7 @@ module.exports = {
         
         _.each(page.pages, subPage => {
           if (!subPage.url.startsWith('/')) {
-            subPage.url = `${url}/${subPage.url}`;
+            subPage.url = `${url === '/' ? '' : url}/${subPage.url}`;
           }
           
           if (!subPage.container) {
