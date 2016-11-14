@@ -31,8 +31,6 @@ ItemView = Woowahan.View.create('ItemView', {
     if (this.onSelectedCell && typeof this.onSelectedCell === 'function') {
       this.onSelectedRow(event, function(...args) {
         this.trigger.apply(this, Array.prototype.concat.call(events.SELECTED_CELL, args));
-
-        // this.trigger.apply(this, _.concat(events.SELECTED_CELL, args));
       }.bind(this));
     }
   }

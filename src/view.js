@@ -105,10 +105,6 @@ viewMount = function() {
 
     this.trigger('viewDidMount');
   }.bind(this), 1);
-
-  // _.delay(_.bind(function(){
-  //   this.trigger('viewDidMount');
-  // }, this), 1);
 };
 
 View = Backbone.View.extend({
@@ -138,8 +134,6 @@ View = Backbone.View.extend({
   delegateEvents(events) {
     events = events || this.events;
 
-    // events || (events = _.result(this, 'events'));
-
     if (!events) return this;
 
     this.undelegateEvents();
@@ -155,8 +149,6 @@ View = Backbone.View.extend({
       if (!!childMatch) {
         const index = method.indexOf('(');
 
-        // const index = _.indexOf(method, '(');
-        
         let params = [];
         
         eventName = childMatch[1];
@@ -182,22 +174,12 @@ View = Backbone.View.extend({
 
           const values = params.map(param => getVal(_this.$(param)));
 
-          // const values = _.map(params, function(param) {
-          //   const $el = _this.$(param);
-          //
-          //   return getVal($el);
-          // });
-
           if (eventName === 'submit') {
             const inputs = {};
 
             for (const el of _this.$(selector).find('input, select, textarea')) {
               inputs[$(el).attr('name')] = getVal($(el));
             }
-
-            // _.each(_this.$(selector).find('input, select, textarea'), function(el) {
-            //   inputs[$(el).attr('name')] = getVal($(el));
-            // });
 
             values.push(inputs);
           }
@@ -206,11 +188,7 @@ View = Backbone.View.extend({
             method = this[method];
           }
 
-          // if (!_.isFunction(method)) method = this[method];
-
           return method.apply(this, Array.prototype.concat.call(values, args, event));
-
-          // return method.apply(this, _.concat(values, args, event));
         }.bind(this, eventName, selector, method, params);
       } else {
         if (Object.prototype.toString.call(method) !== '[object Function]') {
@@ -219,15 +197,10 @@ View = Backbone.View.extend({
 
         if (!method) continue;
 
-        // if (!_.isFunction(method)) method = this[method];
-        // if (!method) continue;
-
         eventName = match[1];
         selector = match[2];
 
         listener = method.bind(this);
-
-        // listener = _.bind(method, this);
       }
       
       this.delegate(eventName, selector, listener);
@@ -269,8 +242,6 @@ View = Backbone.View.extend({
 
     if (!!view) {
       view.setModel.apply(view, Array.prototype.concat.call(args, { silent: true }));
-
-      // view.setModel.apply(view, _.concat(args, { silent: true }));
       view.container = viewContainer;
 
       if (typeof view.viewWillUnmount === 'function') {
@@ -283,8 +254,6 @@ View = Backbone.View.extend({
 
       view = new (Function.prototype.bind.apply(ChildView, Array.prototype.concat.call(ChildView, args)));
 
-      // view = new (Function.prototype.bind.apply(ChildView, _.concat(ChildView, args)));
-      
       this._views[container] = view;
     }
 
@@ -341,8 +310,6 @@ View = Backbone.View.extend({
         break;
       case 'action':
         app.dispatch(action, subscriber.bind(this));
-
-        // app.dispatch(action, _.bind(subscriber, this));
         break;
     }
   },
@@ -369,14 +336,6 @@ View = Backbone.View.extend({
       }
     }
 
-    // if (_.isNull(attrs) || !this.model || !(this.model instanceof Backbone.Model)) {
-    //   this.model = new Backbone.Model();
-    //
-    //   if (this._viewMounted) {
-    //     this._bindModel();
-    //   }
-    // }
-
     for(let attr in attrs) {
       let value = this.model.get(attr);
 
@@ -393,13 +352,9 @@ View = Backbone.View.extend({
     
     if (!key) {
       return this.model.clone().toJSON();
-
-      // return _.cloneDeep(this.model.toJSON());
     }
 
     return this.model.clone().get(key);
-
-    // return _.cloneDeep(this.model.get(key));
   },
 
   log() {
@@ -465,38 +420,12 @@ View = Backbone.View.extend({
         }
       }
     }
-
-    // _.each(this.$el.find('[data-ref]'), _.bind(function(element) {
-    //   let $element = $(element);
-    //   let refName = $element.data('ref');
-    //   let refGroup = $element.data('refGroup') || false;
-    //   let refFormRestore = $element.data('refFormRestore') || false;
-    //
-    //   if (refGroup) {
-    //     if (this.refs[refName]) {
-    //       this.refs[refName].push(element);
-    //     } else {
-    //       this.refs[refName] = [element];
-    //     }
-    //   } else {
-    //     let currentElement = this.refs[refName];
-    //
-    //     this.refs[refName] = element;
-    //
-    //     if (currentElement) {
-    //       refFormRestore && this._syncElement(currentElement, this.refs[refName]);
-    //       currentElement = null;
-    //     }
-    //   }
-    // }, this));
   },
 
   _bindModel() {
     this._unbindModel();
 
     let targetElements = this.$el.find('[data-role=bind]');
-
-    // let targetElements = this.$el.find('[data-role=bind]');
 
     for (const element of targetElements) {
       let key = $(element).data('name');
@@ -509,26 +438,12 @@ View = Backbone.View.extend({
         this._plugins[type].call(this, element, value);
       }.bind(this, element, key));
     }
-
-    // _.each(targetElements, _.bind(function(element) {
-    //   let key = $(element).data('name');
-    //   let eventName = `change:${key}`;
-    //   this.listenTo(this.model, eventName, _.bind(function(element, key) {
-    //     let value = this.model.get(key);
-    //     let type = ($(element).data('type') || DEFAULT_ATTR_TYPE).toLowerCase();
-    //     this._plugins[type].call(this, element, value);
-    //   }, this, element, key));
-    // }, this));
   },
 
   _unbindRef() {
     for (const ref in this.refs) {
       this.refs[ref] = null;
     }
-
-    // _.each(this.refs, ref => {
-    //   ref = null;
-    // });
 
     this.refs = null;
   },

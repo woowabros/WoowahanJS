@@ -65,8 +65,6 @@ module.exports = {
 
     pages = Array.from(pages);
 
-    // pages = _.cloneDeep(pages);
-
     while (!!pages.length) {
       page = pages.shift();
 
@@ -98,12 +96,6 @@ module.exports = {
               ++idx;
             }
           }
-
-          // _.each(page.url.split('/'), function(part) {
-          //   if (part.startsWith(':')) {
-          //     params[part.substr(1)] = args[idx++];
-          //   }
-          // });
         }
 
         const queryStr = decodeURIComponent(args[args.length - 1]);
@@ -118,22 +110,12 @@ module.exports = {
               query[arr[0]] = arr[1];
             }
           }
-
-          // _.each(queryArr, function(q) {
-          //   const arr = q.split('=');
-          //
-          //   if (arr.length == 2) {
-          //     query[arr[0]] = arr[1];
-          //   }
-          // });
         }
         
         if (!!page.layout) {
           if (!this.currentLayout || this.currentLayout.viewname != page.layout) {
             const layout = this.layouts.find(layout => layout.viewName === page.layout);
 
-            // const layout = _.find(this.layouts, { viewName: page.layout });
-            
             if (!!layout) {
               !!this.currentLayout && this.currentLayout.close();
 
@@ -184,23 +166,6 @@ module.exports = {
 
           pages.push(subPage);
         }
-
-
-        // _.each(page.pages, subPage => {
-        //   if (!subPage.url.startsWith('/')) {
-        //     subPage.url = `${url}/${subPage.url}`;
-        //   }
-        //
-        //   if (!subPage.container) {
-        //     subPage.container = container;
-        //   }
-        //
-        //   if (!subPage.layout) {
-        //     subPage.layout = layout;
-        //   }
-        //
-        //   pages.push(subPage);
-        // });
       }
     }
 

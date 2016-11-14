@@ -10,44 +10,30 @@ const INTERVAL = 1000/60;
 const toolset = {
   get dispatch() {
     return instance.dispatch.bind(instance);
-
-    // return _.bind(instance.dispatch, instance);
   },
 
   get getStates() {
     return instance.getStates.bind(instance);
-
-    // return _.bind(instance.getStates, instance);
   },
 
   get getComponent() {
     return instance.getComponent.bind(instance);
-
-    // return _.bind(instance.getComponent, instance);
   },
 
   get getRouteTables() {
     return instance.getRouteTables.bind(instance);
-
-    // return _.bind(instance.getRouteTables, instance);
   },
 
   get addAction() {
     return instance.addAction.bind(instance);
-
-    // return _.bind(instance.addAction, instance);
   },
 
   get removeAction() {
     return instance.removeAction.bind(instance);
-
-    // return _.bind(instance.removeAction, instance);
   },
 
   get addError() {
     return instance.addError.bind(instance);
-
-    // return _.bind(instance.addError, instance);
   }
 };
 
@@ -79,8 +65,6 @@ class Woowahan {
 
   enableQueue() {
     this.queuemonitor = setInterval(this.queuing.bind(this), INTERVAL);
-
-    // this.queuemonitor = setInterval(_.bind(this.queuing, this), INTERVAL);
   }
 
   disableQueue() {
@@ -135,13 +119,9 @@ class Woowahan {
           this.trigger('error', errors);
         } else {
           new (Function.prototype.bind.apply(reducer, Array.prototype.concat.call(reducer, item.action.data, item.subscriber.bind(this))))();
-
-          // new (Function.prototype.bind.apply(reducer, _.concat(reducer, item.action.data, _.bind(item.subscriber, this))))();
         }
       } else {
         new (Function.prototype.bind.apply(reducer, Array.prototype.concat.call(reducer, item.action.data, item.subscriber.bind(this))))();
-
-        // new (Function.prototype.bind.apply(reducer, _.concat(reducer, item.action.data, _.bind(item.subscriber, this))))();
       }
     }
 
@@ -261,8 +241,6 @@ class Woowahan {
 }
 
 Object.assign(Woowahan.prototype, Backbone.Events);
-
-// _.extend(Woowahan.prototype, Backbone.Events);
 
 Woowahan.$ = Backbone.$;
 

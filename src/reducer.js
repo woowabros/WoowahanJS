@@ -15,8 +15,6 @@ Reducer = {
   queueSuccess: [],
   queueFail: [],
   extend(protoProps) {
-    // const child = _.extend({}, _.cloneDeep(this));
-
     const child = Object.assign({}, this);
 
     if (!!protoProps.onSuccess) {
@@ -61,11 +59,6 @@ Reducer = {
       onFail: _this.onFail
     });
 
-    // let fn = _.extend(Reducer.prototype, {
-    //   onSuccess: _this.onSuccess,
-    //   onFail: _this.onFail
-    // });
-    
     fn.useraction = handler;
 
     fn.id = () => this._id;
@@ -137,8 +130,6 @@ Reducer = {
       let success = function(...args) {
         const queueSuccess = Array.prototype.concat.call(_this.queueSuccess, this.queueSuccess);
 
-        // const queueSuccess = _.concat(_this.queueSuccess, this.queueSuccess);
-
         if (!!queueSuccess.length || !!this.onSuccess) {
           for (const item of queueSuccess) {
             item.apply(this, args);
@@ -152,8 +143,6 @@ Reducer = {
 
       let fail = function(...args) {
         const queueFail = Array.prototype.concat.call(_this.queueFail, this.queueFail);
-
-        // const queueFail = _.concat(_this.queueFail, this.queueFail);
         const jqXHR = args[0];
 
         if (!!jqXHR) {
