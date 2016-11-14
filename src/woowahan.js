@@ -17,6 +17,9 @@ const toolset = {
   get getComponent() {
     return _.bind(instance.getComponent, instance);
   },
+  get getPopup() {
+    return _.bind(instance.getPopup, instance);
+  },
   get getRouteTables() {
     return _.bind(instance.getRouteTables, instance);
   },
@@ -47,6 +50,8 @@ class Woowahan {
   constructor(settings = {}) {
     this.reducers = settings.reducers || {};
     this.components = settings.components || {};
+    this.popups = settings.popups || {};
+
     this.store = null;
     this.queue = [];
     this.actionObject = {};
@@ -134,6 +139,10 @@ class Woowahan {
     this.components[component.name] = component;
   }
 
+  bindPopup(popup) {
+    this.popups[popup.name] = popup;
+  }
+
   bindPlugin(plugin) {
     Woowahan.View.prototype._plugins[plugin.type] = plugin.plugin;
   }
@@ -155,6 +164,14 @@ class Woowahan {
 
     if (!!component) {
       return component.view;
+    }
+  }
+
+  getPopup(name) {
+    const popup = this.popups[name];
+
+    if (!!popup) {
+      return popup.view;
     }
   }
 
@@ -195,6 +212,9 @@ class Woowahan {
         break;
       case 'component':
         this.bindComponent(module);
+        break;
+      case 'popup':
+        this.bindPopup(module);
         break;
       case 'plugin':
         this.bindPlugin(module);
@@ -247,6 +267,7 @@ Woowahan.Action         = require('./action');
 Woowahan.Event          = require('./event');
 Woowahan.Schema         = require('./schema');
 Woowahan.Layout         = require('./layout');
+Woowahan.Popup          = require('./popup');
 Woowahan.Component      = require('./component');
 Woowahan.Plugin         = require('./plugin');
 

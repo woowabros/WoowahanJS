@@ -268,12 +268,45 @@ View = Backbone.View.extend({
     this.updateView(container);
   },
 
+  addPopup(name, callback) {
+    const view = this.getPopup(name);
+
+    let containerName;
+    let container;
+    let popup;
+
+    if (!!view) {
+      containerName = `${name}Container`;
+      container = $(`div[data-ref=${containerName}]`);
+
+      if (!container.length) {
+        container = $(`<div data-ref="${containerName}"></div>`);
+      }
+
+      $('body').append(container);
+
+      popup = this.addView(`div[data-ref=${containerName}]`, view);
+
+      popup.closePopup = function(containerName, callbak, data) {
+        callback.call(this, data);
+
+        this.removeView(`div[data-ref=${containerName}]`);
+      }.bind(this, containerName, callback);
+    } else {
+      console.error(`undefined popup name [${name}]`);
+    }
+  },
+
   getStates() {
     return app.getStates();
   },
 
   getComponent(name) {
     return app.getComponent(name).extend({});
+  },
+
+  getPopup(name) {
+    return app.getPopup(name).extend({});
   },
 
   getRouteTables(routeName, params, query) {
