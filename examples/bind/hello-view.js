@@ -19,14 +19,20 @@ export default Woowahan.View.create('Hello', {
 
   viewDidMount() {
     this.setModel({
-      depth1: 'korean',
-      depth2: sampleData['korean'],
-      selectAll: false
+      depth1: [
+        { label: '한식', value: 'korean', selected: true },
+        { label: '중식', value: 'chinese' },
+        { label: '양식', value: 'western' },
+        { label: '기타', value: 'etc' }
+      ]
+      // depth2: sampleData['korean'],
+      // selectAll: false
     });
   },
 
   onChangeDepth1(val) {
-    this.setModel({ depth2: sampleData[val] });
+    debugger;
+    // this.setModel({ depth2: sampleData[val] });
   },
 
   onChangeDepth2(val) {

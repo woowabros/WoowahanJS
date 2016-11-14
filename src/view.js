@@ -208,13 +208,13 @@ View = Backbone.View.extend({
 
               // return $el.val();
             } else {
-              return el.value || el.textContent
+              return el.value || el.textContent;
 
               // return $el.val() || $el.text();
             }
           };
 
-          const values = params.map(param => getVal(_this.querySelector(param)));
+          const values = params.map(param => getVal(_this.el.querySelector(param)));
 
           // const values = _.map(params, function(param) {
           //   const $el = _this.$(param);
@@ -225,7 +225,7 @@ View = Backbone.View.extend({
           if (eventName === 'submit') {
             const inputs = {};
 
-            for (const el of _this.querySelector(selector).querySelectorAll('input, select, textarea')) {
+            for (const el of _this.el.querySelector(selector).querySelectorAll('input, select, textarea')) {
               inputs[el.getAttribute('name')] = getVal(el);
             }
 
@@ -416,6 +416,8 @@ View = Backbone.View.extend({
 
       if (value !== attrs[attr]) {
         this.model.set(attr, attrs[attr]);
+
+        console.log(this.model.toJSON());
       }
     }
   },
@@ -529,8 +531,10 @@ View = Backbone.View.extend({
 
   _bindModel() {
     this._unbindModel();
-    
-    let targetElements = this.$el.find('[data-role=bind]');
+
+    let targetElements = this.el.querySelectorAll('[data-role=bind]');
+
+    // let targetElements = this.$el.find('[data-role=bind]');
 
     for (const element of targetElements) {
       let key = $(element).data('name');
@@ -539,6 +543,7 @@ View = Backbone.View.extend({
       this.listenTo(this.model, eventName, function(element, key) {
         let value = this.model.get(key);
         let type = ($(element).data('type') || DEFAULT_ATTR_TYPE).toLowerCase();
+
         this._plugins[type].call(this, element, value);
       }.bind(this, element, key));
     }
