@@ -26,7 +26,7 @@ export default Woowahan.View.create('MainView', {
   },
 
   viewDidMount() {
-    console.log(this.refs);
+    // console.log(this.refs);
   },
 
   onChangeSkinColor(event) {
