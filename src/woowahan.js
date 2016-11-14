@@ -63,8 +63,6 @@ global._ = _;
 Backbone.Model.prototype.idAttribute = '___ID_ATTR___';
 Backbone.View.prototype.viewname = '___WOOWA_VIEW___';
 
-require('./core');
-
 class Woowahan {
   constructor(settings = {}) {
     this.reducers = settings.reducers || {};
