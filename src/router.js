@@ -153,7 +153,7 @@ module.exports = {
 
         for (const subPage of page.pages) {
           if (!subPage.url.startsWith('/')) {
-            subPage.url = `${url}/${subPage.url}`;
+            subPage.url = `${url === '/' ? '' : url}/${subPage.url}`;
           }
 
           if (!subPage.container) {
