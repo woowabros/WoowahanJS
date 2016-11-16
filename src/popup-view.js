@@ -11,12 +11,13 @@ PopupView = Woowahan.View.create('PopupView', {
   },
 
   initialize() {
+    this.on('viewDidMount', this.PopupDidMount.bind(this));
 
     Woowahan.View.prototype.initialize.apply(this, arguments);
   },
 
-  closePopup() {
-
+  PopupDidMount() {
+    this.$el.addClass('modal-box').addClass('on').parent().prepend('<div class="modal-overlay on"></div>');
   }
 });
 
