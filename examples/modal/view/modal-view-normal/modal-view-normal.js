@@ -6,7 +6,8 @@ export default Woowahan.View.create('ModalViewNormal', {
 
   events: {
     'click #btn-close': 'onClickClose',
-    'click #btn-update': 'onUpdateCount'
+    'click #btn-update': 'onUpdateCount',
+    'click .modal-overlay': 'onClickClose'
   },
 
   initialize(data) {
@@ -21,6 +22,12 @@ export default Woowahan.View.create('ModalViewNormal', {
     renderData.count = renderData.count + ' 번 업데이트';
 
     return renderData;
+  },
+
+  viewDidMount() {
+    setTimeout(function() {
+      $('.modal-overlay, .modal-box').addClass('on');
+    }, 300);
   },
 
   onUpdateCount() {

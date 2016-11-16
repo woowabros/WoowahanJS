@@ -4,13 +4,13 @@ export default Woowahan.View.create('Hello', {
   template: `<h1>Hello, WoowahanJs</h1>
     <button id="btn-modal-normal">NORMAL</button>
     <button id="btn-modal-bootstrap">BOOTSTRAP</button>
-    <div id="popup-wrap"></div>`,
+    <div id="modal-wrap"></div>`,
 
   events: {
     'click #btn-modal-normal': 'onClickModalNormal',
     'click #btn-modal-bootstrap': 'onClickModalBootstrap',
-    '@closed #popup-wrap': 'onCloseModal',
-    '@updated #popup-wrap': 'onUpdateModal'
+    '@closed #modal-wrap': 'onCloseModal',
+    '@updated #modal-wrap': 'onUpdateModal'
   },
 
   initialize() {
@@ -27,7 +27,7 @@ export default Woowahan.View.create('Hello', {
 
     const ModalViewNormal = this.getComponent('ModalComponentNormal');
 
-    this.modalNormal = this.addView('#popup-wrap', ModalViewNormal, { label: '팝업 컨테이너에 추가' });
+    this.modalNormal = this.addView('#modal-wrap', ModalViewNormal, { label: '팝업 컨테이너에 추가' });
   },
 
   onClickModalBootstrap() {
@@ -37,21 +37,22 @@ export default Woowahan.View.create('Hello', {
 
     const ModalViewBootstrap = this.getComponent('ModalComponentBootstrap');
 
-    this.modalBootstrap = this.addView('#popup-wrap', ModalViewBootstrap);
+    this.modalBootstrap = this.addView('#modal-wrap', ModalViewBootstrap);
 
     this.modalBootstrap.show();
   },
 
   onUpdateModal(count) {
-    this.updateView('#popup-wrap', { count: ++count });
+    this.updateView('#modal-wrap', { count: ++count });
   },
 
   onCloseModal() {
     if (!!this.modalNormal || !!this.modalBootstrap) {
-      this.removeView('#popup-wrap');
+      this.removeView('#modal-wrap');
 
       this.modalNormal = null;
       this.modalBootstrap = null;
     }
   }
+
 });
