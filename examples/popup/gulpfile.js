@@ -26,5 +26,12 @@ gulp.task('clean', (cb) => {
   del(['dist'], cb);
 });
 
+// TODO: style을 Woowahan 내재화
+gulp.task('styles', () => {
+  gulp.src('scss/**/*.scss')
+    .pipe($.sass().on('error', $.sass.logError))
+    .pipe(gulp.dest(path.resolve(__dirname, 'dist', 'css')));
+});
+
 gulp.task('default', ['clean'], () => gulp.start('build'));
-gulp.task('build', ['clean'], () => gulp.start(['scripts', 'html']));
+gulp.task('build', ['clean'], () => gulp.start(['scripts', 'styles', 'html']));

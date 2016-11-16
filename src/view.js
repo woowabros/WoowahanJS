@@ -270,8 +270,10 @@ View = Backbone.View.extend({
     this.updateView(container);
   },
 
-  addPopup(name, callback) {
-    const view = this.getPopup(name);
+  addPopup(view, callback) {
+    view = (typeof view === 'string') ? this.getComponent(view) : view;
+
+    const name = view.viewname;
 
     let containerName;
     let container;
@@ -289,6 +291,13 @@ View = Backbone.View.extend({
 
       popup = this.addView(`div[data-ref=${containerName}]`, view);
 
+      popup.on('viewDidMount', function() {
+        this.$('.modal-overlay, .modal-box').addClass('on');
+        this.$('.modal-overlay').click(function() {
+          this.closePopup();
+        }.bind(this));
+      }.bind(popup));
+
       popup.closePopup = function(containerName, callbak, data) {
         callback.call(this, data);
 
@@ -305,10 +314,6 @@ View = Backbone.View.extend({
 
   getComponent(name) {
     return app.getComponent(name).extend({});
-  },
-
-  getPopup(name) {
-    return app.getPopup(name).extend({});
   },
 
   getRouteTables(routeName, params, query) {

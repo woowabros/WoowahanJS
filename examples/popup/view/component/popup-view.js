@@ -1,7 +1,7 @@
 import Woowahan from '../../../../index';
 import Template from './popup-view.hbs';
 
-export const PopupView = Woowahan.View.create('PopupView', {
+export const PopupView = Woowahan.PopupView.create('PopupView', {
   template: Template,
 
   events: {
