@@ -4,6 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
+    "install": "npm install webpack -g && npm install",
     "watch": "webpack --output-path ./dist/js --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

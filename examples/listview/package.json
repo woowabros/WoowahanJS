@@ -4,8 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "demo-server": "node ./server/demo.js"
+    "build": "gulp build",
+    "test": "node ./server/demo.js"
   },
   "author": "",
   "license": "ISC",
