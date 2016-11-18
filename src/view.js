@@ -3,6 +3,7 @@
 const Debug = require('debug');
 const format = require('util').format;
 const Backbone = require('backbone');
+const MD5 = require('md5');
 
 const PluginText = require('./plugin/text');
 const PluginInputText = require('./plugin/input-text');
@@ -270,7 +271,12 @@ View = Backbone.View.extend({
     this.updateView(container);
   },
 
-  addPopup(view, callback) {
+  addPopup(view, options, callback) { // TODO: options 추가
+    if (typeof options === 'function') {
+      callback = options;
+      options = void 0;
+    }
+
     view = (typeof view === 'string') ? this.getComponent(view) : view;
 
     const name = view.viewname;
@@ -280,7 +286,7 @@ View = Backbone.View.extend({
     let popup;
 
     if (!!view) {
-      containerName = `${name}Container`;
+      containerName = MD5(`${name}Container${Date.now()}`);
       container = $(`div[data-ref=${containerName}]`);
 
       if (!container.length) {
@@ -289,15 +295,19 @@ View = Backbone.View.extend({
 
       this.$el.append(container);
 
-      popup = this.addView(`div[data-ref=${containerName}]`, view);
+      popup = this.addView(`div[data-ref=${containerName}]`, view, options);
 
       popup.closePopup = function(containerName, callbak, data) {
-        callback.call(this, data);
+        if (!!callback) {
+          callback.call(this, data);
+        }
 
         this.removeView(`div[data-ref=${containerName}]`);
 
         this.$(`div[data-ref=${containerName}]`).remove();
       }.bind(this, containerName, callback);
+
+      return popup;
     } else {
       console.error(`undefined popup name [${name}]`);
     }

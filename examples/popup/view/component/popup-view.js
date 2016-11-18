@@ -3,6 +3,7 @@ import Template from './popup-view.hbs';
 
 export const PopupView = Woowahan.PopupView.create('PopupView', {
   template: Template,
+  showOverlay: false,
 
   events: {
     'click button[data-ref=btnCancel]': 'onClickCancel',
@@ -20,7 +21,6 @@ export const PopupView = Woowahan.PopupView.create('PopupView', {
   },
 
   onClickCancel() {
-    debugger;
     this.closePopup();
 
     return false;
