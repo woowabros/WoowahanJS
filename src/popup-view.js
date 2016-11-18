@@ -5,6 +5,17 @@ const events = require('./events');
 let PopupView;
 let app;
 
+const defaultOverlayCss = {
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  background: '#000',
+  opacity: 0.7,
+  zIndex: 1000
+};
+
 const defaultCss = {
   overflowY: 'auto',
   display: 'block',
@@ -16,17 +27,7 @@ const defaultCss = {
   background: '#fff',
   webkitTransform: 'translate(-50%, -50%)',
   transform: 'translate(-50%, -50%)',
-  zIndex: 1000,
-};
-
-const defaultOverlayCss = {
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  background: '#000',
-  opacity: 0.7,
+  zIndex: 1100
 };
 
 PopupView = Woowahan.View.create('PopupView', {
@@ -53,6 +54,9 @@ PopupView = Woowahan.View.create('PopupView', {
       overlay.css(Object.assign({}, defaultOverlayCss, this.overlayCss));
 
       this.$el.parent().prepend(overlay);
+
+      defaultOverlayCss.zIndex += 500;
+      defaultCss.zIndex += 500;
 
       $(overlay).on('click', function() {
         this.dispatch(Woowahan.Event.create('overlayClicked', this));
