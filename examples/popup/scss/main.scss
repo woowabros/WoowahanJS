@@ -25,13 +25,22 @@ html, body {
   width:80%;
   max-height:80%;
   background:#fff;
-  -webkit-transform:translate(-50%,-75%);
-  transform:translate(-50%,-75%);
   z-index:1000;
-  -webkit-transition:transform 0.3s ease, opacity 0.3s ease;
-  transition:transform 0.3s ease, opacity 0.3s ease;
-  opacity:0;
   &.on {
+    -webkit-animation:modal 0.3s ease;
+    animation:modal 0.3s ease;
+    -webkit-animation-fill-mode:forwards;
+    animation-fill-mode:forwards;
+  }
+}
+
+@keyframes modal {
+  0% {
+    -webkit-transform:translate(-50%,-90%);
+    transform:translate(-50%,-90%);
+    opacity:0.5;
+  }
+  100% {
     -webkit-transform:translate(-50%,-50%);
     transform:translate(-50%,-50%);
     opacity:1;
