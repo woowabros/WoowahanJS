@@ -1,9 +1,9 @@
 import Woowahan from '../../../../index';
 import Template from './popup-view.hbs';
+import { AlertView } from './alert-view';
 
 export const PopupView = Woowahan.PopupView.create('PopupView', {
   template: Template,
-  showOverlay: false,
 
   events: {
     'click button[data-ref=btnCancel]': 'onClickCancel',
@@ -15,6 +15,18 @@ export const PopupView = Woowahan.PopupView.create('PopupView', {
   },
 
   onSubmitForm(data) {
+    if (!data.txt0 || !data.txt1 || !data.txt2) {
+      this.addPopup(AlertView, {
+        css: {
+          width: '300px', height: '200px'
+        },
+        title: '경고',
+        desc: '입력해주세요.'
+      });
+
+      return false;
+    }
+
     this.closePopup({ action: 'submit', data });
 
     return false;

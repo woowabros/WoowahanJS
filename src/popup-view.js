@@ -6,20 +6,17 @@ let PopupView;
 let app;
 
 const defaultCss = {
-  overflowY: 'scroll',
+  overflowY: 'auto',
+  display: 'block',
   position: 'absolute',
   top: '50%',
   left: '50%',
   width: '80%',
   maxHeight: '80%',
   background: '#fff',
+  webkitTransform: 'translate(-50%, -50%)',
+  transform: 'translate(-50%, -50%)',
   zIndex: 1000,
-
-  // on
-  webkitAnimation: 'modal 0.3s ease',
-  animation: 'modal 0.3s ease',
-  webkitAnimationFillMode: 'forwards',
-  animationFillMode: 'forwards'
 };
 
 const defaultOverlayCss = {
@@ -30,15 +27,12 @@ const defaultOverlayCss = {
   bottom: 0,
   background: '#000',
   opacity: 0.7,
-  webkitTransition: 'opacity 0.3s ease',
-  transition: 'opacity 0.3s ease',
 };
 
 PopupView = Woowahan.View.create('PopupView', {
   overlayCss: {},
   css: {},
   showOverlay: true,
-  baseZ: 1000,
 
   super() {
     PopupView.prototype.initialize.apply(this.arguments);
@@ -47,24 +41,22 @@ PopupView = Woowahan.View.create('PopupView', {
   initialize(options) {
     this.listenTo(this, 'viewDidMount', this.PopupDidMount.bind(this));
 
-    if (Object.prototype.toString.call(options) === '[object Object]') {
-      Object.keys(options).map(function(key) {
-        this[key] = options[key];
-      }.bind(this));
-    }
-
     Woowahan.View.prototype.initialize.apply(this, arguments);
   },
 
   PopupDidMount() {
-    this.$el.css(Object.assign({}, this.css, defaultCss));
+    this.$el.css(Object.assign({}, defaultCss, this.css));
 
     if (this.showOverlay) {
       const overlay = $('<div></div>');
 
-      overlay.css(Object.assign({}, this.overlayCss, defaultOverlayCss));
+      overlay.css(Object.assign({}, defaultOverlayCss, this.overlayCss));
 
       this.$el.parent().prepend(overlay);
+
+      $(overlay).on('click', function() {
+        this.dispatch(Woowahan.Event.create('overlayClicked', this));
+      }.bind(this));
     }
   }
 });

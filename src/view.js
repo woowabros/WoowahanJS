@@ -287,15 +287,23 @@ View = Backbone.View.extend({
 
     if (!!view) {
       containerName = MD5(`${name}Container${Date.now()}`);
-      container = $(`div[data-ref=${containerName}]`);
+      container = $(`<div data-ref="${containerName}"></div>`);
 
-      if (!container.length) {
-        container = $(`<div data-ref="${containerName}"></div>`);
-      }
-
-      this.$el.append(container);
+      $('body').append(container);
 
       popup = this.addView(`div[data-ref=${containerName}]`, view, options);
+
+      if (!!options) {
+        Object.keys(options).map(function(key) {
+          switch (key) {
+            case 'css':
+            case 'overlayCss':
+            case 'showOverlay':
+              popup[key] = options[key];
+              break;
+          }
+        });
+      }
 
       popup.closePopup = function(containerName, callbak, data) {
         if (!!callback) {
@@ -304,7 +312,7 @@ View = Backbone.View.extend({
 
         this.removeView(`div[data-ref=${containerName}]`);
 
-        this.$(`div[data-ref=${containerName}]`).remove();
+        $(`div[data-ref=${containerName}]`).remove();
       }.bind(this, containerName, callback);
 
       return popup;
