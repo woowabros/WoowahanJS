@@ -9,83 +9,19 @@ html, body {
   right:0;
   bottom:0;
   background:#000;
-  opacity:0;
-  -webkit-transition:opacity 0.3s ease;
-  transition:opacity 0.3s ease;
-  &.on {
-    opacity:0.7;
-  }
+  opacity:0.7;
 }
 
 .modal-box {
   overflow-y:scroll;
+  display:block;
   position:absolute;
   top:50%;
   left:50%;
   width:80%;
   max-height:80%;
   background:#fff;
+  -webkit-transform:translate(-50%,-50%);
+  transform:translate(-50%,-50%);
   z-index:1000;
-  &.on {
-    -webkit-animation:modal 0.3s ease;
-    animation:modal 0.3s ease;
-    -webkit-animation-fill-mode:forwards;
-    animation-fill-mode:forwards;
-  }
-}
-
-@keyframes modal {
-  0% {
-    -webkit-transform:translate(-50%,-90%);
-    transform:translate(-50%,-90%);
-    opacity:0.5;
-  }
-  100% {
-    -webkit-transform:translate(-50%,-50%);
-    transform:translate(-50%,-50%);
-    opacity:1;
-  }
-}
-
-.modal-box.sticky {
-  top:0;
-  -webkit-transform:translate(-50%,-100%);
-  transform:translate(-50%,-100%);
-  &.on {
-    -webkit-transform:translate(-50%,0);
-    transform:translate(-50%,0);
-  }
-}
-
-.modal-box.slidein {
-  left:100%;
-  -webkit-transform:translate(0,-50%);
-  transform:translate(0,-50%);
-  -webkit-transition: left 0.3s ease;
-  transition: left 0.3s ease;
-  &.on {
-    left:50%;
-    -webkit-transform:translate(-50%,-50%);
-    transform:translate(-50%,-50%);
-  }
-}
-
-.modal-box.slideup {
-  -webkit-transform:translate(-50%,100%);
-  transform:translate(-50%,100%);
-  &.on {
-    -webkit-transform:translate(-50%,-50%);
-    transform:translate(-50%,-50%);
-  }
-}
-
-.modal-box.scale {
-  -webkit-transform:translate(-50%,-50%) scale(0.5);
-  transform:translate(-50%,-50%) scale(0.5);
-  -webkit-transition:transform 0.3s ease;
-  transition:transform 0.3s ease;
-  &.on {
-    -webkit-transform:translate(-50%,-50%) scale(1);
-    transform:translate(-50%,-50%) scale(1);
-  }
 }
