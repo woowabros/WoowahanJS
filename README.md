@@ -1,24 +1,23 @@
 # WoowahanJS
 
-WoowahanJS는 보다 큰 규모의 웹 어플리케이션 개발을 위한 프레임워크입니다.
+WoowahanJS is a framework for developing larger web applications.
 
-현대의 웹 어플리케이션은 많은 수의 컴포넌트로 복잡하게 구성된 뷰와 상태를 관리하는 HTTP 기반 클라이언트 어플리케이션 입니다.
-일정 규모 이상의 웹 어플리케이션을 개발하기 위해선 다양한 디자이너, 퍼블리셔 및 프로그래머가 협업해야 합니다.
-WoowahanJS는 퍼블리셔와 프로그래머간 협업이 쉬운 환경을 제공합니다.
+Modern web applications are HTTP-based client applications that manage complex views and states with a large number of components. In order to develop web applications over a certain size, various designers, publishers, and programmers need to collaborate. WoowahanJS provides an easy environment for collaboration between publishers and programmers.
 
-빠르고 생산성 높은 UI 작업을 위해 계층 뷰 컴포넌트 관리와 One-way data binding을 지원하며 UI와 비즈니스 코드간 종속성을 최소화 하기 위한 아키텍처로 설계되었습니다.
+It supports hierarchical view component management and one-way data binding for fast and productive UI operations and is designed as an architecture to minimize the dependency between UI and business code.
 
-## 영향을 받은 것들
+## Affected ones
 
-WoowahanJS는 유명한 [BackboneJS](http://backbonejs.org) 기반 위에서 작성되었습니다. [BackboneJS](http://backbonejs.org)는 [UnderscoreJS](http://underscorejs.org), [jQuery](http://jquery.com) 종속성을 포함하므로 WoowahanJS도 자연스럽게 언제든 [UnderscoreJS](http://underscorejs.org)와 [jQuery](http://jquery.com)를 사용할 수 있습니다.
+WoowahanJS was built on the famous [BackboneJS](http://backbonejs.org) base. [BackboneJS](http://backbonejs.org) includes [UnderscoreJS](http://underscorejs.org) and [jQuery](http://jquery.com) dependencies, so WoowahanJS can naturally use UnderscoreJS and jQuery at any time.
 
-API 호출에서 촉발되는 상태 흐름과 관리를 위해 [React](https://facebook.github.io/react/) 프로젝트의 [Flux](https://facebook.github.io/flux) 및 [Redux](http://redux.js.org) 아키텍처의 아이디어를 구현했습니다. 하지만 WoowahanJS를 사용하기 위해 이들을 선행학습 할 필요는 없습니다.
+We implemented the idea of the [Flux](https://facebook.github.io/flux) and [Redux](http://redux.js.org) architecture of the [React](https://facebook.github.io/react/) project for state flow and management triggered by API calls. However, you do not have to learn these to use WoowahanJS.
 
-## 빠르게 시작하기
 
-저장소를 Clone 한 뒤 [Example](./examples) 디렉토리의 셈플들을 살펴보세요. WoowahanJS를 가장 빠르게 시작할 수 있는 지름길입니다.
+## Get started fast
 
-## 설치
+Clone the repository and look at the samples in the [Example](./examples) directory. WoowahanJS is the fastest way to get started.
+
+## Install
 
 ```
 $ mkdir hello-woowa && cd hello-woowa
@@ -42,6 +41,6 @@ app.start({
 });
 ```
 
-다음 링크에서 더 많은 정보를 제공합니다.
+The following links provide more information.
 
-* [WoowahanJS 시작하기](./docs/README.md)
+* [Getting Started with WoowahanJS](./docs/README.md)
