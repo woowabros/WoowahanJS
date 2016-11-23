@@ -1,6 +1,4 @@
-const Backbone = require('backbone');
 const Woowahan = require('./woowahan');
-const events = require('./events');
 
 let PopupView;
 let app;
@@ -31,6 +29,7 @@ const defaultCss = {
 };
 
 PopupView = Woowahan.View.create('PopupView', {
+  overlayClassName: '',
   overlayCss: {},
   css: {},
   showOverlay: true,
@@ -42,6 +41,8 @@ PopupView = Woowahan.View.create('PopupView', {
   initialize(options) {
     this.listenTo(this, 'viewDidMount', this.PopupDidMount.bind(this));
 
+    this.overlay = $('<div></div>');
+
     Woowahan.View.prototype.initialize.apply(this, arguments);
   },
 
@@ -49,8 +50,9 @@ PopupView = Woowahan.View.create('PopupView', {
     this.$el.css(Object.assign({}, defaultCss, this.css));
 
     if (this.showOverlay) {
-      const overlay = $('<div></div>');
+      const overlay = this.overlay;
 
+      overlay.addClass(this.overlayClassName);
       overlay.css(Object.assign({}, defaultOverlayCss, this.overlayCss));
 
       this.$el.parent().prepend(overlay);
