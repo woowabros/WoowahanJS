@@ -39,15 +39,13 @@ PopupView = Woowahan.View.create('PopupView', {
   },
 
   initialize(options) {
-    this.listenTo(this, 'viewDidMount', this.PopupDidMount.bind(this));
-
     this.overlay = $('<div></div>');
 
     Woowahan.View.prototype.initialize.apply(this, arguments);
   },
 
-  PopupDidMount() {
-    this.$el.css(Object.assign({}, defaultCss, this.css));
+  viewComponentDidMount($el) {
+    $el.css(Object.assign({}, defaultCss, this.css));
 
     if (this.showOverlay) {
       const overlay = this.overlay;

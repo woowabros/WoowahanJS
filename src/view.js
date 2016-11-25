@@ -96,7 +96,11 @@ viewMount = function() {
   this._viewMounted = true;
   this._bindRef();
   this._bindModel();
-  
+
+  if (typeof this.viewComponentDidMount === 'function') {
+    this.viewComponentDidMount($dom);
+  }
+
   if (typeof this.viewDidMount === 'function') {
     this.viewDidMount($dom);
   }
