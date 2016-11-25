@@ -300,7 +300,7 @@ View = Backbone.View.extend({
             case 'overlayCss':
             case 'overlayClassName':
             case 'showOverlay':
-              popup[key] = options[key];
+              Object.assign(popup[key], options[key]);
               break;
           }
         });
