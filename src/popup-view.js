@@ -45,6 +45,19 @@ PopupView = Woowahan.View.create('PopupView', {
   },
 
   viewComponentDidMount($el) {
+    const model = this.getModel();
+
+    Object.keys(model).map(function (key) {
+      switch (key) {
+        case 'css':
+        case 'overlayCss':
+        case 'overlayClassName':
+        case 'showOverlay':
+          this[key] = Object.assign({}, this[key], model[key]);
+          break;
+      }
+    }.bind(this));
+
     $el.css(Object.assign({}, defaultCss, this.css));
 
     if (this.showOverlay) {
