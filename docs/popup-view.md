@@ -37,7 +37,8 @@ export default Woowahan.PopupView.create('BasicPopupView', {
 팝업 뷰는 기본 `css`를 가지고 있습니다.
 `css` 속성으로 추가한 스타일이 기본 `css`를 덮어쓰는 형태로 적용됩니다.
 
-> 기본 css 속성들  
+**기본 css 속성들**
+
 > overflowY: 'auto'  
 > display: 'block'  
 > position: 'absolute'  
@@ -55,7 +56,8 @@ export default Woowahan.PopupView.create('BasicPopupView', {
 팝업 뷰의 오버레이는 기본 `css`를 가지고 있습니다.
 `overlayCss` 속성으로 추가한 스타일들이 기본 `css`를 덮어쓰는 형태로 적용됩니다.
 
-> 오버레이의 기본 css 속성들  
+**오버레이의 기본 css 속성들**
+
 > position: 'fixed'  
 > top: 0  
 > left: 0  
