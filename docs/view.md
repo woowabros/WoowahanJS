@@ -253,7 +253,7 @@ this.addPopup(BasicPopupView, { css, overlayCss, overlayClassName, showOverlay, 
 
 두 번째 인자로 사용하는 데이터에는 팝업 뷰의 형태를 제어하는 데이터를 추가할 수 있습니다
 
-- `css`: 팝업 뷰의 `css`를 추가할 수 있습니다.
+- `css`: 팝업 뷰에 `css`를 추가할 수 있습니다.
 - `overlayCss`: 팝업 뷰의 오버레이에 `css`를 추가할 수 있습니다.
 - `overlayClassName`: 팝업 뷰의 오버레이에 `className`을 추가할 수 있습니다.
 - `showOverlay`: 팝업 뷰의 오버레이를 보여줄지 여부를 `true` 또는 `false`로 제어할 수 있습니다.
