@@ -1,7 +1,7 @@
 # 컬렉션 뷰
 
-컬렉션 뷰~CollectionView~는 `Woowahan`에서 제공하는 뷰 컴포넌트입니다.
-[뷰]('./view.md)~View~의 기능들을 상속하며, 컬렉션 데이터를 나타내기 위한 기능들을 제공합니다
+컬렉션 뷰<sub>CollectionView</sub>는 `Woowahan`에서 제공하는 뷰 컴포넌트입니다.
+[뷰]('./view.md)<sub>View</sub>의 기능들을 상속하며, 컬렉션 데이터를 나타내기 위한 기능들을 제공합니다
 
 아래는 기본적인 컬렉션 뷰의 형태입니다.
 
@@ -35,7 +35,7 @@ export default Woowahan.CollectionView.create('BasicCollectionView', {
      
 ## rowView
 
-컬렉션 데이터를 뷰 모델로 가지는 아이템 뷰~ItemView~입니다.
+컬렉션 데이터를 뷰 모델로 가지는 아이템 뷰<sub>ItemView</sub>입니다.
 
 ## reload
 

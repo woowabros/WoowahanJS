@@ -237,24 +237,24 @@ updateView는 자식 뷰 관련 기능 뿐만 아니라 현재 뷰의 UI를 다�
 
 ## 팝업 뷰
 
-[팝업 뷰]('./popup-view.md')를 추가하기 위해 `addPopup` 메소드를 사용합니다.
+[팝업 뷰](./popup-view.md)<sub>PopupView</sub>를 추가하기 위해 `addPopup` 메소드를 사용합니다.
 
 ```javascript
-this.addPopup(BasicPopupView, { css, overlayCss, overlayClassName, showOverlay, popupData }, function popupCallback(popupData) {
-console.log(popupData);
+this.addPopup(BasicPopupView, { css, overlayCss, overlayClassName, showOverlay, popupData }, function(popupData) {
+  console.log(popupData);
 });
 ```
 
 `addPopup` 메소드는 최대 3개의 인자를 받습니다.
 
-- 첫 번째 인자는 팝업으로 사용할 [`PopupView`]('./popup-view.md') 컴포넌트를 전달합니다. 필수인자입니다.
+- 첫 번째 인자는 팝업으로 사용할 팝업 뷰 컴포넌트를 전달합니다. 필수인자입니다.
 - 두 번째 인자는 팝업으로 전달할 데이터입니다. 전달할 데이터가 없다면 생략할 수 있습니다.
-- 세 번째 인자는 팝업 뷰가 닫히고 나서 호출되는 콜백 함수입니다. `PopupView`에서 전달하는 데이터를 인자로 받을 수 있습니다. 콜백을 전달받을 필요가 없다면 생략할 수 있습니다.
+- 세 번째 인자는 팝업 뷰가 닫히고 나서 호출되는 콜백 함수입니다. `PopupView`에서 전달하는 데이터를 인자로 받을 수 있습니다. 콜백을 전달할 필요가 없다면 생략할 수 있습니다.
 
 두 번째 인자로 사용하는 데이터에는 팝업 뷰의 형태를 제어하는 데이터를 추가할 수 있습니다
 
-- css: 팝업 뷰의 css를 추가할 수 있습니다.
-- overlayCss: 팝업 뷰의 오버레이에 css를 추가할 수 있습니다.
-- overlayClassName: 팝업 뷰의 오버레이에 className을 추가할 수 있습니다.
-- showOverlay: 팝업 뷰의 오버레이를 보여줄지 여부를 true 또는 false로 제어할 수 있습니다.
+- `css`: 팝업 뷰의 `css`를 추가할 수 있습니다.
+- `overlayCss`: 팝업 뷰의 오버레이에 `css`를 추가할 수 있습니다.
+- `overlayClassName`: 팝업 뷰의 오버레이에 `className`을 추가할 수 있습니다.
+- `showOverlay`: 팝업 뷰의 오버레이를 보여줄지 여부를 `true` 또는 `false`로 제어할 수 있습니다.
 
