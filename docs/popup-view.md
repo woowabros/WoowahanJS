@@ -37,52 +37,33 @@ export default Woowahan.PopupView.create('BasicPopupView', {
 팝업 뷰는 기본 `css`를 가지고 있습니다.
 `css` 속성으로 추가한 스타일이 기본 `css`를 덮어쓰는 형태로 적용됩니다.
 
-> 기본 css 속성들
-
-> overflowY: 'auto'
-
-> display: 'block'
-
-> position: 'absolute'
-
-> top: '50%'
-
-> left: '50%'
-
-> width: '80%'
-
-> maxHeight: '80%'
-
-> background: '#fff'
-
-> webkitTransform: 'translate(-50%, -50%)'
-
-> transform: 'translate(-50%, -50%)'
-
-> zIndex: 1100
+> 기본 css 속성들  
+> overflowY: 'auto'  
+> display: 'block'  
+> position: 'absolute'  
+> top: '50%'  
+> left: '50%'  
+> width: '80%'  
+> maxHeight: '80%'  
+> background: '#fff'  
+> webkitTransform: 'translate(-50%, -50%)'  
+> transform: 'translate(-50%, -50%)'  
+> zIndex: 1100  
 
 ## overlayCss
 
 팝업 뷰의 오버레이는 기본 `css`를 가지고 있습니다.
 `overlayCss` 속성으로 추가한 스타일들이 기본 `css`를 덮어쓰는 형태로 적용됩니다.
 
-> 오버레이의 기본 css 속성들
-
-> position: 'fixed'
-
-> top: 0
-
-> left: 0
-
-> right: 0
-
-> bottom: 0
-
-> background: '#000'
-
-> opacity: 0.7
-
-> zIndex: 1000
+> 오버레이의 기본 css 속성들  
+> position: 'fixed'  
+> top: 0  
+> left: 0  
+> right: 0  
+> bottom: 0  
+> background: '#000'  
+> opacity: 0.7  
+> zIndex: 1000  
 
 ## overlayClassName
 
