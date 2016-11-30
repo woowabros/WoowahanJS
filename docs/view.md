@@ -240,7 +240,7 @@ updateView는 자식 뷰 관련 기능 뿐만 아니라 현재 뷰의 UI를 다�
 [팝업 뷰](./popup-view.md)<sub>PopupView</sub>를 추가하기 위해 `addPopup` 메소드를 사용합니다.
 
 ```javascript
-this.addPopup(BasicPopupView, { css, overlayCss, overlayClassName, showOverlay, popupData }, function(popupData) {
+this.addPopup(BasicPopupView, { css, overlayCss, overlayClassName, showOverlay, buttons, popupData }, function(popupData) {
   console.log(popupData);
 });
 ```
@@ -257,4 +257,23 @@ this.addPopup(BasicPopupView, { css, overlayCss, overlayClassName, showOverlay, 
 - `overlayCss`: 팝업 뷰의 오버레이에 `css`를 추가할 수 있습니다.
 - `overlayClassName`: 팝업 뷰의 오버레이에 `className`을 추가할 수 있습니다.
 - `showOverlay`: 팝업 뷰의 오버레이를 보여줄지 여부를 `true` 또는 `false`로 제어할 수 있습니다.
+- `buttons`: 팝업 뷰의 버튼이 선택되었을 때 실행할 함수를 전달할 수 있습니다.
+
+```javascript
+this.addPopup(BasicPopupView, {
+  css: {
+    color: '#FFF'
+  },
+  overlayCss: {
+    backgroundColor: '#000'
+  },
+  overlayClassName: 'cool-overlay',
+  showOverlay: true,
+  buttons: {
+    '#btn-ok': function() {
+      this.closePopup();
+    }
+  }
+});
+```
 
