@@ -59,8 +59,10 @@ PopupView = Woowahan.View.create('PopupView', {
           const buttons = model.buttons;
 
           for (const button in buttons) {
-            $el.find(button).click(buttons[button].bind(this));
+            this.events[`click ${button}`] = buttons[button].bind(this);
           }
+
+          this.delegateEvents();
           break;
       }
     }.bind(this));
