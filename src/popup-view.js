@@ -55,6 +55,13 @@ PopupView = Woowahan.View.create('PopupView', {
         case 'showOverlay':
           this[key] = Object.assign({}, this[key], model[key]);
           break;
+        case 'buttons':
+          const buttons = model.buttons;
+
+          for (const button in buttons) {
+            $el.find(button).click(buttons[button].bind(this));
+          }
+          break;
       }
     }.bind(this));
 

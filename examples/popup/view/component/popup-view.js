@@ -21,7 +21,14 @@ export const PopupView = Woowahan.PopupView.create('PopupView', {
           width: '300px', height: '200px'
         },
         title: '경고',
-        desc: '입력해주세요.'
+        desc: '입력해주세요.',
+        buttons: {
+          'button[data-ref=btnClose]': function() {
+            this.closePopup();
+
+            return false;
+          }
+        }
       });
 
       return false;
