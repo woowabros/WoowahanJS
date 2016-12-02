@@ -10,6 +10,10 @@ export const PopupView = Woowahan.PopupView.create('PopupView', {
     '@submit form[name=popup-form]': 'onSubmitForm'
   },
 
+  initialize() {
+    this.super();
+  },
+
   viewDidMount($el) {
     $el.css({ width: 420, height: 80, overflow: 'hidden' });
   },

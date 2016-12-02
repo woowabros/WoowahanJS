@@ -35,7 +35,7 @@ PopupView = Woowahan.View.create('PopupView', {
   showOverlay: true,
 
   super() {
-    PopupView.prototype.initialize.apply(this.arguments);
+    PopupView.prototype.initialize.apply(this, this.arguments);
   },
 
   initialize(options) {
