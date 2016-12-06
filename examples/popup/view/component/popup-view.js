@@ -47,5 +47,9 @@ export const PopupView = Woowahan.PopupView.create('PopupView', {
     this.closePopup();
 
     return false;
+  },
+
+  onOverlayClick(event) {
+    console.log(event);
   }
 });
