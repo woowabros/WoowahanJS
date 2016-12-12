@@ -14,7 +14,7 @@ const app = new Woowahan();
 /* layout 생성 & 등록 */
 app.use(Woowahan.Layout('.wrap', LayoutView1));
 app.use(Woowahan.Layout('.wrap', LayoutView2));
-app.use(Woowahan.Layout('.wrap', LayoutView3));
+app.use(Woowahan.Layout('.wrap', LayoutView3, { update: false }));
 
 /* 사이트맵 디자인 */
 const siteDesign = [

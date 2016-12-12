@@ -6,5 +6,9 @@ export default Woowahan.View.create('LayoutView2', {
 
   initialize() {
     this.super();
+  },
+
+  viewDidMount() {
+    console.log('viewDidMount');
   }
 });

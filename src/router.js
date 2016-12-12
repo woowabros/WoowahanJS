@@ -113,9 +113,9 @@ module.exports = {
         }
         
         if (!!page.layout) {
-          if (!this.currentLayout || this.currentLayout.viewname != page.layout) {
-            const layout = this.layouts.find(layout => layout.viewName === page.layout);
+          const layout = this.layouts.find(layout => layout.viewName === page.layout);
 
+          if (!this.currentLayout || this.currentLayout.viewname != page.layout) {
             if (!!layout) {
               !!this.currentLayout && this.currentLayout.close();
 
@@ -126,10 +126,12 @@ module.exports = {
               this.currentLayout = new layout.view();
             }
           } else {
-            this.currentLayout.params = params;
-            this.currentLayout.query = query;
+            if (layout.options.update) {
+              this.currentLayout['params'] = params;
+              this.currentLayout['query'] = query;
 
-            this.currentLayout.updateView();
+              this.currentLayout.updateView();
+            }
           }
         }
 

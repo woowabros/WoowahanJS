@@ -1,7 +1,8 @@
-module.exports = (container, view) => {
+module.exports = (container, view, options) => {
   return {
-    view: view, 
-    container: container, 
+    view,
+    container,
+    options: Object.assign({ update: true }, options),
     viewName: view.viewname,
     wwtype: 'layout'
   };
