@@ -21,6 +21,7 @@ export const PopupView = Woowahan.PopupView.create('PopupView', {
   onSubmitForm(data) {
     if (!data.txt0 || !data.txt1 || !data.txt2) {
       this.addPopup(AlertView, {
+        _id: 'alert',
         css: {
           width: '300px', height: '200px'
         },
