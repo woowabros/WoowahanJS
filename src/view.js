@@ -275,10 +275,10 @@ View = Backbone.View.extend({
     this.updateView(container);
   },
 
-  addPopup(view, options, callback) { // TODO: options 추가
+  addPopup(view, options = {}, callback) { // TODO: options 추가
     if (typeof options === 'function') {
       callback = options;
-      options = void 0;
+      options = {};
     }
 
     view = (typeof view === 'string') ? this.getComponent(view) : view;
@@ -290,13 +290,7 @@ View = Backbone.View.extend({
     let popup;
 
     if (!!view) {
-      let _id;
-
-      if (!!options && !!options._id) {
-        _id = options._id;
-      } else {
-        _id = MD5(`${name}Container${Date.now()}`);
-      }
+      let _id = options._id || MD5(`${name}Container${Date.now()}`);;
 
       if (!!$(`div[data-id=${_id}]`).length) {
         return;
