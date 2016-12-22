@@ -301,16 +301,20 @@ View = Backbone.View.extend({
 
       $('body').append(container);
 
-      popup = this.addView(`div[data-id=${containerName}]`, view, options);
+      popup = this.addView(`div[data-id=${containerName}]`, view, Object.assign(options, { _id }));
 
-      popup.closePopup = function(containerName, callbak, data) {
+      popup.on('remove', function() {
+        popup.off('remove');
+
+        $(`div[data-id=${containerName}]`).remove();
+      });
+
+      popup.closePopup = function(containerName, callback, data) {
         if (!!callback) {
           callback.call(this, data);
         }
 
         this.removeView(`div[data-id=${containerName}]`);
-
-        $(`div[data-id=${containerName}]`).remove();
       }.bind(this, containerName, callback);
 
       return popup;
@@ -430,6 +434,12 @@ View = Backbone.View.extend({
       this._unbindRef();
       this.remove();
     }
+  },
+
+  remove() {
+    this.trigger('remove', this);
+
+    Backbone.View.prototype.remove.apply(this, arguments);
   },
 
   _syncElement(source, target) {
