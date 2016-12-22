@@ -358,7 +358,11 @@ View = Backbone.View.extend({
         this.$el.trigger(action.type, ...action.data);
         break;
       case 'action':
-        app.dispatch(action, subscriber.bind(this));
+        if (!!subscriber) {
+          subscriber = subscriber.bind(this);
+        }
+
+        app.dispatch(action, subscriber);
         break;
     }
   },
