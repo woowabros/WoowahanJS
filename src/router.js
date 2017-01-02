@@ -98,7 +98,7 @@ module.exports = {
           }
         }
 
-        const queryStr = decodeURIComponent(args[args.length - 1]);
+        const queryStr = decodeURIComponent(args[args.length - 1] || (window.location.search || '').substr(1));
 
         if (!!queryStr && !!~queryStr.indexOf('=')) {
           const queryArr = queryStr.split('&');

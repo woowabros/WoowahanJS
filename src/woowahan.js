@@ -7,19 +7,6 @@ const Router = require('./router');
 const debug = Debug('Woowahan');
 const INTERVAL = 1000/60;
 
-const cssText = `@keyframes modal {
-  0% {
-    -webkit-transform:translate(-50%,-90%);
-    transform:translate(-50%,-90%);
-    opacity:0.5;
-  }
-  100% {
-    -webkit-transform:translate(-50%,-50%);
-    transform:translate(-50%,-50%);
-    opacity:1;
-  }
-}`;
-
 const toolset = {
   get dispatch() {
     return instance.dispatch.bind(instance);
