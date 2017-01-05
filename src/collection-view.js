@@ -59,7 +59,7 @@ CollectionView = Woowahan.View.create('CollectionView', {
   reload(data, options = {}) {
     const uid = options.uid;
 
-    const renderData = data.filter(item => !!item).map(item => {
+    let renderData = data.filter(item => !!item).map(item => {
       if (!!uid) {
         const model = this.collection.findWhere({ [uid]: item[uid] });
 
@@ -72,6 +72,10 @@ CollectionView = Woowahan.View.create('CollectionView', {
 
       return item;
     });
+
+    if (options.reset + '' === 'false') {
+      renderData = this.getCollection.concat(data);
+    }
 
     this.collection.set(renderData);
   },
