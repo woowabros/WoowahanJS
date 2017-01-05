@@ -45,30 +45,35 @@ CollectionView = Woowahan.View.create('CollectionView', {
     let view = new this.rowView(model);
 
     this.rowViews.push(view);
-    
+
     model.on('remove', view.close, view);
+
+    model.on('change', (data) => {
+      view.setModel(data.toJSON());
+      view.updateView();
+    }, view);
 
     ListViewEvents.forEach(event => view.on(event, this[`on${event.charAt(0).toUpperCase()}${event.slice(1)}`], this));
   },
 
-  reload(data) {
-    if (this.collection instanceof Backbone.Collection) {
-      let model;
+  reload(data, options = {}) {
+    const uid = options.uid;
 
-      while (model = this.collection.first()) {
-        this.collection.remove(model);
+    const renderData = data.filter(item => !!item).map(item => {
+      if (!!uid) {
+        const model = this.collection.findWhere({ [uid]: item[uid] });
+
+        if (!!model) {
+          model.set(item);
+
+          return model;
+        }
       }
 
-      this.rowViews = [];
-    }
+      return item;
+    });
 
-    if (Array.isArray(data)) {
-      for (const item of data) {
-        this.collection.add(item);
-      }
-    } else {
-      this.collection.add(data);
-    }
+    this.collection.set(renderData);
   },
 
   getCollection() {
