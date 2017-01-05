@@ -74,7 +74,7 @@ CollectionView = Woowahan.View.create('CollectionView', {
     });
 
     if (options.reset + '' === 'false') {
-      renderData = this.getCollection.concat(data);
+      renderData = this.collection.models.concat(renderData);
     }
 
     this.collection.set(renderData);
