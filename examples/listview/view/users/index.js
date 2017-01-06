@@ -29,7 +29,7 @@ export default Woowahan.CollectionView.create('Users', {
   },
 
   fetchUsers(data) {
-    this.reload(data.resultSet /* , { uid: 'id', reset: true, order: 'sequence' } */);
+    this.reload(data.resultSet/* , { uid: 'id', reset: false, reverse: true } */);
     
     this.setModel({
       currentPage: data.page.page,
