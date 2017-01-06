@@ -20,6 +20,7 @@ CollectionView = Woowahan.View.create('CollectionView', {
     this.collection.on('add', this.addRowView, this);
 
     this.rowViews = [];
+    this.order = 'sequence';
 
     Woowahan.View.prototype.initialize.apply(this, arguments);
   },
@@ -40,7 +41,14 @@ CollectionView = Woowahan.View.create('CollectionView', {
     }
 
     this.rowView.prototype.container = container;
-    this.rowView.prototype.append = true;
+
+    switch(this.order) {
+      case 'reverse':
+        this.rowView.prototype.prepend = true;
+        break;
+      default:
+        this.rowView.prototype.append = true;
+    }
 
     let view = new this.rowView(model);
 
@@ -72,6 +80,8 @@ CollectionView = Woowahan.View.create('CollectionView', {
 
       return item;
     });
+
+    this.order = ('order' in options) ? options.order : 'sequence';
 
     this.collection.set(renderData, { remove: ('reset' in options) ? options.reset : true });
   },
