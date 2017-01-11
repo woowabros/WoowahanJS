@@ -498,12 +498,13 @@ View = Backbone.View.extend({
       let type = ($(element).data('type') || DEFAULT_ATTR_TYPE).toLowerCase();
       let value = this.model.get(key);
 
-      this.listenTo(this.model, eventName, function(element, key) {
+      this.listenTo(this.model, eventName, function(element, key, type) {
         let value = this.model.get(key);
         this._plugins[type].call(this, element, value);
-      }.bind(this, element, key));
+      }.bind(this, element, key, type));
 
-      this._plugins[type].call(this, element, value);
+      if(typeof value !== 'undefined') this._plugins[type].call(this, element, value);
+      
     }
   },
 
