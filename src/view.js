@@ -470,6 +470,8 @@ View = Backbone.View.extend({
 
         this._plugins[type].call(this, element, value);
       }.bind(this, element, key));
+
+      this._plugins[type].call(this, element, value);
     }
   },
 
