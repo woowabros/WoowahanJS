@@ -495,11 +495,11 @@ View = Backbone.View.extend({
     for (const element of targetElements) {
       let key = $(element).data('name');
       let eventName = `change:${key}`;
+      let type = ($(element).data('type') || DEFAULT_ATTR_TYPE).toLowerCase();
+      let value = this.model.get(key);
 
       this.listenTo(this.model, eventName, function(element, key) {
         let value = this.model.get(key);
-        let type = ($(element).data('type') || DEFAULT_ATTR_TYPE).toLowerCase();
-
         this._plugins[type].call(this, element, value);
       }.bind(this, element, key));
 
