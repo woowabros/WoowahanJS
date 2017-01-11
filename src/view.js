@@ -292,7 +292,7 @@ View = Backbone.View.extend({
     let popup;
 
     if (!!view) {
-      let _id = options._id || MD5(`${name}Container${Date.now()}`);;
+      let _id = options._id || MD5(`${name}Container${Date.now()}`);
 
       if (!!$(`div[data-id=${_id}]`).length) {
         return;
