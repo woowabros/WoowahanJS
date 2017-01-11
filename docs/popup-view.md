@@ -124,6 +124,7 @@ this.addPopup(BasicPopupView, { css, overlayCss, overlayClassName, showOverlay, 
 - `overlayClassName`: 팝업 뷰의 오버레이에 `className`을 추가할 수 있습니다.
 - `showOverlay`: 팝업 뷰의 오버레이를 보여줄지 여부를 `true` 또는 `false`로 제어할 수 있습니다.
 - `buttons`: 팝업 뷰의 버튼이 선택되었을 때 실행할 함수를 전달할 수 있습니다.
+- `_id` : 팝업 뷰에 `id`를 지정할 수 있습니다. 같은 `id`를 지정한 팝업 뷰를 `addPopup`하는 경우 나중에 전달된 팝업 뷰는 무시됩니다.
 
 ```javascript
 this.addPopup(BasicPopupView, {
@@ -139,6 +140,7 @@ this.addPopup(BasicPopupView, {
     '#btn-ok': function() {
       this.closePopup();
     }
-  }
+  },
+  _id: 'coolPopup'
 });
 ```
