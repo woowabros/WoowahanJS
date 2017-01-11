@@ -54,4 +54,10 @@ this.reload(collectionData, { uid: 'phoneNumber', reset: true, reverse: true });
 
 ## getCollection
 
-컬렉션 뷰의 `getCollection` 메소드를 통해 현재 컬렉션 데이터를 `JSON` 형태로 가져올 수 있습니다.
+컬렉션 뷰의 `getCollection` 메소드를 통해 현재의 컬렉션 데이터를 `JSON` 형태로 가져올 수 있습니다.  
+`reload` 메소드를 통해 전달한 데이터를 `rowView`에서 제어하는 경우에도 항상 최신의 데이터를 반환합니다.
+
+```javascript
+// 현재 rowView들이 가진 뷰 모델 리스트를 가져옵니다.
+console.log(this.getCollection());
+```
