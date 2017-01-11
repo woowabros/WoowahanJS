@@ -3,7 +3,7 @@ import Woowahan from '../../index';
 export default Woowahan.View.create('Hello', {
   template: '<h1>Hello, WoowahanJs</h1><ul data-role="bind" data-name="listData" data-type="list"></ul>',
 
-  viewDidMount() {
+  initialize() {
     this.setModel({
       listData: [
         { label: 'test1', value: 'val1'},
@@ -14,5 +14,7 @@ export default Woowahan.View.create('Hello', {
         { label: 'test6', value: 'val6'}
       ]
     });
+
+    this.super();
   }
 });
