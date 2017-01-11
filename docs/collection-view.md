@@ -54,4 +54,4 @@ this.reload(collectionData, { uid: 'phoneNumber', reset: true, reverse: true });
 
 ## getCollection
 
-컬렉션 뷰의 `getCollection` 메소드를 통해 현재 컬렉션 데이터를 가져올 수 있습니다.
+컬렉션 뷰의 `getCollection` 메소드를 통해 현재 컬렉션 데이터를 `JSON` 형태로 가져올 수 있습니다.
