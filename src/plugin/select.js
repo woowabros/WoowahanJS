@@ -1,6 +1,7 @@
 /*global $ _*/
 
 module.exports = function(element, value) {
+  if(typeof value === 'undefined') return;
   const opts = Array.from(Array.isArray(value) ? value : [value]);
 
   let selectedIndex = 0;
