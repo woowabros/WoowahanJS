@@ -500,11 +500,11 @@ View = Backbone.View.extend({
 
       this.listenTo(this.model, eventName, function(element, key, type) {
         let value = this.model.get(key);
+
         this._plugins[type].call(this, element, value);
       }.bind(this, element, key, type));
 
       if(typeof value !== 'undefined') this._plugins[type].call(this, element, value);
-      
     }
   },
 

@@ -17,12 +17,19 @@ export default Woowahan.View.create('Hello', {
     '@change #ckb-sel': 'onChangeSel(#ckb-sel)'
   },
 
-  viewDidMount() {
+  initialize() {
     this.setModel({
-      depth1: 'korean',
+      depth1: [
+        { label: '한식', value: 'korean' },
+        { label: '중식', value: 'chinese' },
+        { label: '양식', value: 'western' },
+        { label: 'etc', value: 'etc' }
+      ],
       depth2: sampleData['korean'],
       selectAll: false
     });
+
+    this.super();
   },
 
   onChangeDepth1(val) {
