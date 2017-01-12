@@ -1,9 +1,22 @@
 /*global $ _*/
 
 module.exports = function(element, value) {
-  const opts = Array.from(Array.isArray(value) ? value : [value]);
-
   let selectedIndex = 0;
+  let opts;
+
+  if (Array.isArray(value)) {
+    if (!value.length) {
+      return;
+    } else {
+      opts = Array.from(value);
+    }
+  } else {
+    if (typeof value === 'undefined') {
+      return;
+    } else {
+      opts = Array.from([value]);
+    }
+  }
 
   element.innerHTML = '';
 
