@@ -35,7 +35,7 @@ const Main = Woowahan.View.create('Main', {
   template: '<h1>Hello, WoowahanJs</h1>'
 });
 
-const app = Woowahan();
+const app = new Woowahan();
 
 app.start({
   url: '/', container: 'body', view: Main
