@@ -1,7 +1,5 @@
 /*global $*/
 
-const MD5 = require('md5');
-
 const defaultConfiguration = {
   timeout: 5000
 };
@@ -41,7 +39,7 @@ Reducer = {
 
     let Reducer = function(data, subscriber) {
       this._timestamp = Date.now();
-      this._id = MD5(actionName.toLowerCase() + this._timestamp);
+      this._id = actionName.toLowerCase() + this._timestamp;
       this.subscriber = subscriber;
       this.queueSuccess = [];
       this.queueFail = [];
@@ -96,7 +94,7 @@ Reducer = {
     
     fn.loadScript = function(path, id) {
       if (!id) {
-        id = MD5(path.toLowerCase());
+        id = path.toLowerCase();
       }
 
       let script = $('script[id=' + id + ']');

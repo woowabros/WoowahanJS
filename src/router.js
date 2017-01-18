@@ -1,7 +1,5 @@
 /*global _ Backbone*/
 
-const MD5 = require('md5');
-
 function urlBuilder(path) {
   return function(params) {
     let url = path;
@@ -76,7 +74,7 @@ module.exports = {
         page.url = page.url.substr(1);
       }
 
-      routeId = 'r' + MD5(page.url.toLowerCase() + Date.now());
+      routeId = 'r' + page.url.toLowerCase() + Date.now();
 
       options.routes[page.url] = routeId;
 
