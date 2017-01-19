@@ -63,6 +63,10 @@ CollectionView = Woowahan.View.create('CollectionView', {
   },
 
   reload(data, options = {}) {
+    if (Object.prototype.toString.call(options) !== '[object Object]') {
+      throw 'invalid options!!!';
+    }
+
     const uid = options.uid;
 
     let renderData = data.filter(item => !!item).map(item => {
