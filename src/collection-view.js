@@ -52,7 +52,11 @@ CollectionView = Woowahan.View.create('CollectionView', {
 
     this.rowViews.push(view);
 
-    model.on('remove', view.close, view);
+    model.on('remove', (data) => {
+      this.rowViews.splice(this.rowViews.indexOf(view), 1);
+
+      view.close();
+    }, view);
 
     model.on('change', (data) => {
       view.setModel(data.toJSON());
