@@ -14,11 +14,11 @@ export default Woowahan.View.create('Hello', {
   ],
 
   secondItems: [
-    { name: 'secondItem0' },
-    { name: 'secondItem1' },
-    { name: 'secondItem2' },
-    { name: 'secondItem3' },
-    { name: 'secondItem4' },
+    { name: 'secondItem0', sub: [{ name: 'secondSubItem' }] },
+    { name: 'secondItem1', sub: [{ name: 'secondSubItem' }] },
+    { name: 'secondItem2', sub: [{ name: 'secondSubItem' }] },
+    { name: 'secondItem3', sub: [{ name: 'secondSubItem' }] },
+    { name: 'secondItem4', sub: [{ name: 'secondSubItem' }] },
   ],
 
   events: {
@@ -40,7 +40,7 @@ export default Woowahan.View.create('Hello', {
 
   onClickUpdateSecond() {
     this.secondItems = this.collectionSecond.getCollection();
-    this.secondItems.push({ name: `secondItem${this.secondItems.length}` });
+    this.secondItems.push({ name: `secondItem${this.secondItems.length}`, sub: [{ name: 'secondSubItem' }] });
 
     this.updateView('#collectionSecond', CollectionSecond, { items: this.secondItems });
   }

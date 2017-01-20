@@ -27,6 +27,7 @@ CollectionView = Woowahan.View.create('CollectionView', {
   
   viewWillUnmount() {
     this.rowViews.forEach(row => row.close());
+    this.rowViews = [];
   },
 
   addRowView(model) {
