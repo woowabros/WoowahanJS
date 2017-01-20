@@ -66,7 +66,7 @@ CollectionView = Woowahan.View.create('CollectionView', {
     ListViewEvents.forEach(event => view.on(event, this[`on${event.charAt(0).toUpperCase()}${event.slice(1)}`], this));
   },
 
-  reload(data, options = {}) {
+  reload(data = [], options = {}) {
     if (Object.prototype.toString.call(options) !== '[object Object]') {
       throw 'invalid options!!!';
     }

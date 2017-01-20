@@ -18,6 +18,6 @@ export default Woowahan.CollectionView.create('CollectionViewFirst', {
   },
 
   viewWillUnmount() {
-    this.reload([]);
+    this.reload();
   }
 });
