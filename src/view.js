@@ -218,9 +218,7 @@ View = Backbone.View.extend({
   updateView(container, ChildView, ...args) {
     if (!arguments.length) {
       this.close(false);
-      
       viewMount.apply(this);
-      
       return;
     }
 
