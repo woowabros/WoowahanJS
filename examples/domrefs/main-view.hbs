@@ -1,11 +1,10 @@
 <div class="container">
     <h1>뷰의 DOM 참조</h1>
 
-    <div class="alert alert-success" role="alert" data-ref="alertMessage">입력합 값을 검증해보세요.</div>
+    <div class="alert alert-success" role="alert" data-ref="alertMessage">이 메세지가 보이나요? 토글 버튼을 눌러 사라지게 해 보세요.</div>
 
-
-    <input type="text" class="form-control" data-ref="text1" value="{{text1}}">
-    <input type="text" class="form-control" data-ref="text2" value="{{text2}}" data-ref-form-restore="true">
+    <input type="text" class="form-control" data-ref="text1">
+    <input type="text" class="form-control" data-ref="text2" data-ref-form-restore="true">
 
     <select class="form-control" name="skinColor" data-ref="skinColor" data-ref-form-restore="true">
         <option value="white">White</option>
@@ -18,6 +17,7 @@
     <select class="form-control" data-role="bind" data-name="peopleColor" data-type="select" data-ref="peopleColor" data-ref-form-restore="true"></select>
 
     <button type="button" class="btn btn-default btn-toggle">Toggle</button>
-    <button type="button" class="btn btn-default btn-check-value">Check Value</button>
     <button type="button" class="btn btn-default btn-update-view">Update View</button>
+
+    <a href="/#/other" class="btn btn-default btn-toggle">다른 뷰</a>
 </div>

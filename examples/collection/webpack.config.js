@@ -12,8 +12,7 @@ module.exports = {
   output: output,
   module : {
     loaders : [
-      { test: /\.js?$/, exclude: /node_modules/, loader: 'babel-loader' },
-      { test: /\.hbs$/, exclude: /node_modules/, loader: 'handlebars-loader'}
+      { test: /\.js?$/, exclude: /node_modules/, loader: 'babel-loader' }
     ]
   }
 };

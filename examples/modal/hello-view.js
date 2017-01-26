@@ -1,10 +1,10 @@
 import Woowahan from '../../index';
 
 export default Woowahan.View.create('Hello', {
-  template: `<h1>Hello, WoowahanJS Common View Example</h1>
+  template: `<h1>Hello, WoowahanJs</h1>
     <button id="btn-modal-normal">NORMAL</button>
     <button id="btn-modal-bootstrap">BOOTSTRAP</button>
-    <div data-ref="modal-wrap" id="modal-wrap"></div>`,
+    <div id="modal-wrap"></div>`,
 
   events: {
     'click #btn-modal-normal': 'onClickModalNormal',

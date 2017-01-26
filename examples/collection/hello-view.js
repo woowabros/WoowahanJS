@@ -1,10 +1,9 @@
 import Woowahan from '../../index';
-import HelloView from './hello-view.hbs';
 import CollectionFirst from './collection-first';
 import CollectionSecond from './collection-second';
 
 export default Woowahan.View.create('Hello', {
-  template: HelloView,
+  template: '<h1>Hello, WoowahanJs</h1><button id="btnUpdateFirst">UPDATE</button><div id="collectionFirst"></div><button id="btnUpdateSecond">UPDATE</button><div id="collectionSecond"></div>',
 
   firstItems: [
     { name: 'firstItem0' },
@@ -28,21 +27,21 @@ export default Woowahan.View.create('Hello', {
   },
 
   viewDidMount() {
-    this.collectionFirst = this.updateView(this.refs.collectionFirst, CollectionFirst, { items: this.firstItems });
-    this.collectionSecond = this.updateView(this.refs.collectionSecond, CollectionSecond, { items: this.secondItems });
+    this.collectionFirst = this.updateView('#collectionFirst', CollectionFirst, { items: this.firstItems });
+    this.collectionSecond = this.updateView('#collectionSecond', CollectionSecond, { items: this.secondItems });
   },
 
   onClickUpdateFirst() {
     this.firstItems = this.collectionFirst.getCollection();
     this.firstItems.push({ name: `firstItem${this.firstItems.length}` });
 
-    this.updateView(this.refs.collectionFirst, CollectionFirst, { items: this.firstItems });
+    this.updateView('#collectionFirst', CollectionFirst, { items: this.firstItems });
   },
 
   onClickUpdateSecond() {
     this.secondItems = this.collectionSecond.getCollection();
     this.secondItems.push({ name: `secondItem${this.secondItems.length}`, sub: [{ name: 'secondSubItem' }] });
 
-    this.updateView(this.refs.collectionSecond, CollectionSecond, { items: this.secondItems });
+    this.updateView('#collectionSecond', CollectionSecond, { items: this.secondItems });
   }
 });

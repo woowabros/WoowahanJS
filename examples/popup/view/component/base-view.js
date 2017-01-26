@@ -12,14 +12,7 @@ export const BaseView = Woowahan.View.create('BaseView', {
   onClickPopup() {
     this.refs.txtResult.innerText = '텍스트를 입력하세요.';
 
-    this.addPopup(PopupView, { 
-      title: '입력해 주세요.',
-      _id: 'popup',
-      css: {
-        width: '300px', height: '400px'
-      },
-      desc: '입력해주세요.',
-    }, function(popupData = {}) {
+    this.addPopup(PopupView, { title: '입력해 주세요.' }, function(popupData = {}) {
       if (popupData.action === 'submit') {
         const data = popupData.data;
         const result = Object.keys(data).reduce((prev, key) => ((!!data[key] ? prev.push(data[key]) : prev), prev), []);

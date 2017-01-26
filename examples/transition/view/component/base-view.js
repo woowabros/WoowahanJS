@@ -5,23 +5,22 @@ export const BaseView = Woowahan.View.create('BaseView', {
   template: Template,
 
   startTransition() {
+    const _this = this;
 
     let num = 0;
-    var transition = function(){
+
+    (function transition() {
       ++num;
 
-      this.setModel({ num });
+      _this.setModel({ num });
 
-      this.refs.colorBox.style.backgroundColor = `rgba(0, 0, 0, ${num / 100})`;
+      _this.refs.colorBox.style.backgroundColor = `rgba(0, 0, 0, ${num / 100})`;
 
       if (num < 100) {
         setTimeout(transition, 10);
       } else {
-        this.dispatch(Woowahan.Event.create('transitionComplete'));
+        _this.dispatch(Woowahan.Event.create('transitionComplete'));
       }
-    }.bind(this);
-
-    transition();
-
+    })();
   }
 });

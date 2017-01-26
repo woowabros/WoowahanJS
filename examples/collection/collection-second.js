@@ -1,6 +1,6 @@
 import Woowahan from '../../index';
 
-const RowItemView = Woowahan.ItemView.create('RowItemView', {
+const RowItemView = Woowahan.CollectionView.create('RowItemView', {
   template: '<li></li>',
 
   viewDidMount($el) {
@@ -31,8 +31,8 @@ const RowView = Woowahan.ItemView.create('RowView', {
 });
 
 export default Woowahan.CollectionView.create('CollectionViewSecond', {
-  template: '<ul id="rowContainer2"></ul>',
-  rowContainer: '#rowContainer2',
+  template: '<ul id="rowContainer"></ul>',
+  rowContainer: '#rowContainer',
   rowView: RowView,
 
   viewDidMount() {

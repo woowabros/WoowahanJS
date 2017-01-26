@@ -15,3 +15,9 @@ app.use(Woowahan.Layout('#content', MainLayout));
 app.start([
   { url: '/', container: '#mainContent', view: BaseView, layout: 'MainLayout' }
 ]);
+
+// app.start({
+//   url: '/',
+//   container: '#content',
+//   view: HelloView
+// });
