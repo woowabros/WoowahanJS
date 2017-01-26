@@ -3,6 +3,7 @@
 const Debug = require('debug');
 const format = require('util').format;
 const Backbone = require('backbone');
+const MD5 = require('md5');
 
 const PluginText = require('./plugin/text');
 const PluginInputText = require('./plugin/input-text');
@@ -214,21 +215,25 @@ View = Backbone.View.extend({
 
     return this;
   },
-
   updateView(container, ChildView, ...args) {
     if (!arguments.length) {
       this.close(false);
-      
       viewMount.apply(this);
-      
       return;
     }
 
+    let containerKey;
+    if(typeof container === 'string') {
+      containerKey = container;
+    }else {
+      containerKey = $(container).data('ref');
+    }
+    
     if (!!container && !ChildView) {
-      if (!!this._views[container]) {
-        this._views[container].close();
+      if (!!this._views[containerKey]) {
 
-        delete this._views[container];
+        this._views[containerKey].close();
+        delete this._views[containerKey];
       }
 
       return;
@@ -238,34 +243,27 @@ View = Backbone.View.extend({
       args = ChildView;
     }
 
-    let viewContainer = (typeof container === 'string') ? this.$(container) : container;
+    let viewContainer = this.$(container);
 
     if (!viewContainer.length) {
       viewContainer = $(container);
     }
-
-    let view = this._views[container];
-
-    if (!!view) {
-      view.setModel.apply(view, Array.prototype.concat.call(args, { silent: true }));
-      view.container = viewContainer;
-
-      if (typeof view.viewWillUnmount === 'function') {
-        view.viewWillUnmount.call(view);
-      }
-
-      viewMount.apply(this._views[container]);
-    } else {
+    let view = this._views[containerKey];
+    if (!!view && typeof ChildView != 'function') {
+    }else {
       ChildView.prototype.container = viewContainer;
-
       view = new (Function.prototype.bind.apply(ChildView, Array.prototype.concat.call(ChildView, args)));
-
-      this._views[container] = view;
+      this._views[containerKey] = view;
     }
-
+    
+    view.setModel.apply(view, Array.prototype.concat.call(args, { silent: true }));
+    view.container = viewContainer;
+    if (typeof view.viewWillUnmount === 'function') {
+      view.viewWillUnmount.call(view);
+    }
+    viewMount.apply(view);
     return view;
   },
-
   addView(container, ChildView, ...args) {
     this.removeView(container);
 
@@ -291,31 +289,30 @@ View = Backbone.View.extend({
     let popup;
 
     if (!!view) {
-      let _id = options._id || `${name}Container${Date.now()}`;
+      let _id = options._id || MD5(`${name}Container${Date.now()}`);
 
-      if (!!$(`div[data-id=${_id}]`).length) {
+      if (!!$(`div[data-ref=${_id}]`).length) {
         return;
       }
 
       containerName = _id;
-      container = $(`<div data-id="${containerName}"></div>`);
+      container = $(`<div data-ref="${containerName}"></div>`);
 
       $('body').append(container);
-
-      popup = this.addView(`div[data-id=${containerName}]`, view, Object.assign(options, { _id }));
-
+      popup = this.addView(container, view, Object.assign(options, { _id }));
       popup.on('remove', function() {
         popup.off('remove');
 
-        $(`div[data-id=${containerName}]`).remove();
+        $(`div[data-ref=${containerName}]`).remove();
       });
 
       popup.closePopup = function(containerName, callback, data) {
+        
         if (!!callback) {
           callback.call(this, data);
         }
 
-        this.removeView(`div[data-id=${containerName}]`);
+        this.removeView(containerName);
       }.bind(this, containerName, callback);
 
       return popup;
