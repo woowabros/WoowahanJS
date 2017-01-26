@@ -8,6 +8,9 @@ global.$ = global.jQuery = Woowahan.$;
 
 Debug.enable('*');
 
+require("./sass/main.scss");
+require('bootstrap-loader');
+
 var app = new Woowahan();
 
 app.use(Woowahan.Layout('#content', MainLayout));

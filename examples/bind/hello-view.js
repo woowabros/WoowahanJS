@@ -16,22 +16,9 @@ export default Woowahan.View.create('Hello', {
     '@change #sel-depth2': 'onChangeDepth2(#sel-depth2)',
     '@change #ckb-sel': 'onChangeSel(#ckb-sel)'
   },
-
   initialize() {
-    this.setModel({
-      depth1: [
-        { label: '한식', value: 'korean' },
-        { label: '중식', value: 'chinese' },
-        { label: '양식', value: 'western' },
-        { label: 'etc', value: 'etc' }
-      ],
-      depth2: sampleData['korean'],
-      selectAll: false
-    });
-
     this.super();
   },
-
   onChangeDepth1(val) {
     this.setModel({ depth2: sampleData[val] });
   },

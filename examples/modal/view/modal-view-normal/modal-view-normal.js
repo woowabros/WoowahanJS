@@ -31,9 +31,7 @@ export default Woowahan.View.create('ModalViewNormal', {
   },
 
   onUpdateCount() {
-    const count = this.getModel('count');
-
-    this.setModel({ count: count + 1 });
+    this.dispatch(Woowahan.Event.create('updated', this.getModel('count')));
   },
 
   onClickClose() {

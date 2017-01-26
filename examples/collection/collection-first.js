@@ -9,8 +9,8 @@ const RowView = Woowahan.ItemView.create('RowView', {
 });
 
 export default Woowahan.CollectionView.create('CollectionViewFirst', {
-  template: '<ul id="rowContainer"></ul>',
-  rowContainer: '#rowContainer',
+  template: '<ul id="rowContainer1"></ul>',
+  rowContainer: '#rowContainer1',
   rowView: RowView,
 
   viewDidMount() {
