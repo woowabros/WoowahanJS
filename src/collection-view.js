@@ -26,7 +26,12 @@ CollectionView = Woowahan.View.create('CollectionView', {
   },
   
   viewWillUnmount() {
-    this.rowViews.forEach(row => row.close());
+    let model;
+
+    while (model = this.collection.first()) {
+      this.collection.remove(model);
+    }
+
     this.rowViews = [];
   },
 
