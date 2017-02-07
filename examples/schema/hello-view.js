@@ -25,7 +25,8 @@ export default Woowahan.View.create('Index', {
     this.dispatch(Woowahan.Action.create('save-user-profile', {
       id: inputs['id'],
       name: inputs['name'],
-      email: inputs['email']
+      email: inputs['email'],
+      valid: true
     }), this.onCompleteSave);
 
     return false;

@@ -5,7 +5,8 @@ const TYPE = {
   NUMBER: 'number',
   ARRAY: 'array',
   EMAIL: 'email',
-  PHONE: 'phone'
+  PHONE: 'phone',
+  BOOLEAN: 'boolean'
 };
 const REQUIRED = 'required';
 const DEFAULT_VALUE = 'defaultValue';
@@ -91,6 +92,10 @@ partialValidator[TYPE.EMAIL] = function(value) {
   return regexp.test(value);
 };
 
+partialValidator[TYPE.BOOLEAN] = function(value) {
+  return Object.prototype.toString.call(value) === '[object Boolean]';
+};
+
 partialValidator[REQUIRED] = function(value) {
   if (this[REQUIRED]) return value !== void 0 && value !== null;
   return true;
@@ -143,6 +148,12 @@ module.exports = {
 
   Email(options) {
     return typeGenerator(TYPE.EMAIL, [
+      REQUIRED
+    ], Object.assign({}, options));
+  },
+
+  Boolean(options) {
+    return typeGenerator(TYPE.BOOLEAN, [
       REQUIRED
     ], Object.assign({}, options));
   }
