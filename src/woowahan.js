@@ -5,11 +5,43 @@ const Backbone = require('backbone');
 const Router = require('./router');
 
 const debug = Debug('Woowahan');
+const DELEGATE = ['before','after'];
 const INTERVAL = 1000/60;
+
+/*
+ case VIEW_AFTER_MOUNT:
+ return function(view) {
+
+ };
+ break;
+ case VIEW_BEFORE_MOUNT:
+ return function(view, next) {
+
+ };
+ break;
+ case REDUCER_AFTER_REQUEST:
+ return function(res, type, xhr) {
+
+ };
+ break;
+ case REDUCER_BEFORE_REQUEST:
+ return function(settings) {
+
+ };
+ break;
+
+ */
+function inspectMiddlewareType(middleware) {
+
+}
 
 const toolset = {
   get dispatch() {
     return instance.dispatch.bind(instance);
+  },
+
+  get getMiddleware() {
+    return instance.getMiddleware.bind(instance);
   },
 
   get getStates() {
@@ -53,6 +85,24 @@ class Woowahan {
   constructor(settings = {}) {
     this.reducers = settings.reducers || {};
     this.components = settings.components || {};
+    this.middlewares = {
+      app: {
+        before: [],
+        after: [],
+      },
+      router: {
+        before: [],
+        after: [],
+      },
+      reducer: {
+        before: [],
+        after: [],
+      },
+      view: {
+        before: [],
+        after: [],
+      },
+    };
 
     this.store = null;
     this.queue = [];
@@ -157,6 +207,10 @@ class Woowahan {
     return this.store;
   }
 
+  getMiddleware(type, delegate) {
+    return this.middlewares[type][delegate];
+  }
+
   getComponent(name) {
     const component = this.components[name];
 
@@ -206,6 +260,18 @@ class Woowahan {
       case 'plugin':
         this.bindPlugin(module);
         break;
+    }
+  }
+
+  set(middleware, options = {}) {
+    let instance = new middleware(options);
+
+    if (instance.mwtype) {
+      DELEGATE.forEach(delegate => {
+        delegate in instance && this.middlewares[instance.mwtype][delegate].push(instance);
+      });
+    } else {
+      // 경고
     }
   }
 

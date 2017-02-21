@@ -1,5 +1,14 @@
 /*global $*/
 
+const MIDDLEWARE = {
+  REDUCER: 'reducer',
+};
+
+const MIDDLEWARE_PROTOCOL = {
+  BEFORE: 'before',
+  AFTER: 'after',
+};
+
 const defaultConfiguration = {
   timeout: 5000
 };
@@ -162,23 +171,51 @@ Reducer = {
         }
       };
 
+      app.getMiddleware(MIDDLEWARE.REDUCER, MIDDLEWARE_PROTOCOL.BEFORE).forEach(middleware => {
+        if (MIDDLEWARE_PROTOCOL.BEFORE in middleware) {
+          let featureList = middleware.features.map(feature => settings[feature] || {});
+
+          middleware[MIDDLEWARE_PROTOCOL.BEFORE].apply(null, featureList);
+        }
+      });
+
       return $.ajax(settings)
         .done(success.bind(this))
         .fail(fail.bind(this));
     };
 
+    /**
+     *
+     * @param url
+     * @param settings
+     */
     fn.getData = function(url, settings) {
       return this.requestData(url, settings, 'get');
     };
 
+    /**
+     *
+     * @param url
+     * @param settings
+     */
     fn.putData = function(url, settings) {
       return this.requestData(url, settings, 'put');
     };
 
+    /**
+     *
+     * @param url
+     * @param settings
+     */
     fn.postData = function(url, settings) {
       return this.requestData(url, settings, 'post');
     };
 
+    /**
+     *
+     * @param url
+     * @param settings
+     */
     fn.deleteData = function(url, settings) {
       return this.requestData(url, settings, 'delete');
     };
@@ -203,6 +240,8 @@ Reducer = {
       this.subscriber && this.subscriber.call(this, data, options);
       this.removeAction(this._id);
     };
+
+    fn.env = {};
 
     return Reducer;
   }
