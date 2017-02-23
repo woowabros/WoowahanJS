@@ -13,6 +13,13 @@ const defaultConfiguration = {
   timeout: 5000
 };
 
+const defaultFeatureValue = {
+  headers: {},
+  url: '',
+  type: '',
+  timeout: defaultConfiguration.timeout
+};
+
 let Reducer;
 let app;
 
@@ -173,9 +180,19 @@ Reducer = {
 
       app.getMiddleware(MIDDLEWARE.REDUCER, MIDDLEWARE_PROTOCOL.BEFORE).forEach(middleware => {
         if (MIDDLEWARE_PROTOCOL.BEFORE in middleware) {
-          let featureList = middleware.features.map(feature => settings[feature] || {});
+          let featureList = {};
 
-          middleware[MIDDLEWARE_PROTOCOL.BEFORE].apply(null, featureList);
+          middleware.features.forEach(feature => {
+            if (defaultFeatureValue.hasOwnProperty(feature)) {
+              if (!settings.hasOwnProperty(feature)) {
+                settings[feature] = defaultFeatureValue[feature];
+              }
+
+              featureList[feature] = settings[feature];
+            }
+          });
+
+          middleware[MIDDLEWARE_PROTOCOL.BEFORE].call(null, featureList, Object.assign({}, this.env));
         }
       });
 
@@ -242,6 +259,24 @@ Reducer = {
     };
 
     fn.env = {};
+    fn.env.template = function(templateStr, env) {
+      if (typeof templateStr !== 'string') return templateStr;
+
+      let renderStr = templateStr;
+      let variables = templateStr.match(/{{\w+}}/g);
+
+      if (variables) {
+        variables.forEach(v => {
+          let attrName = v.replace('{{', '').replace('}}', '');
+
+          if (attrName in env) {
+            renderStr = renderStr.replace(v, env[attrName]);
+          }
+        });
+      }
+
+      return renderStr;
+    };
 
     return Reducer;
   }

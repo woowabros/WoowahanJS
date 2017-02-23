@@ -13,6 +13,15 @@ const delegateEventSplitter = /^(\S+)\s*(.*)$/;
 const childEventSplitter = /^\@(\w+)\s*(.*)$/;
 const DEFAULT_ATTR_TYPE = 'text';
 
+const MIDDLEWARE = {
+  VIEW: 'view',
+};
+
+const MIDDLEWARE_PROTOCOL = {
+  BEFORE: 'before',
+  AFTER: 'after',
+};
+
 let View = null;
 let viewMount = null;
 let app = null;
@@ -97,6 +106,10 @@ viewMount = function() {
   this._viewMounted = true;
   this._bindRef();
   this._bindModel();
+
+  app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.AFTER).forEach(middleware => {
+    middleware[MIDDLEWARE_PROTOCOL.AFTER].call(null, this, $dom[0]);
+  });
 
   if (typeof this.viewComponentDidMount === 'function') {
     this.viewComponentDidMount($dom);
