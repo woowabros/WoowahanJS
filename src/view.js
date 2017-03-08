@@ -442,7 +442,7 @@ View = Backbone.View.extend({
     }
 
     this._unbindModel();
-    this._removeChild();
+    this._removeChild(remove);
     
     if (remove + '' != 'false' && !!this) {
       this._unbindRef();
@@ -532,9 +532,9 @@ View = Backbone.View.extend({
     this.stopListening(this.model);
   },
 
-  _removeChild() {
+  _removeChild(remove) {
     for (var key in this._views) {
-      this._views[key].close.call(this._views[key]);
+      this._views[key].close.call(this._views[key], remove);
       delete this._views[key];
     }
   }
