@@ -113,13 +113,15 @@ function jsonHeader() {
   };
 }
 
-function uniqId() {
+function WoowahanDevtools() {
   let w = window;
+  let ctrl = document.createElement('div');
   let c = document.createElement('canvas');
   let ctx = c.getContext('2d');
   let components = [];
   let isAttach = false;
-  let isShift = false;
+  let isOption = false;
+  let isVisible = false;
   let rect = {
     get width() {
       return w.innerWidth;
@@ -128,6 +130,30 @@ function uniqId() {
       return w.innerHeight;
     }
   };
+
+  ctrl.style.position = 'fixed';
+  ctrl.style.top = '60px';
+  ctrl.style.right = '10px';
+  ctrl.style.width = '30px';
+  ctrl.style.height = '30px';
+  ctrl.style.background = 'red';
+  ctrl.style.borderRadius = '15px';
+  ctrl.style.opacity = 0.2;
+  ctrl.style.zIndex = 999999;
+
+  document.body.append(ctrl);
+
+  ctrl.addEventListener('mouseover', function() {
+    this.style.opacity = 0.4;
+  });
+
+  ctrl.addEventListener('mouseout', function() {
+    this.style.opacity = 0.2;
+  });
+
+  ctrl.addEventListener('click', function() {
+    isVisible = !isVisible;
+  });
 
   this.mwtype = 'view';
 
@@ -141,6 +167,7 @@ function uniqId() {
 
   c.setAttribute('width', rect.width);
   c.setAttribute('height', rect.height);
+  c.style.display = 'none';
   c.style.position = 'fixed';
   c.style.left = 0;
   c.style.top = 0;
@@ -155,8 +182,12 @@ function uniqId() {
   function devmode() {
     ctx.clearRect(0, 0, rect.width, rect.height);
 
-    if (isShift) {
-      document.querySelector('#app').style.opacity = 0.6;
+    if (isVisible) {
+      if (c.style.display === 'none') {
+        c.style.display = 'block';
+      }
+
+      document.querySelector('#app').style.opacity = 0.3;
 
       if (Woowahan.config.testMode) {
         components.forEach(comp => {
@@ -173,12 +204,15 @@ function uniqId() {
             ctx.fillStyle = 'black';
             ctx.fillText(comp.dataset.componentViewName, rect.left + 20, rect.top + 40);
           } else {
-            ctx.font = '11pt verdana';
+            ctx.font = '11px verdana';
             ctx.fillStyle = COLOR.node(true);
             ctx.strokeStyle = COLOR.node(false);
             ctx.strokeRect(rect.left+0.5, rect.top+0.5, rect.width, rect.height);
-            ctx.fillStyle = COLOR.node(false);
-            ctx.fillText(comp.dataset.componentHandlerName, rect.left, rect.top+rect.height+20);
+
+            if (isOption) {
+              ctx.fillStyle = COLOR.node(false);
+              ctx.fillText(`${comp.dataset.componentHandlerName} #${comp.dataset.componentId}`, rect.left, rect.top+rect.height+20);
+            }
           }
 
           ctx.restore();
@@ -187,18 +221,11 @@ function uniqId() {
       }
     } else {
       document.querySelector('#app').style.opacity = 1;
+      if (c.style.display === 'block') c.style.display = 'none';
     }
 
     requestAnimationFrame(devmode);
   }
-
-  w.addEventListener('keydown', function(event) {
-    isShift = event.shiftKey;
-  });
-
-  w.addEventListener('keyup', function(event) {
-    isShift = event.shiftKey;
-  });
 
   this.after = function(view, dom) {
     let idx = 0;
@@ -230,9 +257,17 @@ function uniqId() {
 app.set(logger);
 app.set(customHeader, { 'X-Authorization': 'Bearer {{token}}' });
 app.set(jsonHeader);
-app.set(uniqId);
+app.set(WoowahanDevtools);
 
 app.use(reducer);
+
+Woowahan.testDef = function(view) {
+  view.def = {
+    'onDoit': '이것은 디스패치다'
+  };
+};
+
+Woowahan.testDef(mainView);
 
 app.start({
   url: '/', view: mainView, container: '#app'
