@@ -255,6 +255,7 @@ class Woowahan {
         this.bindStore(module.store);
         break;
       case 'component':
+        console.warn('Component:: Deprecated and will be removed in a future release.');
         this.bindComponent(module);
         break;
       case 'plugin':
