@@ -192,7 +192,13 @@ class Woowahan {
   }
 
   bindPlugin(plugin) {
-    Woowahan.View.prototype._plugins[plugin.type] = plugin.plugin;
+    const type = plugin.type.toLowerCase();
+
+    if (Woowahan.View.prototype._plugins.hasOwnProperty(type)) {
+      throw 'Duplicate plugin name';
+    }
+
+    Woowahan.View.prototype._plugins[type] = plugin.plugin;
   }
 
   combineReducer(reducers) {
