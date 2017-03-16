@@ -324,11 +324,11 @@ View = Backbone.View.extend({
       });
 
       popup.closePopup = function(containerName, callback, data) {
+        this.removeView(`div[data-id=${containerName}]`);
+
         if (!!callback) {
           callback.call(this, data);
         }
-
-        this.removeView(`div[data-id=${containerName}]`);
       }.bind(this, containerName, callback);
 
       return popup;
