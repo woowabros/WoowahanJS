@@ -1,4 +1,4 @@
-import Woowahan from 'woowahan';
+import Woowahan from '../../../index';
 import HelloView from './hello-view';
 
 const app = new Woowahan();

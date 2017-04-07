@@ -4,9 +4,8 @@
   "description": "transition example",
   "main": "main.js",
   "scripts": {
-    "install": "npm install http-server -g && npm install",
     "build": "gulp build",
-    "test": "http-server dist -o"
+    "demo-server": "node ./node_modules/http-server/bin/http-server dist"
   },
   "author": "",
   "license": "ISC",
@@ -29,6 +28,7 @@
     "gulp-watch": "^4.1.1",
     "handlebars": "^4.0.3",
     "handlebars-loader": "^1.1.4",
+    "http-server": "^0.9.0",
     "mocha": "^2.2.1",
     "morgan": "^1.7.0",
     "nodemon": "^1.9.2",
