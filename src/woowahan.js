@@ -48,6 +48,10 @@ const toolset = {
     return instance.getStates.bind(instance);
   },
 
+  get setStates() {
+    return instance.setStates.bind(instance);
+  },
+
   get getComponent() {
     return instance.getComponent.bind(instance);
   },
@@ -209,8 +213,24 @@ class Woowahan {
     });
   }
 
-  getStates() {
-    return this.store;
+  getStates(key) {
+    return (typeof key !== 'undefined') ? this.store[key] : this.store;
+  }
+
+  setStates(key, value) {
+    let store;
+
+    if (typeof key === 'string' && typeof value !== 'undefined') {
+      store = { [key]: value };
+    } else {
+      store = key;
+    }
+
+    if (!this.store) {
+      this.store = {};
+    }
+
+    Object.assign(this.store, store);
   }
 
   getMiddleware(type, delegate) {

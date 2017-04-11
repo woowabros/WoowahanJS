@@ -337,8 +337,12 @@ View = Backbone.View.extend({
     }
   },
 
-  getStates() {
-    return app.getStates();
+  getStates(key) {
+    return app.getStates(key);
+  },
+
+  setStates(key, value) {
+    app.setStates(key, value);
   },
 
   getComponent(name) {
@@ -385,7 +389,15 @@ View = Backbone.View.extend({
     }
   },
 
-  setModel(attrs) {
+  setModel(key, value) {
+    let attrs;
+
+    if (typeof key === 'string' && typeof value !== 'undefined') {
+      attrs = { [key]: value };
+    } else {
+      attrs = key;
+    }
+
     if (attrs instanceof Backbone.Model) {
       if (!!this.model) {
         this._unbindModel();
