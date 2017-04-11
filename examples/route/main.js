@@ -16,6 +16,8 @@ app.use(Woowahan.Layout('.wrap', LayoutView1));
 app.use(Woowahan.Layout('.wrap', LayoutView2));
 app.use(Woowahan.Layout('.wrap', LayoutView3, { update: false }));
 
+app.use(Woowahan.Store.create({ test: 'test' }));
+
 /* 사이트맵 디자인 */
 const siteDesign = [
   { url: '/', view: MainView, container: '.wrap' },
