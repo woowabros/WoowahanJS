@@ -33,6 +33,7 @@ PopupView = Woowahan.View.create('PopupView', {
   overlayCss: {},
   css: {},
   showOverlay: true,
+  useDefaultCss: true,
 
   super() {
     PopupView.prototype.initialize.apply(this, this.arguments);
@@ -51,9 +52,12 @@ PopupView = Woowahan.View.create('PopupView', {
       switch (key) {
         case 'css':
         case 'overlayCss':
+          this[key] = Object.assign({}, this[key], model[key]);
+          break;
         case 'overlayClassName':
         case 'showOverlay':
-          this[key] = Object.assign({}, this[key], model[key]);
+        case 'useDefaultCss':
+          this[key] = model[key];
           break;
         case 'buttons':
           const buttons = model.buttons;
@@ -71,7 +75,11 @@ PopupView = Woowahan.View.create('PopupView', {
       }
     }.bind(this));
 
-    $el.css(Object.assign({}, defaultCss, this.css));
+    if (this.useDefaultCss) {
+      $el.css(defaultCss);
+    }
+
+    $el.css(this.css);
 
     if (this.showOverlay) {
       const overlay = this.overlay;
