@@ -280,7 +280,14 @@ View = Backbone.View.extend({
   },
 
   addView(container, ChildView, ...args) {
-    this.removeView(container);
+    switch (true) {
+      case ChildView.prototype.append:
+      case ChildView.prototype.prepend:
+      case ChildView.prototype.after:
+        break;
+      default:
+        this.removeView(container);
+    }
 
     return this.updateView(container, ChildView, ...args);
   },
