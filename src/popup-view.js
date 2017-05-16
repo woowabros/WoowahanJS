@@ -2,6 +2,7 @@ const Woowahan = require('./woowahan');
 
 let PopupView;
 let app;
+let zIndex = 1000;
 
 const defaultOverlayCss = {
   position: 'fixed',
@@ -10,8 +11,7 @@ const defaultOverlayCss = {
   right: 0,
   bottom: 0,
   background: '#000',
-  opacity: 0.7,
-  zIndex: 1000
+  opacity: 0.7
 };
 
 const defaultCss = {
@@ -24,8 +24,7 @@ const defaultCss = {
   maxHeight: '80%',
   background: '#fff',
   webkitTransform: 'translate(-50%, -50%)',
-  transform: 'translate(-50%, -50%)',
-  zIndex: 1100
+  transform: 'translate(-50%, -50%)'
 };
 
 PopupView = Woowahan.View.create('PopupView', {
@@ -75,33 +74,28 @@ PopupView = Woowahan.View.create('PopupView', {
       }
     }.bind(this));
 
-    if (this.useDefaultCss) {
-      $el.css(defaultCss);
-    }
-
-    $el.css(this.css);
-
     if (this.showOverlay) {
       const overlay = this.overlay;
 
       overlay.addClass(this.overlayClassName);
-      overlay.css(Object.assign({}, defaultOverlayCss, this.overlayCss));
+      overlay.css(Object.assign({ zIndex }, defaultOverlayCss, this.overlayCss));
 
       this.$el.parent().prepend(overlay);
 
+      zIndex += 100;
+
       $(overlay).on('click', function(event) {
         this.dispatch(Woowahan.Event.create('overlayClicked', this));
-
-        // if (typeof this.onOverlayClick === 'function') {
-        //   this.onOverlayClick(event);
-        // } else {
-        //   this.closePopup();
-        // }
       }.bind(this));
     }
 
-    defaultOverlayCss.zIndex += 500;
-    defaultCss.zIndex += 500;
+    if (this.useDefaultCss) {
+      $el.css(defaultCss);
+    }
+
+    $el.css(Object.assign({ zIndex }, this.css));
+
+    zIndex += 100;
   }
 });
 
