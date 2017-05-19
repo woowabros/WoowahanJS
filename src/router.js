@@ -1,5 +1,21 @@
 /*global _ Backbone*/
 
+const MIDDLEWARE = {
+  ROUTER: 'router',
+};
+
+const MIDDLEWARE_PROTOCOL = {
+  BEFORE: 'before',
+  AFTER: 'after',
+};
+
+const defaultFeatureValue = {
+  params: {},
+  query: {}
+};
+
+let app;
+
 function urlBuilder(path) {
   return function(params) {
     let url = path;
@@ -48,10 +64,11 @@ module.exports = {
     this.layouts.push(layout);
   },
 
-  design(pages, settings = {}) {
+  design(pages, settings = {}, toolset) {
     this.settings = settings;
-
     this.router = null;
+
+    app = toolset;
 
     this.bindRouter(Array.isArray(pages) ? pages : [pages]);
   },
@@ -113,7 +130,7 @@ module.exports = {
         if (!!page.layout) {
           const layout = this.layouts.find(layout => layout.viewName === page.layout);
 
-          if (!this.currentLayout || this.currentLayout.viewname != page.layout) {
+          if (!this.currentLayout || this.currentLayout.viewname !== page.layout) {
             if (!!layout) {
               !!this.currentLayout && this.currentLayout.close();
 
@@ -132,6 +149,23 @@ module.exports = {
             }
           }
         }
+
+        app.getMiddleware(MIDDLEWARE.ROUTER, MIDDLEWARE_PROTOCOL.BEFORE).forEach(middleware => {
+          if (MIDDLEWARE_PROTOCOL.BEFORE in middleware) {
+            const featureList = {};
+            const features = middleware.features || [];
+
+            if (features.includes('params')) {
+              featureList['params'] = params;
+            }
+
+            if (features.includes('query')) {
+              featureList['query'] = query;
+            }
+
+            middleware[MIDDLEWARE_PROTOCOL.BEFORE].call(null, featureList);
+          }
+        });
 
         page.view.prototype.params = params;
         page.view.prototype.query = query;

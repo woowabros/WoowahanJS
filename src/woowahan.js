@@ -289,7 +289,7 @@ class Woowahan {
       clearInterval(wait);
 
       if (!!design) {
-        Router.design(design, options);
+        Router.design(design, options, toolset);
       }
 
       Backbone.history.start({

@@ -113,6 +113,15 @@ function jsonHeader() {
   };
 }
 
+function GALogger(gaKey) {
+  this.mwtype = 'router';
+  this.features = ['params', 'query'];
+
+  this.before = function(feature) {
+    console.log(`key: ${gaKey}, data: ${JSON.stringify(feature)}`);
+  }
+}
+
 function uniqId() {
   let w = window;
   let c = document.createElement('canvas');
@@ -231,6 +240,7 @@ app.set(logger);
 app.set(customHeader, { 'X-Authorization': 'Bearer {{token}}' });
 app.set(jsonHeader);
 app.set(uniqId);
+app.set(GALogger, 'qwertyuiop');
 
 app.use(reducer);
 
