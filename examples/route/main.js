@@ -2,14 +2,19 @@ import Woowahan from '../../index';
 
 global.$ = global.jQuery = Woowahan.$;
 
-import { 
+import {
   MainView,
   LayoutView1, LayoutView2, LayoutView3,
   MainView1, MainView2, MainView3, 
   ContentView1, ContentView2, ContentView3,
   SubContentView1, SubContentView2 } from './view/';
 
+import { LogMiddleware, DebugMiddleware } from './middleware';
+
 const app = new Woowahan();
+
+app.set(LogMiddleware);
+app.set(DebugMiddleware);
 
 /* layout 생성 & 등록 */
 app.use(Woowahan.Layout('.wrap', LayoutView1));
@@ -24,7 +29,7 @@ const siteDesign = [
   { url: '/layout1', view: MainView1, container: '#content', layout: 'LayoutView1', pages: [
     { url: 'content1', view: ContentView1, pages: [
       { url: 'sub1', view: SubContentView1 },
-      { url: 'sub2', view: SubContentView2 }
+      { url: ':sub2', view: SubContentView2 }
     ] },
     { url: 'content2', view: ContentView2, pages: [
       { url: 'sub1', view: SubContentView1 },
