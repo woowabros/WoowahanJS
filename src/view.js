@@ -472,7 +472,7 @@ View = Backbone.View.extend({
     let $source = $(source);
     let $target = $(target);
 
-    if ($source.is('input[type=text]') || $source.is('input[type=number]') || $source.is('textarea')) {
+    if ($source.is('input[type=text]') || $source.is('input[type=number]') || $source.is('input[type=tel]') || $source.is('textarea')) {
       $target.val($source.val());
     } else if ($source.is('input[type=checkbox]') || $source.is('input[type=radio]')) {
       return $el.is(':checked');
