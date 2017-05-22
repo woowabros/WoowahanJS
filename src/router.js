@@ -87,7 +87,7 @@ module.exports = {
 
       page.originUrl = page.url;
 
-      if (!!page.url.startsWith('/')) {
+      if (page.url.startsWith('/')) {
         page.url = page.url.substr(1);
       }
 
