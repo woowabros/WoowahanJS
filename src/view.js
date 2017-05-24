@@ -80,7 +80,7 @@ viewMount = function() {
       $dom.addClass(this.className);
     }
 
-    if (!!this._viewMounted) {
+    if (this._viewMounted) {
       if ($.contains(container[0], this.el)) {
         this.$el.replaceWith($dom);
       } else {
@@ -140,7 +140,11 @@ View = Backbone.View.extend({
       this.setModel(model);
     }
 
-    viewMount.apply(this);
+    try {
+      viewMount.apply(this);
+    } catch(error) {
+      debugger;
+    }
   },
   
   _plugins: {

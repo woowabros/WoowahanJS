@@ -9,19 +9,12 @@ export default Woowahan.View.create('LayoutView2', {
   },
 
   viewWillMount(renderData) {
-    const links = {};
-    const routeTables = this.getRouteTables();
-
-    for (const key in routeTables) {
-      links[key] = routeTables[key]();
-    }
-
-    Object.assign(renderData, links);
+    renderData.links = this.getLinks(this.getRouteTables());
 
     return renderData;
   },
 
-  viewDidMount() {
-    console.log('viewDidMount');
+  getLinks(routeTables) {
+    return Object.keys(routeTables).reduce((a, b) => (a[`${b}Link`] = `#${routeTables[b]()}`, a), {});
   }
 });

@@ -1,7 +1,9 @@
 <h2>메인 3</h2>
 <p>세번째 레이아웃 메인입니다.</p>
+{{#with links}}
 <ul>
-  <li><a href="#layout3/content1">콘텐츠 뷰 1</a></li>
-  <li><a href="#layout3/content2">콘텐츠 뷰 2</a></li>
-  <li><a href="#layout3/content3">콘텐츠 뷰 3</a></li>
+  <li><a href="{{Layout3Content1Link}}">콘텐츠 뷰 1</a></li>
+  <li><a href="{{Layout3Content2Link}}">콘텐츠 뷰 2</a></li>
+  <li><a href="{{Layout3Content3Link}}">콘텐츠 뷰 3</a></li>
 </ul>
+{{/with}}
