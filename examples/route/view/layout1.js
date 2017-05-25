@@ -7,8 +7,6 @@ export default Woowahan.View.create('LayoutView1', {
   viewWillMount(renderData) {
     renderData.links = this.getLinks(this.getRouteTables());
 
-    debugger;
-
     return renderData;
   },
 
