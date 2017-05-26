@@ -1,5 +1,7 @@
 var app = new Woowahan();
 
+window.$ = window.jQuery = Woowahan.$;
+
 var HelloView = Woowahan.View.create('HelloView', {
   template: Handlebars.compile(
     '<div><button class="btn toggle" data-role="bind" data-name="buttonLabel">{{buttonLabel}}</button></div>'+

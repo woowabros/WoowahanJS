@@ -140,11 +140,7 @@ View = Backbone.View.extend({
       this.setModel(model);
     }
 
-    try {
-      viewMount.apply(this);
-    } catch(error) {
-      debugger;
-    }
+    viewMount.apply(this);
   },
   
   _plugins: {
