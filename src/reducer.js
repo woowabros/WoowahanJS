@@ -193,6 +193,8 @@ Reducer = {
           });
 
           middleware[MIDDLEWARE_PROTOCOL.BEFORE].call(null, featureList, Object.assign({}, this.env));
+
+          Object.assign(settings, featureList);
         }
       });
 

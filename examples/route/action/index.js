@@ -1,0 +1,1 @@
+export const DISPATCH_ACTION = 'DISPATCH_ACTION';

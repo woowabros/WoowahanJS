@@ -8,13 +8,15 @@ import {
   MainView1, MainView2, MainView3, 
   ContentView1, ContentView2, ContentView3,
   SubContentView1, SubContentView2 } from './view/';
+import { DISPATCH_ACTION } from './action';
 
-import { LogMiddleware, DebugMiddleware } from './middleware';
+import { LogMiddleware, DebugMiddleware, TimeoutMiddleware } from './middleware';
 
 const app = new Woowahan();
 
 app.set(LogMiddleware);
 app.set(DebugMiddleware);
+app.set(TimeoutMiddleware);
 
 /* layout 생성 & 등록 */
 app.use(Woowahan.Layout('.wrap', LayoutView1));
@@ -22,6 +24,14 @@ app.use(Woowahan.Layout('.wrap', LayoutView2));
 app.use(Woowahan.Layout('.wrap', LayoutView3, { update: false }));
 
 app.use(Woowahan.Store.create({ test: 'test' }));
+
+app.use(Woowahan.Reducer.create(DISPATCH_ACTION, function() {
+  this.onSuccess = function(res) {
+    this.finish(res);
+  };
+
+  this.getData('https://jsonplaceholder.typicode.com/posts');
+}));
 
 /* 사이트맵 디자인 */
 const siteDesign = [

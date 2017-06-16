@@ -15,3 +15,12 @@ export const DebugMiddleware = function() {
     console.log('view middleware');
   };
 };
+
+export const TimeoutMiddleware = function() {
+  this.mwtype = 'reducer';
+  this.features = ['timeout'];
+
+  this.before = function(feature) {
+    feature.timeout = 10000;
+  };
+};
