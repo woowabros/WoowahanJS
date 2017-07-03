@@ -248,15 +248,14 @@ Reducer = {
         request.abort();
       }
 
-      //TODO: 오류 발생시 바로 삭제하지 않고 작업을 Disable 시킨 후 오류 처리시 Retry 등의 로직을 수행할 수 있도록 선택지를 만듬
+      // TODO: 오류 발생시 바로 삭제하지 않고 작업을 Disable 시킨 후 오류 처리시 Retry 등의 로직을 수행할 수 있도록 선택지를 만듬
       this.removeAction(this._id);
       this.addError(error);
     };
 
-    fn.finish = function(data, options) {
-      options = options || null;
+    fn.finish = function(...args) {
+      this.subscriber && this.subscriber.apply(this, args);
 
-      this.subscriber && this.subscriber.call(this, data, options);
       this.removeAction(this._id);
     };
 
