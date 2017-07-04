@@ -158,71 +158,73 @@ View = Backbone.View.extend({
     this.undelegateEvents();
 
     for (let key in events) {
-      let method = events[key];
-      let match = key.match(delegateEventSplitter);
-      let childMatch = key.match(childEventSplitter);
-      let eventName;
-      let selector;
-      let listener;
-      
-      if (!!childMatch) {
-        const index = method.indexOf('(');
+      if (events.hasOwnProperty(key)) {
+        let method = events[key];
+        let match = key.match(delegateEventSplitter);
+        let childMatch = key.match(childEventSplitter);
+        let eventName;
+        let selector;
+        let listener;
 
-        let params = [];
-        
-        eventName = childMatch[1];
-        selector = childMatch[2];
-        
-        if (!!~index) {
-          params = method.substring(index + 1, method.length - 1).split(',').map(el => $.trim(el));
-          method = method.substring(0, index);
-        }
-        
-        listener = function(eventName, selector, method, params, event, ...args) {
-          const _this = this;
+        if (!!childMatch) {
+          const index = method.indexOf('(');
 
-          const getVal = function($el) {
-            if ($el.is('input[type=checkbox]') || $el.is('input[type=radio]')) {
-              return $el.is(':checked');
-            } else if ($el.is('select')) {
-              return $el.val();
-            } else {
-              return $el.val() || $el.text();
-            }
-          };
+          let params = [];
 
-          const values = params.map(param => getVal(_this.$(param)));
+          eventName = childMatch[1];
+          selector = childMatch[2];
 
-          if (eventName === 'submit') {
-            const inputs = {};
-
-            for (const el of _this.$(selector).find('input, select, textarea')) {
-              inputs[$(el).attr('name')] = getVal($(el));
-            }
-
-            values.push(inputs);
+          if (!!~index) {
+            params = method.substring(index + 1, method.length - 1).split(',').map(el => $.trim(el));
+            method = method.substring(0, index);
           }
 
+          listener = function(eventName, selector, method, params, event, ...args) {
+            const _this = this;
+
+            const getVal = function($el) {
+              if ($el.is('input[type=checkbox]') || $el.is('input[type=radio]')) {
+                return $el.is(':checked');
+              } else if ($el.is('select')) {
+                return $el.val();
+              } else {
+                return $el.val() || $el.text();
+              }
+            };
+
+            const values = params.map(param => getVal(_this.$(param)));
+
+            if (eventName === 'submit') {
+              const inputs = {};
+
+              for (const el of _this.$(selector).find('input, select, textarea')) {
+                inputs[$(el).attr('name')] = getVal($(el));
+              }
+
+              values.push(inputs);
+            }
+
+            if (Object.prototype.toString.call(method) !== '[object Function]') {
+              method = this[method];
+            }
+
+            return method.apply(this, Array.prototype.concat.call(values, args, event));
+          }.bind(this, eventName, selector, method, params);
+        } else {
           if (Object.prototype.toString.call(method) !== '[object Function]') {
             method = this[method];
           }
 
-          return method.apply(this, Array.prototype.concat.call(values, args, event));
-        }.bind(this, eventName, selector, method, params);
-      } else {
-        if (Object.prototype.toString.call(method) !== '[object Function]') {
-          method = this[method];
+          if (!method) continue;
+
+          eventName = match[1];
+          selector = match[2];
+
+          listener = method.bind(this);
         }
 
-        if (!method) continue;
-
-        eventName = match[1];
-        selector = match[2];
-
-        listener = method.bind(this);
+        this.delegate(eventName, selector, listener);
       }
-      
-      this.delegate(eventName, selector, listener);
     }
 
     return this;
@@ -247,7 +249,7 @@ View = Backbone.View.extend({
       return;
     }
 
-    if (typeof ChildView != 'function') {
+    if (typeof ChildView !== 'function') {
       args = ChildView;
     }
 
@@ -420,10 +422,12 @@ View = Backbone.View.extend({
     }
 
     for(let attr in attrs) {
-      let value = this.model.get(attr);
+      if (attrs.hasOwnProperty(attr)) {
+        let value = this.model.get(attr);
 
-      if (value !== attrs[attr]) {
-        this.model.set(attr, attrs[attr]);
+        if (value !== attrs[attr]) {
+          this.model.set(attr, attrs[attr]);
+        }
       }
     }
   },
@@ -456,7 +460,7 @@ View = Backbone.View.extend({
     this._unbindModel();
     this._removeChild(remove);
     
-    if (remove + '' != 'false' && !!this) {
+    if (remove + '' !== 'false' && !!this) {
       this._unbindRef();
       this.remove();
     }
@@ -534,7 +538,9 @@ View = Backbone.View.extend({
 
   _unbindRef() {
     for (const ref in this.refs) {
-      this.refs[ref] = null;
+      if (this.refs.hasOwnProperty(ref)) {
+        this.refs[ref] = null;
+      }
     }
 
     this.refs = null;
@@ -545,9 +551,11 @@ View = Backbone.View.extend({
   },
 
   _removeChild(remove) {
-    for (var key in this._views) {
-      this._views[key].close.call(this._views[key], remove);
-      delete this._views[key];
+    for (let key in this._views) {
+      if (this._views.hasOwnProperty(key)) {
+        this._views[key].close.call(this._views[key], remove);
+        delete this._views[key];
+      }
     }
   }
 });

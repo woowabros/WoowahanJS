@@ -58,7 +58,7 @@ CollectionView = Woowahan.View.create('CollectionView', {
 
     this.rowViews.push(view);
 
-    model.on('remove', (data) => {
+    model.on('remove', () => {
       this.rowViews.splice(this.rowViews.indexOf(view), 1);
 
       view.close();

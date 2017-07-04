@@ -31,10 +31,6 @@ const INTERVAL = 1000/60;
  break;
 
  */
-function inspectMiddlewareType(middleware) {
-
-}
-
 const toolset = {
   get dispatch() {
     return instance.dispatch.bind(instance);
@@ -152,7 +148,7 @@ class Woowahan {
     let item = this.queue.shift();
 
     if(!!item) {
-      var reducer = this.reducers[item.action.type];
+      let reducer = this.reducers[item.action.type];
 
       if(!reducer) {
         this.enableQueue();

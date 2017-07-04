@@ -9,11 +9,6 @@ const MIDDLEWARE_PROTOCOL = {
   AFTER: 'after',
 };
 
-const defaultFeatureValue = {
-  params: {},
-  query: {}
-};
-
 let app;
 
 function urlBuilder(path) {
@@ -41,7 +36,9 @@ function urlBuilder(path) {
 
     if (typeof params === 'object') {
       for (let key in params) {
-        url = url.replace(':'+key, encodeURIComponent(params[key]));
+        if (params.hasOwnProperty(key)) {
+          url = url.replace(':'+key, encodeURIComponent(params[key]));
+        }
       }
 
       return url;
