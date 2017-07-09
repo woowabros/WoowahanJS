@@ -10,13 +10,14 @@ import {
   SubContentView1, SubContentView2 } from './view/';
 import { DISPATCH_ACTION } from './action';
 
-import { LogMiddleware, DebugMiddleware, TimeoutMiddleware } from './middleware';
+import { AppMiddleware, ViewMiddleware, ReducerMiddleware, RouterMiddleware } from './middleware';
 
 const app = new Woowahan();
 
-app.set(LogMiddleware);
-app.set(DebugMiddleware);
-app.set(TimeoutMiddleware);
+app.set(AppMiddleware, 'test');
+app.set(ViewMiddleware, 'test');
+app.set(ReducerMiddleware, 'test');
+app.set(RouterMiddleware, 'test');
 
 /* layout 생성 & 등록 */
 app.use(Woowahan.Layout('.wrap', LayoutView1));
