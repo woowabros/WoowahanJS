@@ -1,26 +1,47 @@
-export const LogMiddleware = function() {
-  this.mwtype = 'router';
-  this.features = ['params', 'query'];
+export const AppMiddleware = function() {
+  this.mwtype = 'app';
 
-  this.before = function(feature) {
-    console.log('router middleware');
+  this.before = function(app, next) {
+
+  };
+
+  this.after = function(app, next) {
+
   };
 };
 
-export const DebugMiddleware = function() {
+export const ViewMiddleware = function() {
   this.mwtype = 'view';
-  this.features = [];
 
-  this.after = function(view, dom) {
-    console.log('view middleware');
+  this.before = function(view, next) {
+
+  };
+
+  this.after = function(view, next) {
+
   };
 };
 
-export const TimeoutMiddleware = function() {
+export const ReducerMiddleware = function() {
   this.mwtype = 'reducer';
-  this.features = ['timeout'];
 
-  this.before = function(feature) {
-    feature.timeout = 10000;
+  this.before = function(app, next) {
+
+  };
+
+  this.after = function(app, next) {
+
+  };
+};
+
+export const RouterMiddleware = function() {
+  this.mwtype = 'router';
+
+  this.before = function(app, next) {
+
+  };
+
+  this.after = function(app, next) {
+
   };
 };
