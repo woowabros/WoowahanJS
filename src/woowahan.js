@@ -1,36 +1,14 @@
-const _ = require('lodash');
 const format = require('util').format;
 const Debug = require('debug');
 const Backbone = require('backbone');
 const Router = require('./router');
+const MIDDLEWARE = require('./middleware').MIDDLEWARE;
+const MIDDLEWARE_PROTOCOL = require('./middleware').MIDDLEWARE_PROTOCOL;
+const MiddlewareRunner = require('./middleware').MiddlewareRunner;
 
 const debug = Debug('Woowahan');
-const DELEGATE = ['before','after'];
 const INTERVAL = 1000/60;
 
-/*
- case VIEW_AFTER_MOUNT:
- return function(view) {
-
- };
- break;
- case VIEW_BEFORE_MOUNT:
- return function(view, next) {
-
- };
- break;
- case REDUCER_AFTER_REQUEST:
- return function(res, type, xhr) {
-
- };
- break;
- case REDUCER_BEFORE_REQUEST:
- return function(settings) {
-
- };
- break;
-
- */
 const toolset = {
   get dispatch() {
     return instance.dispatch.bind(instance);
@@ -76,8 +54,6 @@ if (global.__backboneAgent) {
   global.__backboneAgent.handleBackbone(Backbone);
 }
 
-global._ = _;
-
 Backbone.Model.prototype.idAttribute = '___ID_ATTR___';
 Backbone.View.prototype.viewname = '___WOOWA_VIEW___';
 
@@ -101,6 +77,7 @@ class Woowahan {
       view: {
         before: [],
         after: [],
+        unmount: [],
       },
     };
 
@@ -290,11 +267,11 @@ class Woowahan {
     let instance = new middleware(options);
 
     if (instance.mwtype) {
-      DELEGATE.forEach(delegate => {
+      Object.values(MIDDLEWARE_PROTOCOL).forEach(delegate => {
         delegate in instance && this.middlewares[instance.mwtype][delegate].push(instance);
       });
     } else {
-      // 경고
+      throw new Error('Required attribute "mwtype" is missing.');
     }
   }
 
@@ -315,9 +292,15 @@ class Woowahan {
         Router.design(design, options, toolset);
       }
 
-      Backbone.history.start({
-        pushState: !!options.pushState
-      });
+      let middlewares = this.getMiddleware(MIDDLEWARE.APP, MIDDLEWARE_PROTOCOL.BEFORE);
+
+      MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.BEFORE, [toolset], function() {
+        middlewares = this.getMiddleware(MIDDLEWARE.APP, MIDDLEWARE_PROTOCOL.AFTER);
+
+        MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.AFTER, [toolset], function() {
+          Backbone.history.start({ pushState: !!options.pushState });
+        });
+      }.bind(this));
     }, 1);
   }
 

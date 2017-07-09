@@ -4,6 +4,10 @@ const Debug = require('debug');
 const format = require('util').format;
 const Backbone = require('backbone');
 
+const MIDDLEWARE = require('./middleware').MIDDLEWARE;
+const MIDDLEWARE_PROTOCOL = require('./middleware').MIDDLEWARE_PROTOCOL;
+const MiddlewareRunner = require('./middleware').MiddlewareRunner;
+
 const PluginText = require('./plugin/text');
 const PluginInputText = require('./plugin/input-text');
 const PluginCheckbox = require('./plugin/checkbox');
@@ -12,15 +16,6 @@ const PluginSelect = require('./plugin/select');
 const delegateEventSplitter = /^(\S+)\s*(.*)$/;
 const childEventSplitter = /^\@(\w+)\s*(.*)$/;
 const DEFAULT_ATTR_TYPE = 'text';
-
-const MIDDLEWARE = {
-  VIEW: 'view',
-};
-
-const MIDDLEWARE_PROTOCOL = {
-  BEFORE: 'before',
-  AFTER: 'after',
-};
 
 let View = null;
 let viewMount = null;
@@ -45,85 +40,87 @@ viewMount = function() {
   if (!container || !container.length) {
     throw `[${this.viewname}] "container" is undefined.`;
   }
-  
-  if (typeof this.viewWillMount === 'function') {
-    renderData = this.viewWillMount(renderData) || renderData;
-  }
 
-  if (!!template) {
-    if (typeof template === 'string') {
-      domStr = template;
-    } else {
-      domStr = template(renderData);
+  let middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.BEFORE);
+
+  MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.BEFORE, [this], function() {
+    if (typeof this.viewWillMount === 'function') {
+      renderData = this.viewWillMount(renderData) || renderData;
     }
 
-    if (tagName === 'div') {
-      let proto = this;
+    if (!!template) {
+      if (typeof template === 'string') {
+        domStr = template;
+      } else {
+        domStr = template(renderData);
+      }
 
-      tagName = '';
+      if (tagName === 'div') {
+        let proto = this;
 
-      do {
-        if (proto.hasOwnProperty('tagName') && !!proto.tagName) {
-          tagName = proto.tagName;
-          break;
+        tagName = '';
+
+        do {
+          if (proto.hasOwnProperty('tagName') && !!proto.tagName) {
+            tagName = proto.tagName;
+            break;
+          }
+        } while((proto = proto.__proto__) && (proto.viewname !== '___WOOWA_VIEW___'));
+      }
+
+      if (!!tagName || $(domStr).length > 1) {
+        $dom = $(`<${tagName || 'div'}>${domStr}</${tagName || 'div'}>`);
+      } else {
+        $dom = $(domStr);
+      }
+
+      if (!!this.className) {
+        $dom.addClass(this.className);
+      }
+
+      if (this._viewMounted) {
+        if ($.contains(container[0], this.el)) {
+          this.$el.replaceWith($dom);
+        } else {
+          container.html($dom);
         }
-      } while((proto = proto.__proto__) && (proto.viewname !== '___WOOWA_VIEW___'));
-    }
-
-    if (!!tagName || $(domStr).length > 1) {
-      $dom = $(`<${tagName || 'div'}>${domStr}</${tagName || 'div'}>`);
-    } else {
-      $dom = $(domStr);
-    }
-
-    if (!!this.className) {
-      $dom.addClass(this.className);
-    }
-
-    if (this._viewMounted) {
-      if ($.contains(container[0], this.el)) {
-        this.$el.replaceWith($dom);
       } else {
-        container.html($dom);
+        if (!!this.append) {
+          container.append($dom);
+        } else if (!!this.prepend) {
+          container.prepend($dom);
+        } else if (!!this.after) {
+          container.after($dom);
+        } else {
+          container.html($dom);
+        }
       }
+
+      this.setElement($dom);
     } else {
-      if (!!this.append) {
-        container.append($dom);
-      } else if (!!this.prepend) {
-        container.prepend($dom);
-      } else if (!!this.after) {
-        container.after($dom);
-      } else {
-        container.html($dom);
-      }
+      this.setElement(container);
     }
 
-    this.setElement($dom);
-  } else {
-    this.setElement(container);
-  }
-  
-  this._viewMounted = true;
-  this._bindRef();
-  this._bindModel();
+    this._viewMounted = true;
+    this._bindRef();
+    this._bindModel();
 
-  app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.AFTER).forEach(middleware => {
-    middleware[MIDDLEWARE_PROTOCOL.AFTER].call(null, this, $dom[0]);
-  });
+    if (typeof this.viewComponentDidMount === 'function') {
+      this.viewComponentDidMount($dom);
+    }
 
-  if (typeof this.viewComponentDidMount === 'function') {
-    this.viewComponentDidMount($dom);
-  }
+    if (typeof this.viewDidMount === 'function') {
+      this.viewDidMount($dom);
+    }
 
-  if (typeof this.viewDidMount === 'function') {
-    this.viewDidMount($dom);
-  }
+    middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.AFTER);
 
-  setTimeout(function() {
-    this.dispatch(Woowahan.Event.create('viewDidMount', this));
+    MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.AFTER, [this], function() {
+      this.dispatch(Woowahan.Event.create('viewDidMount', this));
 
-    this.trigger('viewDidMount');
-  }.bind(this), 1);
+      this.trigger('viewDidMount');
+    }.bind(this));
+  }.bind(this));
 };
 
 View = Backbone.View.extend({

@@ -1,23 +1,10 @@
 /*global $*/
-
-const MIDDLEWARE = {
-  REDUCER: 'reducer',
-};
-
-const MIDDLEWARE_PROTOCOL = {
-  BEFORE: 'before',
-  AFTER: 'after',
-};
+const MIDDLEWARE = require('./middleware').MIDDLEWARE;
+const MIDDLEWARE_PROTOCOL = require('./middleware').MIDDLEWARE_PROTOCOL;
+const MiddlewareRunner = require('./middleware').MiddlewareRunner;
 
 const defaultConfiguration = {
   timeout: 5000
-};
-
-const defaultFeatureValue = {
-  headers: {},
-  url: '',
-  type: '',
-  timeout: defaultConfiguration.timeout
 };
 
 let Reducer;
@@ -144,63 +131,55 @@ Reducer = {
       let success = function(...args) {
         const queueSuccess = Array.prototype.concat.call(_this.queueSuccess, this.queueSuccess);
 
-        if (!!queueSuccess.length || !!this.onSuccess) {
-          for (const item of queueSuccess) {
-            item.apply(this, args);
-          }
+        let middlewares = app.getMiddleware(MIDDLEWARE.REDUCER, MIDDLEWARE_PROTOCOL.AFTER);
 
-          !!this.onSuccess && this.onSuccess.apply(this, args);
-        } else {
-          this.success.apply(this, args);
-        }
+        MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.AFTER, [app], function() {
+          if (!!queueSuccess.length || !!this.onSuccess) {
+            for (const item of queueSuccess) {
+              item.apply(this, args);
+            }
+
+            !!this.onSuccess && this.onSuccess.apply(this, args);
+          } else {
+            this.success.apply(this, args);
+          }
+        }.bind(this));
       };
 
       let fail = function(...args) {
         const queueFail = Array.prototype.concat.call(_this.queueFail, this.queueFail);
         const jqXHR = args[0];
 
-        if (!!jqXHR) {
-          args = [{
-            status: jqXHR.status,
-            statusText: jqXHR.statusText || '',
-            response: jqXHR.responseJSON || jqXHR.responseText
-          }];
-        }
+        let middlewares = app.getMiddleware(MIDDLEWARE.REDUCER, MIDDLEWARE_PROTOCOL.AFTER);
 
-        if (!!queueFail.length || !!this.onFail) {
-          for (const item of queueFail) {
-            item.apply(this, args);
+        MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.AFTER, [app], function() {
+          if (!!jqXHR) {
+            args = [{
+              status: jqXHR.status,
+              statusText: jqXHR.statusText || '',
+              response: jqXHR.responseJSON || jqXHR.responseText
+            }];
           }
 
-          !!this.onFail && this.onFail.apply(this, args);
-        } else {
-          this.fail.apply(this, args);
-        }
+          if (!!queueFail.length || !!this.onFail) {
+            for (const item of queueFail) {
+              item.apply(this, args);
+            }
+
+            !!this.onFail && this.onFail.apply(this, args);
+          } else {
+            this.fail.apply(this, args);
+          }
+        }.bind(this));
       };
 
-      app.getMiddleware(MIDDLEWARE.REDUCER, MIDDLEWARE_PROTOCOL.BEFORE).forEach(middleware => {
-        if (MIDDLEWARE_PROTOCOL.BEFORE in middleware) {
-          let featureList = {};
+      let middlewares = app.getMiddleware(MIDDLEWARE.REDUCER, MIDDLEWARE_PROTOCOL.BEFORE);
 
-          middleware.features.forEach(feature => {
-            if (defaultFeatureValue.hasOwnProperty(feature)) {
-              if (!settings.hasOwnProperty(feature)) {
-                settings[feature] = defaultFeatureValue[feature];
-              }
-
-              featureList[feature] = settings[feature];
-            }
-          });
-
-          middleware[MIDDLEWARE_PROTOCOL.BEFORE].call(null, featureList, Object.assign({}, this.env));
-
-          Object.assign(settings, featureList);
-        }
-      });
-
-      return $.ajax(settings)
-        .done(success.bind(this))
-        .fail(fail.bind(this));
+      MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.BEFORE, [app], function() {
+        return $.ajax(settings)
+          .done(success.bind(this))
+          .fail(fail.bind(this));
+      }.bind(this));
     };
 
     /**

@@ -1,13 +1,6 @@
-/*global _ Backbone*/
-
-const MIDDLEWARE = {
-  ROUTER: 'router',
-};
-
-const MIDDLEWARE_PROTOCOL = {
-  BEFORE: 'before',
-  AFTER: 'after',
-};
+const MIDDLEWARE = require('./middleware').MIDDLEWARE;
+const MIDDLEWARE_PROTOCOL = require('./middleware').MIDDLEWARE_PROTOCOL;
+const MiddlewareRunner = require('./middleware').MiddlewareRunner;
 
 let app;
 
@@ -44,8 +37,8 @@ function urlBuilder(path) {
       return url;
     }
 
-
     console.error('Invalid params type');
+
     return url;
   };
 }
@@ -147,34 +140,28 @@ module.exports = {
           }
         }
 
-        app.getMiddleware(MIDDLEWARE.ROUTER, MIDDLEWARE_PROTOCOL.BEFORE).forEach(middleware => {
-          if (MIDDLEWARE_PROTOCOL.BEFORE in middleware) {
-            const featureList = {};
-            const features = middleware.features || [];
-
-            if (features.includes('params')) {
-              featureList['params'] = params;
-            }
-
-            if (features.includes('query')) {
-              featureList['query'] = query;
-            }
-
-            middleware[MIDDLEWARE_PROTOCOL.BEFORE].call(null, featureList);
-          }
-        });
-
         page.view.prototype.params = params;
         page.view.prototype.query = query;
         page.view.prototype.container = page.container;
 
-        const view = new page.view();
+        // before
 
-        if (!!this.currentView) {
-          this.currentView.close();
-        }
+        let middlewares = app.getMiddleware(MIDDLEWARE.ROUTER, MIDDLEWARE_PROTOCOL.BEFORE);
 
-        this.currentView = view;
+        MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.BEFORE, [app], function() {
+          console.log('test');
+          const view = new page.view();
+
+          if (!!this.currentView) {
+            this.currentView.close();
+          }
+
+          this.currentView = view;
+
+          middlewares = app.getMiddleware(MIDDLEWARE.ROUTER, MIDDLEWARE_PROTOCOL.AFTER);
+
+          MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.AFTER, [app]);
+        }.bind(this));
       }.bind(this, page);
 
       if (!!page.pages && !!page.pages.length) {
