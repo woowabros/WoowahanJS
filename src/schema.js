@@ -23,12 +23,13 @@ module.exports = {
 
       let errors = [];
       
-      for(let key in mixedData) {
+      for (let key in mixedData) {
         if (mixedData.hasOwnProperty(key)) {
           let type = defineSchema[key];
 
           if (type && type.hasOwnProperty('__validate__')) {
             let error = type.__validate__.call(type, key, data[key]);
+
             if (error) errors.push(error);
           } else {
             typeof window === 'object' && console.warn(`Is not defined in the schema field "${key}" is present.`);

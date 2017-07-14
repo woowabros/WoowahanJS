@@ -1,5 +1,3 @@
-/*global $ _*/
-
 const Debug = require('debug');
 const format = require('util').format;
 const Backbone = require('backbone');
@@ -35,7 +33,7 @@ viewMount = function() {
   let $dom;
 
   if (!container) {
-    throw `[${this.viewname}] Required attribute "container" is missing.`;
+    throw new Error(`[${this.viewname}] Required attribute "container" is missing.`);
   } else {
     if (typeof container === 'string') {
       container = $(container);
@@ -43,7 +41,7 @@ viewMount = function() {
   }
 
   if (!container || !container.length) {
-    throw `[${this.viewname}] "container" is undefined.`;
+    throw new Error(`[${this.viewname}] "container" is undefined.`);
   }
   
   if (typeof this.viewWillMount === 'function') {
@@ -67,7 +65,7 @@ viewMount = function() {
           tagName = proto.tagName;
           break;
         }
-      } while((proto = proto.__proto__) && (proto.viewname !== '___WOOWA_VIEW___'));
+      } while ((proto = proto.__proto__) && (proto.viewname !== '___WOOWA_VIEW___'));
     }
 
     if (!!tagName || $(domStr).length > 1) {
@@ -127,8 +125,8 @@ viewMount = function() {
 };
 
 View = Backbone.View.extend({
-  super() {
-    View.prototype.initialize.apply(this, arguments);
+  super(...args) {
+    View.prototype.initialize.apply(this, args);
   },
 
   initialize(model) {
@@ -377,7 +375,7 @@ View = Backbone.View.extend({
   dispatch(action, subscriber, options) {
     action.__options = options || {};
     
-    switch(action.wwtype) {
+    switch (action.wwtype) {
       case 'event':
         this.$el.trigger(action.type, ...action.data);
         break;
@@ -421,7 +419,7 @@ View = Backbone.View.extend({
       }
     }
 
-    for(let attr in attrs) {
+    for (let attr in attrs) {
       if (attrs.hasOwnProperty(attr)) {
         let value = this.model.get(attr);
 
@@ -444,12 +442,12 @@ View = Backbone.View.extend({
     return this.model.clone().get(key);
   },
 
-  log() {
-    this.debug(format.apply(this, arguments));
+  log(...args) {
+    this.debug(format.apply(this, args));
   },
 
-  logStamp() {
-    this.log(arguments);
+  logStamp(...args) {
+    this.log(args);
   },
 
   close(remove) {
@@ -466,10 +464,10 @@ View = Backbone.View.extend({
     }
   },
 
-  remove() {
+  remove(...args) {
     this.trigger('remove', this);
 
-    Backbone.View.prototype.remove.apply(this, arguments);
+    Backbone.View.prototype.remove.apply(this, args);
   },
 
   _syncElement(source, target) {
@@ -532,7 +530,7 @@ View = Backbone.View.extend({
         this._plugins[type].call(this, element, value);
       }.bind(this, element, key, type));
 
-      if(typeof value !== 'undefined') this._plugins[type].call(this, element, value);
+      if (typeof value !== 'undefined') this._plugins[type].call(this, element, value);
     }
   },
 
@@ -564,7 +562,7 @@ View.create = (viewName, options) => {
   let view = View.extend(options);
 
   view.viewname = viewName;
-  Object.defineProperty(view.prototype, 'viewname', {value: viewName, writable: false});
+  Object.defineProperty(view.prototype, 'viewname', { value: viewName, writable: false });
 
   return view;
 };

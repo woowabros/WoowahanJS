@@ -38,16 +38,16 @@ PopupView = Woowahan.View.create('PopupView', {
     PopupView.prototype.initialize.apply(this, this.arguments);
   },
 
-  initialize(options) {
+  initialize(...args) {
     this.overlay = $('<div></div>');
 
-    Woowahan.View.prototype.initialize.apply(this, arguments);
+    Woowahan.View.prototype.initialize.apply(this, args);
   },
 
   viewComponentDidMount($el) {
     const model = this.getModel();
 
-    Object.keys(model).map(function (key) {
+    Object.keys(model).map(function(key) {
       switch (key) {
         case 'css':
         case 'overlayCss':
@@ -105,7 +105,7 @@ PopupView.create = (viewName, options) => {
   let view = PopupView.extend(options);
 
   view.viewname = viewName;
-  Object.defineProperty(view.prototype, 'viewname', {value: viewName, writable: false});
+  Object.defineProperty(view.prototype, 'viewname', { value: viewName, writable: false });
 
   return view;
 };

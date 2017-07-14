@@ -1,5 +1,3 @@
-/*global $*/
-
 const MIDDLEWARE = {
   REDUCER: 'reducer',
 };
@@ -78,13 +76,13 @@ Reducer = {
     fn.id = () => this._id;
     fn.actionName = actionName;
     fn.createtime = () => this._timestamp;
-    fn.addAction = (id) => app.addAction(id);
-    fn.addError = (err) => app.addError(err);
-    fn.removeAction = (id) => app.removeAction(id);
+    fn.addAction = id => app.addAction(id);
+    fn.addError = err => app.addError(err);
+    fn.removeAction = id => app.removeAction(id);
     fn.getStates = () => app.getStates();
 
     fn.use = function(key, handlers) {
-      switch(key) {
+      switch (key) {
         case _this.SUCCESS:
           if (!handlers) return;
 
@@ -104,7 +102,7 @@ Reducer = {
           }
           break;
         default:
-          throw 'undefined key';
+          throw new Error('undefined key');
       }
     };
     
