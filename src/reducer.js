@@ -1,5 +1,3 @@
-
-
 const MIDDLEWARE = require('./middleware').MIDDLEWARE;
 
 const MIDDLEWARE_PROTOCOL = require('./middleware').MIDDLEWARE_PROTOCOL;

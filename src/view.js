@@ -114,9 +114,10 @@ viewMount = function() {
     middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.AFTER);
 
     MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.AFTER, [this], function() {
-      this.dispatch(Woowahan.Event.create('viewDidMount', this));
-
-      this.trigger('viewDidMount');
+      ['viewDidMount', 'mount'].forEach(type => {
+        this.dispatch(Woowahan.Event.create(type, this));
+        this.trigger(type);
+      });
     }.bind(this));
   }.bind(this));
 };
@@ -263,6 +264,9 @@ View = Backbone.View.extend({
       if (typeof view.viewWillUnmount === 'function') {
         view.viewWillUnmount.call(view);
       }
+
+      view.dispatch(Woowahan.Event.create('unmount', this));
+      view.trigger('unmount');
 
       viewMount.apply(this._views[container]);
     } else {
@@ -452,6 +456,9 @@ View = Backbone.View.extend({
       this.viewWillUnmount();
     }
 
+    this.dispatch(Woowahan.Event.create('unmount', this));
+    this.trigger('unmount');
+
     this._unbindModel();
     this._removeChild(remove);
     
@@ -462,7 +469,8 @@ View = Backbone.View.extend({
   },
 
   remove(...args) {
-    this.trigger('remove', this);
+    this.dispatch(Woowahan.Event.create('remove', this));
+    this.trigger('remove');
 
     Backbone.View.prototype.remove.apply(this, args);
   },
