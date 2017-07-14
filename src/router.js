@@ -30,7 +30,7 @@ function urlBuilder(path) {
     if (typeof params === 'object') {
       for (let key in params) {
         if (params.hasOwnProperty(key)) {
-          url = url.replace(':'+key, encodeURIComponent(params[key]));
+          url = url.replace(':' + key, encodeURIComponent(params[key]));
         }
       }
 

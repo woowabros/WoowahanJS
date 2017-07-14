@@ -7,6 +7,7 @@ const MIDDLEWARE_PROTOCOL = require('./middleware').MIDDLEWARE_PROTOCOL;
 const MiddlewareRunner = require('./middleware').MiddlewareRunner;
 
 const debug = Debug('Woowahan');
+
 const INTERVAL = 1000/60;
 
 const toolset = {
@@ -124,18 +125,18 @@ class Woowahan {
 
     let item = this.queue.shift();
 
-    if(!!item) {
+    if (!!item) {
       let reducer = this.reducers[item.action.type];
 
-      if(!reducer) {
+      if (!reducer) {
         this.enableQueue();
         throw new Error('The unregistered reducer. Please check the type of action, if there is a written reducer use after registration.');
       }
 
       // 리스너가 없는 경우 허용
-      item.subscriber = item.subscriber || function () {};
+      item.subscriber = item.subscriber || function() {};
 
-      if(typeof item.subscriber !== 'function') {
+      if (typeof item.subscriber !== 'function') {
         this.enableQueue();
         throw new Error('The listener must be a function. If you do not need the listener it may not be specified.');
       }
@@ -172,7 +173,7 @@ class Woowahan {
     const type = plugin.type.toLowerCase();
 
     if (Woowahan.View.prototype._plugins.hasOwnProperty(type)) {
-      throw 'Duplicate plugin name';
+      throw new Error('Duplicate plugin name');
     }
 
     Woowahan.View.prototype._plugins[type] = plugin.plugin;
@@ -317,21 +318,21 @@ Object.assign(Woowahan.prototype, Backbone.Events);
 
 Woowahan.$ = Backbone.$;
 
-Woowahan.View           = require('./view')(toolset);
-Woowahan.Reducer        = require('./reducer')(toolset);
-Woowahan.Error          = require('./error');
-Woowahan.Types          = require('./types');
-Woowahan.Store          = require('./store');
-Woowahan.Action         = require('./action');
-Woowahan.Event          = require('./event');
-Woowahan.Schema         = require('./schema');
-Woowahan.Layout         = require('./layout');
-Woowahan.Component      = require('./component');
-Woowahan.Plugin         = require('./plugin');
+Woowahan.View = require('./view')(toolset);
+Woowahan.Reducer = require('./reducer')(toolset);
+Woowahan.Error = require('./error');
+Woowahan.Types = require('./types');
+Woowahan.Store = require('./store');
+Woowahan.Action = require('./action');
+Woowahan.Event = require('./event');
+Woowahan.Schema = require('./schema');
+Woowahan.Layout = require('./layout');
+Woowahan.Component = require('./component');
+Woowahan.Plugin = require('./plugin');
 
 module.exports = global.Woowahan = Woowahan;
 
 /** components */
 Woowahan.CollectionView = require('./collection-view')(toolset);
-Woowahan.ItemView       = require('./item-view')(toolset);
-Woowahan.PopupView      = require('./popup-view')(toolset);
+Woowahan.ItemView = require('./item-view')(toolset);
+Woowahan.PopupView = require('./popup-view')(toolset);

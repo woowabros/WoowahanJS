@@ -1,4 +1,3 @@
-/*global _*/
 const Woowahan = require('./woowahan');
 const events = require('./events');
 
@@ -11,12 +10,12 @@ ItemView = Woowahan.View.create('ItemView', {
     'click': '_onSelectedRow'
   },
 
-  super() {
-    ItemView.prototype.initialize.apply(this, arguments);
+  super(...args) {
+    ItemView.prototype.initialize.apply(this, args);
   },
 
-  initialize() {
-    Woowahan.View.prototype.initialize.apply(this, arguments);
+  initialize(...args) {
+    Woowahan.View.prototype.initialize.apply(this, args);
   },
 
   _onSelectedRow(event) {
@@ -40,7 +39,7 @@ ItemView.create = (viewName, options) => {
   let view = ItemView.extend(options);
 
   view.viewname = viewName;
-  Object.defineProperty(view.prototype, 'viewname', {value: viewName, writable: false});
+  Object.defineProperty(view.prototype, 'viewname', { value: viewName, writable: false });
 
   return view;
 };
