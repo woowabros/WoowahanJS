@@ -55,7 +55,9 @@ export const ViewMiddleware = function(test) {
   };
 
   this.unmount = function(view, next) {
-    if (typeof app !== 'object' || typeof next !== 'function') throw new Error('ViewMiddleware unmout 인자 에러');
+    console.log('ViewMiddleware unmount called');
+
+    if (typeof view !== 'object' || typeof next !== 'function') throw new Error('ViewMiddleware unmout 인자 에러');
     if (view.$el.html() === '') throw new Error('ViewMiddleware unmount 발동 시점 에러');
 
     setTimeout(function() {
@@ -73,7 +75,7 @@ export const ReducerMiddleware = function(test) {
 
   if (test !== 'test') throw new Error('ReducerMiddleware 인자 에러');
 
-  this.before = function(app, next) {
+  this.before = function(settings, app, next) {
     console.log('ReducerMiddleware before called');
 
     if (typeof app !== 'object' || typeof next !== 'function') throw new Error('ReducerMiddleware before 인자 에러');
@@ -90,6 +92,20 @@ export const ReducerMiddleware = function(test) {
   };
 };
 
+export const RouterMiddlewarePre = function() {
+  console.log('RouterMiddlewarePre called');
+
+  this.mwtype = 'router';
+
+  this.before = function(route, app) {
+    console.log('RouterMiddlewarePre before called');
+  };
+
+  this.after = function(route, app) {
+    console.log('RouterMiddlewarePre after called');
+  };
+};
+
 export const RouterMiddleware = function(test) {
   console.log('RouterMiddleware called');
 
@@ -97,7 +113,7 @@ export const RouterMiddleware = function(test) {
 
   if (test !== 'test') throw new Error('RouterMiddleware 인자 에러');
 
-  this.before = function(app, next) {
+  this.before = function(route, app, next) {
     console.log('RouterMiddleware before called');
 
     if (typeof app !== 'object' || typeof next !== 'function') throw new Error('RouterMiddleware before 인자 에러');
@@ -105,7 +121,7 @@ export const RouterMiddleware = function(test) {
     next();
   };
 
-  this.after = function(app, next) {
+  this.after = function(route, app, next) {
     console.log('RouterMiddleware after called');
 
     if (typeof app !== 'object' || typeof next !== 'function') throw new Error('RouterMiddleware after 인자 에러');

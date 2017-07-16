@@ -175,7 +175,7 @@ Reducer = {
 
       let middlewares = app.getMiddleware(MIDDLEWARE.REDUCER, MIDDLEWARE_PROTOCOL.BEFORE);
 
-      MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.BEFORE, [app], function() {
+      MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.BEFORE, [settings, app], function() {
         return $.ajax(settings)
           .done(success.bind(this))
           .fail(fail.bind(this));

@@ -144,12 +144,14 @@ module.exports = {
         page.view.prototype.query = query;
         page.view.prototype.container = page.container;
 
-        // before
+        const pageFeature = Object.assign({}, page);
+
+        if (!!pageFeature.view) delete pageFeature.view;
+        if (!!pageFeature.pages) delete pageFeature.pages;
 
         let middlewares = app.getMiddleware(MIDDLEWARE.ROUTER, MIDDLEWARE_PROTOCOL.BEFORE);
 
-        MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.BEFORE, [app], function() {
-          console.log('test');
+        MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.BEFORE, [pageFeature, app], function() {
           const view = new page.view();
 
           if (!!this.currentView) {
@@ -160,7 +162,7 @@ module.exports = {
 
           middlewares = app.getMiddleware(MIDDLEWARE.ROUTER, MIDDLEWARE_PROTOCOL.AFTER);
 
-          MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.AFTER, [app]);
+          MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.AFTER, [pageFeature, app]);
         }.bind(this));
       }.bind(this, page);
 

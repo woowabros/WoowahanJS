@@ -261,14 +261,18 @@ View = Backbone.View.extend({
       view.setModel.apply(view, Array.prototype.concat.call(args, { silent: true }));
       view.container = viewContainer;
 
-      if (typeof view.viewWillUnmount === 'function') {
-        view.viewWillUnmount.call(view);
-      }
+      let middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.UNMOUNT);
 
-      view.dispatch(Woowahan.Event.create('unmount', this));
-      view.trigger('unmount');
+      MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.UNMOUNT, [this], function() {
+        if (typeof view.viewWillUnmount === 'function') {
+          view.viewWillUnmount.call(view);
+        }
 
-      viewMount.apply(this._views[container]);
+        view.dispatch(Woowahan.Event.create('unmount', this));
+        view.trigger('unmount');
+
+        viewMount.apply(this._views[container]);
+      }.bind(this));
     } else {
       ChildView.prototype.container = viewContainer;
 
@@ -452,20 +456,24 @@ View = Backbone.View.extend({
   },
 
   close(remove) {
-    if (typeof this.viewWillUnmount === 'function') {
-      this.viewWillUnmount();
-    }
+    let middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.UNMOUNT);
 
-    this.dispatch(Woowahan.Event.create('unmount', this));
-    this.trigger('unmount');
+    MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.UNMOUNT, [this], function() {
+      if (typeof this.viewWillUnmount === 'function') {
+        this.viewWillUnmount();
+      }
 
-    this._unbindModel();
-    this._removeChild(remove);
-    
-    if (remove + '' !== 'false' && !!this) {
-      this._unbindRef();
-      this.remove();
-    }
+      this.dispatch(Woowahan.Event.create('unmount', this));
+      this.trigger('unmount');
+
+      this._unbindModel();
+      this._removeChild(remove);
+
+      if (remove + '' !== 'false' && !!this) {
+        this._unbindRef();
+        this.remove();
+      }
+    }.bind(this));
   },
 
   remove(...args) {
