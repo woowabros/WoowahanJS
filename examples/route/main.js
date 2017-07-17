@@ -2,6 +2,10 @@ import Woowahan from '../../index';
 
 global.$ = global.jQuery = Woowahan.$;
 
+global.log = function(log, color) {
+  console.log(`%c${log}`, `color: ${color}`);
+};
+
 import {
   MainView,
   LayoutView1, LayoutView2, LayoutView3,
@@ -10,12 +14,18 @@ import {
   SubContentView1, SubContentView2 } from './view/';
 import { DISPATCH_ACTION } from './action';
 
-import { AppMiddleware, ViewMiddleware, ReducerMiddleware, RouterMiddleware, RouterMiddlewarePre } from './middleware';
+import {
+  AppMiddlewarePre,  AppMiddleware,
+  ViewMiddleware,
+  ReducerMiddlewarePre, ReducerMiddleware,
+  RouterMiddlewarePre, RouterMiddleware } from './middleware';
 
 const app = new Woowahan();
 
+app.set(AppMiddlewarePre);
 app.set(AppMiddleware, 'test');
 app.set(ViewMiddleware, 'test');
+app.set(ReducerMiddlewarePre);
 app.set(ReducerMiddleware, 'test');
 app.set(RouterMiddlewarePre);
 app.set(RouterMiddleware, 'test');
