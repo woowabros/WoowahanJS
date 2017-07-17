@@ -48,7 +48,7 @@ app.use(Woowahan.Reducer.create(DISPATCH_ACTION, function() {
 /* 사이트맵 디자인 */
 const siteDesign = [
   { url: '/', view: MainView, container: '.wrap' },
-  { url: '/layout1', view: MainView1, container: '#content', layout: 'LayoutView1', routeName: 'Layout1', pages: [
+  { url: '/layout1', view: MainView1, container: '#content', layout: 'LayoutView1', routeName: 'Layout1', routeData: { route: 'good' }, pages: [
     { url: 'content1', view: ContentView1, routeName: 'Layout1Content1', pages: [
       { url: 'sub1', view: SubContentView1, routeName: 'Layout1Content1Sub1' },
       { url: ':sub2', view: SubContentView2, routeName: 'Layout1Content1Sub2' }

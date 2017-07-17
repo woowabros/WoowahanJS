@@ -51,10 +51,10 @@ export const ViewMiddleware = function(test) {
 
   if (test !== 'test') throw new Error('ViewMiddleware 인자 에러');
 
-  this.before = function(app, next) {
+  this.before = function(view, next) {
     log('[ViewMiddleware] before called', 'orange');
 
-    if (typeof app !== 'object' || typeof next !== 'function') throw new Error('ViewMiddleware before 인자 에러');
+    if (typeof view !== 'object' || typeof next !== 'function') throw new Error('ViewMiddleware before 인자 에러');
 
     next();
   };
@@ -137,6 +137,7 @@ export const RouterMiddleware = function(test) {
     log('[RouterMiddleware] before called', 'green');
 
     if (typeof app !== 'object' || typeof next !== 'function') throw new Error('RouterMiddleware before 인자 에러');
+    if (route.url === 'layout1' && route.routeData.route !== 'good') throw new Error('RouterMiddleware before 인자 에러');
 
     next();
   };
