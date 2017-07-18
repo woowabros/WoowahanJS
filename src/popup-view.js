@@ -38,16 +38,16 @@ PopupView = Woowahan.View.create('PopupView', {
     PopupView.prototype.initialize.apply(this, this.arguments);
   },
 
-  initialize(...args) {
+  initialize(options) {
     this.overlay = $('<div></div>');
 
-    Woowahan.View.prototype.initialize.apply(this, args);
+    Woowahan.View.prototype.initialize.apply(this, arguments);
   },
 
   viewComponentDidMount($el) {
     const model = this.getModel();
 
-    Object.keys(model).map(function(key) {
+    Object.keys(model).map(function (key) {
       switch (key) {
         case 'css':
         case 'overlayCss':
@@ -66,9 +66,7 @@ PopupView = Woowahan.View.create('PopupView', {
           }
 
           for (const button in buttons) {
-            if (buttons.hasOwnProperty(button)) {
-              this.events[`click ${button}`] = buttons[button].bind(this);
-            }
+            this.events[`click ${button}`] = buttons[button].bind(this);
           }
 
           this.delegateEvents();
@@ -86,7 +84,7 @@ PopupView = Woowahan.View.create('PopupView', {
 
       zIndex += 100;
 
-      $(overlay).on('click', function() {
+      $(overlay).on('click', function(event) {
         this.dispatch(Woowahan.Event.create('overlayClicked', this));
       }.bind(this));
     }
@@ -105,7 +103,7 @@ PopupView.create = (viewName, options) => {
   let view = PopupView.extend(options);
 
   view.viewname = viewName;
-  Object.defineProperty(view.prototype, 'viewname', { value: viewName, writable: false });
+  Object.defineProperty(view.prototype, 'viewname', {value: viewName, writable: false});
 
   return view;
 };

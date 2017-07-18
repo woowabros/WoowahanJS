@@ -1,3 +1,5 @@
+/*global $ _*/
+
 module.exports = function(element, value) {
   let selectedIndex = 0;
   let opts;
@@ -19,8 +21,7 @@ module.exports = function(element, value) {
   element.innerHTML = '';
 
   for (const [index, opt] of opts.entries()) {
-    let label;
-    let val;
+    let label, val;
 
     if (typeof opt === 'string') {
       label = opt;

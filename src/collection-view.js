@@ -11,18 +11,18 @@ let CollectionView;
 let app;
 
 CollectionView = Woowahan.View.create('CollectionView', {
-  super(...args) {
-    CollectionView.prototype.initialize.apply(this, args);
+  super() {
+    CollectionView.prototype.initialize.apply(this, arguments);
   },
 
-  initialize(...args) {
+  initialize() {
     this.collection = this.collection || new Backbone.Collection();
     this.collection.on('add', this.addRowView, this);
 
     this.rowViews = [];
     this.reverse = false;
 
-    Woowahan.View.prototype.initialize.apply(this, args);
+    Woowahan.View.prototype.initialize.apply(this, arguments);
   },
   
   viewWillUnmount() {
@@ -42,7 +42,7 @@ CollectionView = Woowahan.View.create('CollectionView', {
       container = this.$el;
 
       if (!this.$el.is(this.rowContainer)) {
-        throw new Error('undefined rowContainer');
+        throw('undefined rowContainer');
       }
     }
 
@@ -58,13 +58,13 @@ CollectionView = Woowahan.View.create('CollectionView', {
 
     this.rowViews.push(view);
 
-    model.on('remove', () => {
+    model.on('remove', (data) => {
       this.rowViews.splice(this.rowViews.indexOf(view), 1);
 
       view.close();
     }, view);
 
-    model.on('change', data => {
+    model.on('change', (data) => {
       view.setModel(data.toJSON());
       view.updateView();
     }, view);
@@ -74,7 +74,7 @@ CollectionView = Woowahan.View.create('CollectionView', {
 
   reload(data = [], options = {}) {
     if (Object.prototype.toString.call(options) !== '[object Object]') {
-      throw new Error('invalid options!!!');
+      throw 'invalid options!!!';
     }
 
     const uid = options.uid;
@@ -123,7 +123,7 @@ CollectionView.create = (viewName, options) => {
   let view = CollectionView.extend(options);
 
   view.viewname = viewName;
-  Object.defineProperty(view.prototype, 'viewname', { value: viewName, writable: false });
+  Object.defineProperty(view.prototype, 'viewname', {value: viewName, writable: false});
 
   return view;
 };

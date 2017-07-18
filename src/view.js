@@ -1,10 +1,8 @@
+/*global $ _*/
+
 const Debug = require('debug');
 const format = require('util').format;
 const Backbone = require('backbone');
-
-const MIDDLEWARE = require('./middleware').MIDDLEWARE;
-const MIDDLEWARE_PROTOCOL = require('./middleware').MIDDLEWARE_PROTOCOL;
-const MiddlewareRunner = require('./middleware').MiddlewareRunner;
 
 const PluginText = require('./plugin/text');
 const PluginInputText = require('./plugin/input-text');
@@ -14,6 +12,15 @@ const PluginSelect = require('./plugin/select');
 const delegateEventSplitter = /^(\S+)\s*(.*)$/;
 const childEventSplitter = /^\@(\w+)\s*(.*)$/;
 const DEFAULT_ATTR_TYPE = 'text';
+
+const MIDDLEWARE = {
+  VIEW: 'view',
+};
+
+const MIDDLEWARE_PROTOCOL = {
+  BEFORE: 'before',
+  AFTER: 'after',
+};
 
 let View = null;
 let viewMount = null;
@@ -28,7 +35,7 @@ viewMount = function() {
   let $dom;
 
   if (!container) {
-    throw new Error(`[${this.viewname}] Required attribute "container" is missing.`);
+    throw `[${this.viewname}] Required attribute "container" is missing.`;
   } else {
     if (typeof container === 'string') {
       container = $(container);
@@ -36,95 +43,92 @@ viewMount = function() {
   }
 
   if (!container || !container.length) {
-    throw new Error(`[${this.viewname}] "container" is undefined.`);
+    throw `[${this.viewname}] "container" is undefined.`;
+  }
+  
+  if (typeof this.viewWillMount === 'function') {
+    renderData = this.viewWillMount(renderData) || renderData;
   }
 
-  let middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.BEFORE);
-
-  MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.BEFORE, [this], function() {
-    if (typeof this.viewWillMount === 'function') {
-      renderData = this.viewWillMount(renderData) || renderData;
-    }
-
-    if (!!template) {
-      if (typeof template === 'string') {
-        domStr = template;
-      } else {
-        domStr = template(renderData);
-      }
-
-      if (tagName === 'div') {
-        let proto = this;
-
-        tagName = '';
-
-        do {
-          if (proto.hasOwnProperty('tagName') && !!proto.tagName) {
-            tagName = proto.tagName;
-            break;
-          }
-        } while ((proto = proto.__proto__) && (proto.viewname !== '___WOOWA_VIEW___'));
-      }
-
-      if (!!tagName || $(domStr).length > 1) {
-        $dom = $(`<${tagName || 'div'}>${domStr}</${tagName || 'div'}>`);
-      } else {
-        $dom = $(domStr);
-      }
-
-      if (!!this.className) {
-        $dom.addClass(this.className);
-      }
-
-      if (this._viewMounted) {
-        if ($.contains(container[0], this.el)) {
-          this.$el.replaceWith($dom);
-        } else {
-          container.html($dom);
-        }
-      } else {
-        if (!!this.append) {
-          container.append($dom);
-        } else if (!!this.prepend) {
-          container.prepend($dom);
-        } else if (!!this.after) {
-          container.after($dom);
-        } else {
-          container.html($dom);
-        }
-      }
-
-      this.setElement($dom);
+  if (!!template) {
+    if (typeof template === 'string') {
+      domStr = template;
     } else {
-      this.setElement(container);
+      domStr = template(renderData);
     }
 
-    this._viewMounted = true;
-    this._bindRef();
-    this._bindModel();
+    if (tagName === 'div') {
+      let proto = this;
 
-    if (typeof this.viewComponentDidMount === 'function') {
-      this.viewComponentDidMount($dom);
+      tagName = '';
+
+      do {
+        if (proto.hasOwnProperty('tagName') && !!proto.tagName) {
+          tagName = proto.tagName;
+          break;
+        }
+      } while((proto = proto.__proto__) && (proto.viewname !== '___WOOWA_VIEW___'));
     }
 
-    if (typeof this.viewDidMount === 'function') {
-      this.viewDidMount($dom);
+    if (!!tagName || $(domStr).length > 1) {
+      $dom = $(`<${tagName || 'div'}>${domStr}</${tagName || 'div'}>`);
+    } else {
+      $dom = $(domStr);
     }
 
-    middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.AFTER);
+    if (!!this.className) {
+      $dom.addClass(this.className);
+    }
 
-    MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.AFTER, [this], function() {
-      ['viewDidMount', 'mount'].forEach(type => {
-        this.dispatch(Woowahan.Event.create(type, this));
-        this.trigger(type);
-      });
-    }.bind(this));
-  }.bind(this));
+    if (this._viewMounted) {
+      if ($.contains(container[0], this.el)) {
+        this.$el.replaceWith($dom);
+      } else {
+        container.html($dom);
+      }
+    } else {
+      if (!!this.append) {
+        container.append($dom);
+      } else if (!!this.prepend) {
+        container.prepend($dom);
+      } else if (!!this.after) {
+        container.after($dom);
+      } else {
+        container.html($dom);
+      }
+    }
+
+    this.setElement($dom);
+  } else {
+    this.setElement(container);
+  }
+  
+  this._viewMounted = true;
+  this._bindRef();
+  this._bindModel();
+
+  app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.AFTER).forEach(middleware => {
+    middleware[MIDDLEWARE_PROTOCOL.AFTER].call(null, this, $dom[0]);
+  });
+
+  if (typeof this.viewComponentDidMount === 'function') {
+    this.viewComponentDidMount($dom);
+  }
+
+  if (typeof this.viewDidMount === 'function') {
+    this.viewDidMount($dom);
+  }
+
+  setTimeout(function() {
+    this.dispatch(Woowahan.Event.create('viewDidMount', this));
+
+    this.trigger('viewDidMount');
+  }.bind(this), 1);
 };
 
 View = Backbone.View.extend({
-  super(...args) {
-    View.prototype.initialize.apply(this, args);
+  super() {
+    View.prototype.initialize.apply(this, arguments);
   },
 
   initialize(model) {
@@ -154,73 +158,71 @@ View = Backbone.View.extend({
     this.undelegateEvents();
 
     for (let key in events) {
-      if (events.hasOwnProperty(key)) {
-        let method = events[key];
-        let match = key.match(delegateEventSplitter);
-        let childMatch = key.match(childEventSplitter);
-        let eventName;
-        let selector;
-        let listener;
+      let method = events[key];
+      let match = key.match(delegateEventSplitter);
+      let childMatch = key.match(childEventSplitter);
+      let eventName;
+      let selector;
+      let listener;
+      
+      if (!!childMatch) {
+        const index = method.indexOf('(');
 
-        if (!!childMatch) {
-          const index = method.indexOf('(');
+        let params = [];
+        
+        eventName = childMatch[1];
+        selector = childMatch[2];
+        
+        if (!!~index) {
+          params = method.substring(index + 1, method.length - 1).split(',').map(el => $.trim(el));
+          method = method.substring(0, index);
+        }
+        
+        listener = function(eventName, selector, method, params, event, ...args) {
+          const _this = this;
 
-          let params = [];
+          const getVal = function($el) {
+            if ($el.is('input[type=checkbox]') || $el.is('input[type=radio]')) {
+              return $el.is(':checked');
+            } else if ($el.is('select')) {
+              return $el.val();
+            } else {
+              return $el.val() || $el.text();
+            }
+          };
 
-          eventName = childMatch[1];
-          selector = childMatch[2];
+          const values = params.map(param => getVal(_this.$(param)));
 
-          if (!!~index) {
-            params = method.substring(index + 1, method.length - 1).split(',').map(el => $.trim(el));
-            method = method.substring(0, index);
+          if (eventName === 'submit') {
+            const inputs = {};
+
+            for (const el of _this.$(selector).find('input, select, textarea')) {
+              inputs[$(el).attr('name')] = getVal($(el));
+            }
+
+            values.push(inputs);
           }
 
-          listener = function(eventName, selector, method, params, event, ...args) {
-            const _this = this;
-
-            const getVal = function($el) {
-              if ($el.is('input[type=checkbox]') || $el.is('input[type=radio]')) {
-                return $el.is(':checked');
-              } else if ($el.is('select')) {
-                return $el.val();
-              } else {
-                return $el.val() || $el.text();
-              }
-            };
-
-            const values = params.map(param => getVal(_this.$(param)));
-
-            if (eventName === 'submit') {
-              const inputs = {};
-
-              for (const el of _this.$(selector).find('input, select, textarea')) {
-                inputs[$(el).attr('name')] = getVal($(el));
-              }
-
-              values.push(inputs);
-            }
-
-            if (Object.prototype.toString.call(method) !== '[object Function]') {
-              method = this[method];
-            }
-
-            return method.apply(this, Array.prototype.concat.call(values, args, event));
-          }.bind(this, eventName, selector, method, params);
-        } else {
           if (Object.prototype.toString.call(method) !== '[object Function]') {
             method = this[method];
           }
 
-          if (!method) continue;
-
-          eventName = match[1];
-          selector = match[2];
-
-          listener = method.bind(this);
+          return method.apply(this, Array.prototype.concat.call(values, args, event));
+        }.bind(this, eventName, selector, method, params);
+      } else {
+        if (Object.prototype.toString.call(method) !== '[object Function]') {
+          method = this[method];
         }
 
-        this.delegate(eventName, selector, listener);
+        if (!method) continue;
+
+        eventName = match[1];
+        selector = match[2];
+
+        listener = method.bind(this);
       }
+      
+      this.delegate(eventName, selector, listener);
     }
 
     return this;
@@ -245,7 +247,7 @@ View = Backbone.View.extend({
       return;
     }
 
-    if (typeof ChildView !== 'function') {
+    if (typeof ChildView != 'function') {
       args = ChildView;
     }
 
@@ -261,18 +263,11 @@ View = Backbone.View.extend({
       view.setModel.apply(view, Array.prototype.concat.call(args, { silent: true }));
       view.container = viewContainer;
 
-      let middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.UNMOUNT);
+      if (typeof view.viewWillUnmount === 'function') {
+        view.viewWillUnmount.call(view);
+      }
 
-      MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.UNMOUNT, [this], function() {
-        if (typeof view.viewWillUnmount === 'function') {
-          view.viewWillUnmount.call(view);
-        }
-
-        view.dispatch(Woowahan.Event.create('unmount', this));
-        view.trigger('unmount');
-
-        viewMount.apply(this._views[container]);
-      }.bind(this));
+      viewMount.apply(this._views[container]);
     } else {
       ChildView.prototype.container = viewContainer;
 
@@ -380,7 +375,7 @@ View = Backbone.View.extend({
   dispatch(action, subscriber, options) {
     action.__options = options || {};
     
-    switch (action.wwtype) {
+    switch(action.wwtype) {
       case 'event':
         this.$el.trigger(action.type, ...action.data);
         break;
@@ -424,13 +419,11 @@ View = Backbone.View.extend({
       }
     }
 
-    for (let attr in attrs) {
-      if (attrs.hasOwnProperty(attr)) {
-        let value = this.model.get(attr);
+    for(let attr in attrs) {
+      let value = this.model.get(attr);
 
-        if (value !== attrs[attr]) {
-          this.model.set(attr, attrs[attr]);
-        }
+      if (value !== attrs[attr]) {
+        this.model.set(attr, attrs[attr]);
       }
     }
   },
@@ -447,40 +440,32 @@ View = Backbone.View.extend({
     return this.model.clone().get(key);
   },
 
-  log(...args) {
-    this.debug(format.apply(this, args));
+  log() {
+    this.debug(format.apply(this, arguments));
   },
 
-  logStamp(...args) {
-    this.log(args);
+  logStamp() {
+    this.log(arguments);
   },
 
   close(remove) {
-    let middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.UNMOUNT);
+    if (typeof this.viewWillUnmount === 'function') {
+      this.viewWillUnmount();
+    }
 
-    MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.UNMOUNT, [this], function() {
-      if (typeof this.viewWillUnmount === 'function') {
-        this.viewWillUnmount();
-      }
-
-      this.dispatch(Woowahan.Event.create('unmount', this));
-      this.trigger('unmount');
-
-      this._unbindModel();
-      this._removeChild(remove);
-
-      if (remove + '' !== 'false' && !!this) {
-        this._unbindRef();
-        this.remove();
-      }
-    }.bind(this));
+    this._unbindModel();
+    this._removeChild(remove);
+    
+    if (remove + '' != 'false' && !!this) {
+      this._unbindRef();
+      this.remove();
+    }
   },
 
-  remove(...args) {
-    this.dispatch(Woowahan.Event.create('remove', this));
-    this.trigger('remove');
+  remove() {
+    this.trigger('remove', this);
 
-    Backbone.View.prototype.remove.apply(this, args);
+    Backbone.View.prototype.remove.apply(this, arguments);
   },
 
   _syncElement(source, target) {
@@ -543,15 +528,13 @@ View = Backbone.View.extend({
         this._plugins[type].call(this, element, value);
       }.bind(this, element, key, type));
 
-      if (typeof value !== 'undefined') this._plugins[type].call(this, element, value);
+      if(typeof value !== 'undefined') this._plugins[type].call(this, element, value);
     }
   },
 
   _unbindRef() {
     for (const ref in this.refs) {
-      if (this.refs.hasOwnProperty(ref)) {
-        this.refs[ref] = null;
-      }
+      this.refs[ref] = null;
     }
 
     this.refs = null;
@@ -562,11 +545,9 @@ View = Backbone.View.extend({
   },
 
   _removeChild(remove) {
-    for (let key in this._views) {
-      if (this._views.hasOwnProperty(key)) {
-        this._views[key].close.call(this._views[key], remove);
-        delete this._views[key];
-      }
+    for (var key in this._views) {
+      this._views[key].close.call(this._views[key], remove);
+      delete this._views[key];
     }
   }
 });
@@ -575,7 +556,7 @@ View.create = (viewName, options) => {
   let view = View.extend(options);
 
   view.viewname = viewName;
-  Object.defineProperty(view.prototype, 'viewname', { value: viewName, writable: false });
+  Object.defineProperty(view.prototype, 'viewname', {value: viewName, writable: false});
 
   return view;
 };

@@ -1,10 +1,23 @@
-const MIDDLEWARE = require('./middleware').MIDDLEWARE;
+/*global $*/
 
-const MIDDLEWARE_PROTOCOL = require('./middleware').MIDDLEWARE_PROTOCOL;
-  const MiddlewareRunner = require('./middleware').MiddlewareRunner;
+const MIDDLEWARE = {
+  REDUCER: 'reducer',
+};
+
+const MIDDLEWARE_PROTOCOL = {
+  BEFORE: 'before',
+  AFTER: 'after',
+};
 
 const defaultConfiguration = {
   timeout: 5000
+};
+
+const defaultFeatureValue = {
+  headers: {},
+  url: '',
+  type: '',
+  timeout: defaultConfiguration.timeout
 };
 
 let Reducer;
@@ -65,13 +78,13 @@ Reducer = {
     fn.id = () => this._id;
     fn.actionName = actionName;
     fn.createtime = () => this._timestamp;
-    fn.addAction = id => app.addAction(id);
-    fn.addError = err => app.addError(err);
-    fn.removeAction = id => app.removeAction(id);
+    fn.addAction = (id) => app.addAction(id);
+    fn.addError = (err) => app.addError(err);
+    fn.removeAction = (id) => app.removeAction(id);
     fn.getStates = () => app.getStates();
 
     fn.use = function(key, handlers) {
-      switch (key) {
+      switch(key) {
         case _this.SUCCESS:
           if (!handlers) return;
 
@@ -91,7 +104,7 @@ Reducer = {
           }
           break;
         default:
-          throw new Error('undefined key');
+          throw 'undefined key';
       }
     };
     
@@ -131,55 +144,63 @@ Reducer = {
       let success = function(...args) {
         const queueSuccess = Array.prototype.concat.call(_this.queueSuccess, this.queueSuccess);
 
-        let middlewares = app.getMiddleware(MIDDLEWARE.REDUCER, MIDDLEWARE_PROTOCOL.AFTER);
-
-        MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.AFTER, [app], function() {
-          if (!!queueSuccess.length || !!this.onSuccess) {
-            for (const item of queueSuccess) {
-              item.apply(this, args);
-            }
-
-            !!this.onSuccess && this.onSuccess.apply(this, args);
-          } else {
-            this.success.apply(this, args);
+        if (!!queueSuccess.length || !!this.onSuccess) {
+          for (const item of queueSuccess) {
+            item.apply(this, args);
           }
-        }.bind(this));
+
+          !!this.onSuccess && this.onSuccess.apply(this, args);
+        } else {
+          this.success.apply(this, args);
+        }
       };
 
       let fail = function(...args) {
         const queueFail = Array.prototype.concat.call(_this.queueFail, this.queueFail);
         const jqXHR = args[0];
 
-        let middlewares = app.getMiddleware(MIDDLEWARE.REDUCER, MIDDLEWARE_PROTOCOL.AFTER);
+        if (!!jqXHR) {
+          args = [{
+            status: jqXHR.status,
+            statusText: jqXHR.statusText || '',
+            response: jqXHR.responseJSON || jqXHR.responseText
+          }];
+        }
 
-        MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.AFTER, [app], function() {
-          if (!!jqXHR) {
-            args = [{
-              status: jqXHR.status,
-              statusText: jqXHR.statusText || '',
-              response: jqXHR.responseJSON || jqXHR.responseText
-            }];
+        if (!!queueFail.length || !!this.onFail) {
+          for (const item of queueFail) {
+            item.apply(this, args);
           }
 
-          if (!!queueFail.length || !!this.onFail) {
-            for (const item of queueFail) {
-              item.apply(this, args);
-            }
-
-            !!this.onFail && this.onFail.apply(this, args);
-          } else {
-            this.fail.apply(this, args);
-          }
-        }.bind(this));
+          !!this.onFail && this.onFail.apply(this, args);
+        } else {
+          this.fail.apply(this, args);
+        }
       };
 
-      let middlewares = app.getMiddleware(MIDDLEWARE.REDUCER, MIDDLEWARE_PROTOCOL.BEFORE);
+      app.getMiddleware(MIDDLEWARE.REDUCER, MIDDLEWARE_PROTOCOL.BEFORE).forEach(middleware => {
+        if (MIDDLEWARE_PROTOCOL.BEFORE in middleware) {
+          let featureList = {};
 
-      MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.BEFORE, [settings, app], function() {
-        return $.ajax(settings)
-          .done(success.bind(this))
-          .fail(fail.bind(this));
-      }.bind(this));
+          middleware.features.forEach(feature => {
+            if (defaultFeatureValue.hasOwnProperty(feature)) {
+              if (!settings.hasOwnProperty(feature)) {
+                settings[feature] = defaultFeatureValue[feature];
+              }
+
+              featureList[feature] = settings[feature];
+            }
+          });
+
+          middleware[MIDDLEWARE_PROTOCOL.BEFORE].call(null, featureList, Object.assign({}, this.env));
+
+          Object.assign(settings, featureList);
+        }
+      });
+
+      return $.ajax(settings)
+        .done(success.bind(this))
+        .fail(fail.bind(this));
     };
 
     /**
@@ -227,14 +248,15 @@ Reducer = {
         request.abort();
       }
 
-      // TODO: 오류 발생시 바로 삭제하지 않고 작업을 Disable 시킨 후 오류 처리시 Retry 등의 로직을 수행할 수 있도록 선택지를 만듬
+      //TODO: 오류 발생시 바로 삭제하지 않고 작업을 Disable 시킨 후 오류 처리시 Retry 등의 로직을 수행할 수 있도록 선택지를 만듬
       this.removeAction(this._id);
       this.addError(error);
     };
 
-    fn.finish = function(...args) {
-      this.subscriber && this.subscriber.apply(this, args);
+    fn.finish = function(data, options) {
+      options = options || null;
 
+      this.subscriber && this.subscriber.call(this, data, options);
       this.removeAction(this._id);
     };
 
