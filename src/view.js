@@ -20,28 +20,29 @@ let viewMount = null;
 let app = null;
 
 viewMount = function() {
-  let tagName = this.tagName;
-  let renderData = this.getModel();
-  let container = this.container;
-  let template = this.template;
-  let domStr;
-  let $dom;
-
-  if (!container) {
-    throw new Error(`[${this.viewname}] Required attribute "container" is missing.`);
-  } else {
-    if (typeof container === 'string') {
-      container = $(container);
-    }
-  }
-
-  if (!container || !container.length) {
-    throw new Error(`[${this.viewname}] "container" is undefined.`);
-  }
-
   let middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.BEFORE);
 
   MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.BEFORE, [this], function() {
+    let tagName = this.tagName;
+    let container = this.container;
+    let template = this.template;
+    let domStr;
+    let $dom;
+
+    if (!container) {
+      throw new Error(`[${this.viewname}] Required attribute "container" is missing.`);
+    } else {
+      if (typeof container === 'string') {
+        container = $(container);
+      }
+    }
+
+    if (!container || !container.length) {
+      throw new Error(`[${this.viewname}] "container" is undefined.`);
+    }
+
+    let renderData = this.getModel();
+
     if (typeof this.viewWillMount === 'function') {
       renderData = this.viewWillMount(renderData) || renderData;
     }
