@@ -27,28 +27,39 @@ let viewMount = null;
 let app = null;
 
 viewMount = function() {
-  let tagName = this.tagName;
-  let renderData = this.getModel();
-  let container = this.container;
-  let template = this.template;
-  let domStr;
-  let $dom;
+  let middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.BEFORE);
 
-  if (!container) {
-    throw `[${this.viewname}] Required attribute "container" is missing.`;
-  } else {
-    if (typeof container === 'string') {
-      container = $(container);
+  MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.BEFORE, [this], function() {
+    let tagName = this.tagName;
+    let container = this.container;
+    let template = this.template;
+    let domStr;
+    let $dom;
+
+    if (!container) {
+      throw `[${this.viewname}] Required attribute "container" is missing.`;
+    } else {
+      if (typeof container === 'string') {
+        container = $(container);
+      }
     }
-  }
 
   if (!container || !container.length) {
     throw `[${this.viewname}] "container" is undefined.`;
   }
-  
+
   if (typeof this.viewWillMount === 'function') {
     renderData = this.viewWillMount(renderData) || renderData;
   }
+    if (!container || !container.length) {
+      throw new Error(`[${this.viewname}] "container" is undefined.`);
+    }
+
+    let renderData = this.getModel();
+
+    if (typeof this.viewWillMount === 'function') {
+      renderData = this.viewWillMount(renderData) || renderData;
+    }
 
   if (!!template) {
     if (typeof template === 'string') {
@@ -102,7 +113,7 @@ viewMount = function() {
   } else {
     this.setElement(container);
   }
-  
+
   this._viewMounted = true;
   this._bindRef();
   this._bindModel();
@@ -164,20 +175,20 @@ View = Backbone.View.extend({
       let eventName;
       let selector;
       let listener;
-      
+
       if (!!childMatch) {
         const index = method.indexOf('(');
 
         let params = [];
-        
+
         eventName = childMatch[1];
         selector = childMatch[2];
-        
+
         if (!!~index) {
           params = method.substring(index + 1, method.length - 1).split(',').map(el => $.trim(el));
           method = method.substring(0, index);
         }
-        
+
         listener = function(eventName, selector, method, params, event, ...args) {
           const _this = this;
 
@@ -221,7 +232,7 @@ View = Backbone.View.extend({
 
         listener = method.bind(this);
       }
-      
+
       this.delegate(eventName, selector, listener);
     }
 
@@ -455,7 +466,7 @@ View = Backbone.View.extend({
 
     this._unbindModel();
     this._removeChild(remove);
-    
+
     if (remove + '' != 'false' && !!this) {
       this._unbindRef();
       this.remove();
