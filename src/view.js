@@ -1,8 +1,10 @@
-/*global $ _*/
-
 const Debug = require('debug');
 const format = require('util').format;
 const Backbone = require('backbone');
+
+const MIDDLEWARE = require('./middleware').MIDDLEWARE;
+const MIDDLEWARE_PROTOCOL = require('./middleware').MIDDLEWARE_PROTOCOL;
+const MiddlewareRunner = require('./middleware').MiddlewareRunner;
 
 const PluginText = require('./plugin/text');
 const PluginInputText = require('./plugin/input-text');
@@ -12,15 +14,6 @@ const PluginSelect = require('./plugin/select');
 const delegateEventSplitter = /^(\S+)\s*(.*)$/;
 const childEventSplitter = /^\@(\w+)\s*(.*)$/;
 const DEFAULT_ATTR_TYPE = 'text';
-
-const MIDDLEWARE = {
-  VIEW: 'view',
-};
-
-const MIDDLEWARE_PROTOCOL = {
-  BEFORE: 'before',
-  AFTER: 'after',
-};
 
 let View = null;
 let viewMount = null;
@@ -37,20 +30,13 @@ viewMount = function() {
     let $dom;
 
     if (!container) {
-      throw `[${this.viewname}] Required attribute "container" is missing.`;
+      throw new Error(`[${this.viewname}] Required attribute "container" is missing.`);
     } else {
       if (typeof container === 'string') {
         container = $(container);
       }
     }
 
-  if (!container || !container.length) {
-    throw `[${this.viewname}] "container" is undefined.`;
-  }
-
-  if (typeof this.viewWillMount === 'function') {
-    renderData = this.viewWillMount(renderData) || renderData;
-  }
     if (!container || !container.length) {
       throw new Error(`[${this.viewname}] "container" is undefined.`);
     }
@@ -61,85 +47,85 @@ viewMount = function() {
       renderData = this.viewWillMount(renderData) || renderData;
     }
 
-  if (!!template) {
-    if (typeof template === 'string') {
-      domStr = template;
-    } else {
-      domStr = template(renderData);
-    }
+    if (!!template) {
+      if (typeof template === 'string') {
+        domStr = template;
+      } else {
+        domStr = template(renderData);
+      }
 
-    if (tagName === 'div') {
-      let proto = this;
+      if (tagName === 'div') {
+        let proto = this;
 
-      tagName = '';
+        tagName = '';
 
-      do {
-        if (proto.hasOwnProperty('tagName') && !!proto.tagName) {
-          tagName = proto.tagName;
-          break;
+        do {
+          if (proto.hasOwnProperty('tagName') && !!proto.tagName) {
+            tagName = proto.tagName;
+            break;
+          }
+        } while ((proto = proto.__proto__) && (proto.viewname !== '___WOOWA_VIEW___'));
+      }
+
+      if (!!tagName || $(domStr).length > 1) {
+        $dom = $(`<${tagName || 'div'}>${domStr}</${tagName || 'div'}>`);
+      } else {
+        $dom = $(domStr);
+      }
+
+      if (!!this.className) {
+        $dom.addClass(this.className);
+      }
+
+      if (this._viewMounted) {
+        if ($.contains(container[0], this.el)) {
+          this.$el.replaceWith($dom);
+        } else {
+          container.html($dom);
         }
-      } while((proto = proto.__proto__) && (proto.viewname !== '___WOOWA_VIEW___'));
-    }
-
-    if (!!tagName || $(domStr).length > 1) {
-      $dom = $(`<${tagName || 'div'}>${domStr}</${tagName || 'div'}>`);
-    } else {
-      $dom = $(domStr);
-    }
-
-    if (!!this.className) {
-      $dom.addClass(this.className);
-    }
-
-    if (this._viewMounted) {
-      if ($.contains(container[0], this.el)) {
-        this.$el.replaceWith($dom);
       } else {
-        container.html($dom);
+        if (!!this.append) {
+          container.append($dom);
+        } else if (!!this.prepend) {
+          container.prepend($dom);
+        } else if (!!this.after) {
+          container.after($dom);
+        } else {
+          container.html($dom);
+        }
       }
+
+      this.setElement($dom);
     } else {
-      if (!!this.append) {
-        container.append($dom);
-      } else if (!!this.prepend) {
-        container.prepend($dom);
-      } else if (!!this.after) {
-        container.after($dom);
-      } else {
-        container.html($dom);
-      }
+      this.setElement(container);
     }
 
-    this.setElement($dom);
-  } else {
-    this.setElement(container);
-  }
+    this._viewMounted = true;
+    this._bindRef();
+    this._bindModel();
 
-  this._viewMounted = true;
-  this._bindRef();
-  this._bindModel();
+    if (typeof this.viewComponentDidMount === 'function') {
+      this.viewComponentDidMount($dom);
+    }
 
-  app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.AFTER).forEach(middleware => {
-    middleware[MIDDLEWARE_PROTOCOL.AFTER].call(null, this, $dom[0]);
-  });
+    if (typeof this.viewDidMount === 'function') {
+      this.viewDidMount($dom);
+    }
 
-  if (typeof this.viewComponentDidMount === 'function') {
-    this.viewComponentDidMount($dom);
-  }
+    middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.AFTER);
 
-  if (typeof this.viewDidMount === 'function') {
-    this.viewDidMount($dom);
-  }
-
-  setTimeout(function() {
-    this.dispatch(Woowahan.Event.create('viewDidMount', this));
-
-    this.trigger('viewDidMount');
-  }.bind(this), 1);
+    MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.AFTER, [this], function() {
+      ['viewDidMount', 'mount'].forEach(type => {
+        this.dispatch(Woowahan.Event.create(type, this));
+        this.trigger(type);
+      });
+    }.bind(this));
+  }.bind(this));
 };
 
 View = Backbone.View.extend({
-  super() {
-    View.prototype.initialize.apply(this, arguments);
+  super(...args) {
+    View.prototype.initialize.apply(this, args);
   },
 
   initialize(model) {
@@ -169,71 +155,73 @@ View = Backbone.View.extend({
     this.undelegateEvents();
 
     for (let key in events) {
-      let method = events[key];
-      let match = key.match(delegateEventSplitter);
-      let childMatch = key.match(childEventSplitter);
-      let eventName;
-      let selector;
-      let listener;
+      if (events.hasOwnProperty(key)) {
+        let method = events[key];
+        let match = key.match(delegateEventSplitter);
+        let childMatch = key.match(childEventSplitter);
+        let eventName;
+        let selector;
+        let listener;
 
-      if (!!childMatch) {
-        const index = method.indexOf('(');
+        if (!!childMatch) {
+          const index = method.indexOf('(');
 
-        let params = [];
+          let params = [];
 
-        eventName = childMatch[1];
-        selector = childMatch[2];
+          eventName = childMatch[1];
+          selector = childMatch[2];
 
-        if (!!~index) {
-          params = method.substring(index + 1, method.length - 1).split(',').map(el => $.trim(el));
-          method = method.substring(0, index);
-        }
-
-        listener = function(eventName, selector, method, params, event, ...args) {
-          const _this = this;
-
-          const getVal = function($el) {
-            if ($el.is('input[type=checkbox]') || $el.is('input[type=radio]')) {
-              return $el.is(':checked');
-            } else if ($el.is('select')) {
-              return $el.val();
-            } else {
-              return $el.val() || $el.text();
-            }
-          };
-
-          const values = params.map(param => getVal(_this.$(param)));
-
-          if (eventName === 'submit') {
-            const inputs = {};
-
-            for (const el of _this.$(selector).find('input, select, textarea')) {
-              inputs[$(el).attr('name')] = getVal($(el));
-            }
-
-            values.push(inputs);
+          if (!!~index) {
+            params = method.substring(index + 1, method.length - 1).split(',').map(el => $.trim(el));
+            method = method.substring(0, index);
           }
 
+          listener = function(eventName, selector, method, params, event, ...args) {
+            const _this = this;
+
+            const getVal = function($el) {
+              if ($el.is('input[type=checkbox]') || $el.is('input[type=radio]')) {
+                return $el.is(':checked');
+              } else if ($el.is('select')) {
+                return $el.val();
+              } else {
+                return $el.val() || $el.text();
+              }
+            };
+
+            const values = params.map(param => getVal(_this.$(param)));
+
+            if (eventName === 'submit') {
+              const inputs = {};
+
+              for (const el of _this.$(selector).find('input, select, textarea')) {
+                inputs[$(el).attr('name')] = getVal($(el));
+              }
+
+              values.push(inputs);
+            }
+
+            if (Object.prototype.toString.call(method) !== '[object Function]') {
+              method = this[method];
+            }
+
+            return method.apply(this, Array.prototype.concat.call(values, args, event));
+          }.bind(this, eventName, selector, method, params);
+        } else {
           if (Object.prototype.toString.call(method) !== '[object Function]') {
             method = this[method];
           }
 
-          return method.apply(this, Array.prototype.concat.call(values, args, event));
-        }.bind(this, eventName, selector, method, params);
-      } else {
-        if (Object.prototype.toString.call(method) !== '[object Function]') {
-          method = this[method];
+          if (!method) continue;
+
+          eventName = match[1];
+          selector = match[2];
+
+          listener = method.bind(this);
         }
 
-        if (!method) continue;
-
-        eventName = match[1];
-        selector = match[2];
-
-        listener = method.bind(this);
+        this.delegate(eventName, selector, listener);
       }
-
-      this.delegate(eventName, selector, listener);
     }
 
     return this;
@@ -258,7 +246,7 @@ View = Backbone.View.extend({
       return;
     }
 
-    if (typeof ChildView != 'function') {
+    if (typeof ChildView !== 'function') {
       args = ChildView;
     }
 
@@ -274,11 +262,18 @@ View = Backbone.View.extend({
       view.setModel.apply(view, Array.prototype.concat.call(args, { silent: true }));
       view.container = viewContainer;
 
-      if (typeof view.viewWillUnmount === 'function') {
-        view.viewWillUnmount.call(view);
-      }
+      let middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.UNMOUNT);
 
-      viewMount.apply(this._views[container]);
+      MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.UNMOUNT, [this], function() {
+        if (typeof view.viewWillUnmount === 'function') {
+          view.viewWillUnmount.call(view);
+        }
+
+        view.dispatch(Woowahan.Event.create('unmount', this));
+        view.trigger('unmount');
+
+        viewMount.apply(this._views[container]);
+      }.bind(this));
     } else {
       ChildView.prototype.container = viewContainer;
 
@@ -386,7 +381,7 @@ View = Backbone.View.extend({
   dispatch(action, subscriber, options) {
     action.__options = options || {};
     
-    switch(action.wwtype) {
+    switch (action.wwtype) {
       case 'event':
         this.$el.trigger(action.type, ...action.data);
         break;
@@ -430,11 +425,13 @@ View = Backbone.View.extend({
       }
     }
 
-    for(let attr in attrs) {
-      let value = this.model.get(attr);
+    for (let attr in attrs) {
+      if (attrs.hasOwnProperty(attr)) {
+        let value = this.model.get(attr);
 
-      if (value !== attrs[attr]) {
-        this.model.set(attr, attrs[attr]);
+        if (value !== attrs[attr]) {
+          this.model.set(attr, attrs[attr]);
+        }
       }
     }
   },
@@ -451,32 +448,40 @@ View = Backbone.View.extend({
     return this.model.clone().get(key);
   },
 
-  log() {
-    this.debug(format.apply(this, arguments));
+  log(...args) {
+    this.debug(format.apply(this, args));
   },
 
-  logStamp() {
-    this.log(arguments);
+  logStamp(...args) {
+    this.log(args);
   },
 
   close(remove) {
-    if (typeof this.viewWillUnmount === 'function') {
-      this.viewWillUnmount();
-    }
+    let middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.UNMOUNT);
 
-    this._unbindModel();
-    this._removeChild(remove);
+    MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.UNMOUNT, [this], function() {
+      if (typeof this.viewWillUnmount === 'function') {
+        this.viewWillUnmount();
+      }
 
-    if (remove + '' != 'false' && !!this) {
-      this._unbindRef();
-      this.remove();
-    }
+      this.dispatch(Woowahan.Event.create('unmount', this));
+      this.trigger('unmount');
+
+      this._unbindModel();
+      this._removeChild(remove);
+
+      if (remove + '' !== 'false' && !!this) {
+        this._unbindRef();
+        this.remove();
+      }
+    }.bind(this));
   },
 
-  remove() {
-    this.trigger('remove', this);
+  remove(...args) {
+    this.dispatch(Woowahan.Event.create('remove', this));
+    this.trigger('remove');
 
-    Backbone.View.prototype.remove.apply(this, arguments);
+    Backbone.View.prototype.remove.apply(this, args);
   },
 
   _syncElement(source, target) {
@@ -539,13 +544,15 @@ View = Backbone.View.extend({
         this._plugins[type].call(this, element, value);
       }.bind(this, element, key, type));
 
-      if(typeof value !== 'undefined') this._plugins[type].call(this, element, value);
+      if (typeof value !== 'undefined') this._plugins[type].call(this, element, value);
     }
   },
 
   _unbindRef() {
     for (const ref in this.refs) {
-      this.refs[ref] = null;
+      if (this.refs.hasOwnProperty(ref)) {
+        this.refs[ref] = null;
+      }
     }
 
     this.refs = null;
@@ -556,9 +563,11 @@ View = Backbone.View.extend({
   },
 
   _removeChild(remove) {
-    for (var key in this._views) {
-      this._views[key].close.call(this._views[key], remove);
-      delete this._views[key];
+    for (let key in this._views) {
+      if (this._views.hasOwnProperty(key)) {
+        this._views[key].close.call(this._views[key], remove);
+        delete this._views[key];
+      }
     }
   }
 });
@@ -567,7 +576,7 @@ View.create = (viewName, options) => {
   let view = View.extend(options);
 
   view.viewname = viewName;
-  Object.defineProperty(view.prototype, 'viewname', {value: viewName, writable: false});
+  Object.defineProperty(view.prototype, 'viewname', { value: viewName, writable: false });
 
   return view;
 };

@@ -1,18 +1,6 @@
-/*global _ Backbone*/
-
-const MIDDLEWARE = {
-  ROUTER: 'router',
-};
-
-const MIDDLEWARE_PROTOCOL = {
-  BEFORE: 'before',
-  AFTER: 'after',
-};
-
-const defaultFeatureValue = {
-  params: {},
-  query: {}
-};
+const MIDDLEWARE = require('./middleware').MIDDLEWARE;
+const MIDDLEWARE_PROTOCOL = require('./middleware').MIDDLEWARE_PROTOCOL;
+const MiddlewareRunner = require('./middleware').MiddlewareRunner;
 
 let app;
 
@@ -41,14 +29,16 @@ function urlBuilder(path) {
 
     if (typeof params === 'object') {
       for (let key in params) {
-        url = url.replace(':'+key, encodeURIComponent(params[key]));
+        if (params.hasOwnProperty(key)) {
+          url = url.replace(':' + key, encodeURIComponent(params[key]));
+        }
       }
 
       return url;
     }
 
-
     console.error('Invalid params type');
+
     return url;
   };
 }
@@ -150,34 +140,30 @@ module.exports = {
           }
         }
 
-        app.getMiddleware(MIDDLEWARE.ROUTER, MIDDLEWARE_PROTOCOL.BEFORE).forEach(middleware => {
-          if (MIDDLEWARE_PROTOCOL.BEFORE in middleware) {
-            const featureList = {};
-            const features = middleware.features || [];
-
-            if (features.includes('params')) {
-              featureList['params'] = params;
-            }
-
-            if (features.includes('query')) {
-              featureList['query'] = query;
-            }
-
-            middleware[MIDDLEWARE_PROTOCOL.BEFORE].call(null, featureList);
-          }
-        });
-
         page.view.prototype.params = params;
         page.view.prototype.query = query;
         page.view.prototype.container = page.container;
 
-        const view = new page.view();
+        const pageFeature = Object.assign({}, page);
 
-        if (!!this.currentView) {
-          this.currentView.close();
-        }
+        if (!!pageFeature.view) delete pageFeature.view;
+        if (!!pageFeature.pages) delete pageFeature.pages;
 
-        this.currentView = view;
+        let middlewares = app.getMiddleware(MIDDLEWARE.ROUTER, MIDDLEWARE_PROTOCOL.BEFORE);
+
+        MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.BEFORE, [pageFeature, app], function() {
+          const view = new page.view();
+
+          if (!!this.currentView) {
+            this.currentView.close();
+          }
+
+          this.currentView = view;
+
+          middlewares = app.getMiddleware(MIDDLEWARE.ROUTER, MIDDLEWARE_PROTOCOL.AFTER);
+
+          MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.AFTER, [pageFeature, app]);
+        }.bind(this));
       }.bind(this, page);
 
       if (!!page.pages && !!page.pages.length) {

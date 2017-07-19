@@ -1,4 +1,3 @@
-/*global _*/
 const Woowahan = require('./woowahan');
 const events = require('./events');
 
@@ -11,18 +10,18 @@ ItemView = Woowahan.View.create('ItemView', {
     'click': '_onSelectedRow'
   },
 
-  super() {
-    ItemView.prototype.initialize.apply(this, arguments);
+  super(...args) {
+    ItemView.prototype.initialize.apply(this, args);
   },
 
-  initialize() {
-    Woowahan.View.prototype.initialize.apply(this, arguments);
+  initialize(...args) {
+    Woowahan.View.prototype.initialize.apply(this, args);
   },
 
   _onSelectedRow(event) {
     if (this.onSelectedRow && typeof this.onSelectedRow === 'function') {
       this.onSelectedRow(event, function(...args) {
-        this.trigger.apply(this, _.concat(events.SELECTED_ROW, args));
+        this.trigger.apply(this, Array.prototype.concat.call([], events.SELECTED_ROW, args));
       }.bind(this));
     }
   },
@@ -30,7 +29,7 @@ ItemView = Woowahan.View.create('ItemView', {
   _onSelectedCell(event) {
     if (this.onSelectedCell && typeof this.onSelectedCell === 'function') {
       this.onSelectedRow(event, function(...args) {
-        this.trigger.apply(this, Array.prototype.concat.call(events.SELECTED_CELL, args));
+        this.trigger.apply(this, Array.prototype.concat.call([], events.SELECTED_CELL, args));
       }.bind(this));
     }
   }
@@ -40,7 +39,7 @@ ItemView.create = (viewName, options) => {
   let view = ItemView.extend(options);
 
   view.viewname = viewName;
-  Object.defineProperty(view.prototype, 'viewname', {value: viewName, writable: false});
+  Object.defineProperty(view.prototype, 'viewname', { value: viewName, writable: false });
 
   return view;
 };

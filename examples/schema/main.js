@@ -2,8 +2,10 @@
 
 import Woowahan from '../../index';
 import HelloView from './hello-view';
+import _ from 'underscore';
 
 global.$ = global.jQuery = Woowahan.$;
+global._ = _;
 
 var app = new Woowahan();
 
