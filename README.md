@@ -2,6 +2,11 @@
 
 # WoowahanJS
 
+[![npm](https://img.shields.io/npm/v/woowahan.svg?style=flat-square)]()
+[![npm (tag)](https://img.shields.io/npm/v/woowahan/beta.svg?style=flat-square)]()
+[![npm](https://img.shields.io/npm/dm/woowahan.svg?style=flat-square)]()
+[![npm](https://img.shields.io/npm/l/woowahan.svg?style=flat-square)]()
+
 WoowahanJS는 보다 큰 규모의 웹 어플리케이션 개발을 위한 프레임워크입니다.
 
 현대의 웹 어플리케이션은 많은 수의 컴포넌트로 복잡하게 구성된 뷰와 상태를 관리하는 HTTP 기반 클라이언트 어플리케이션 입니다.
