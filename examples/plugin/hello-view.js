@@ -1,7 +1,9 @@
 import Woowahan from '../../index';
 
 export default Woowahan.View.create('Hello', {
-  template: '<h1>Hello, WoowahanJs</h1><ul data-role="bind" data-name="listData" data-type="list"></ul>',
+  template: '<h1>Hello, WoowahanJs</h1>' +
+    '<ul data-role="plugin" data-plugins="listData => list"></ul>' +
+    '<ul data-role="bind" data-name="listData" data-type="list"></ul>',
 
   initialize() {
     this.setModel({
