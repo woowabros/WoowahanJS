@@ -559,7 +559,7 @@ View = Backbone.View.extend({
         let [key, type] = plugin.split('=>').map(s => $.trim(s));
         let value = this.model.get(key);
 
-        this.listenTo(this.model, `change:${key}`, function() {
+        this.listenTo(this.model, `change:${key}`, function(element, key, type) {
           let value = this.model.get(key);
 
           this._plugins[type].call(this, element, value);
