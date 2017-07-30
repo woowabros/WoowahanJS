@@ -1,12 +1,21 @@
 export const AppMiddlewarePre = function() {
   this.mwtype = 'app';
+  this.testVal = 'testVal';
 
   this.before = function(app) {
     log('[AppMiddlewarePre] before called', 'red');
+
+    if (this.testVal !== 'testVal') throw new Error('AppMiddlewarePre before context error');
+
+    this.testVal = 'testVal2';
   };
 
   this.after = function(app) {
     log('[AppMiddlewarePre] after called', 'red');
+
+    if (this.testVal !== 'testVal2') throw new Error('AppMiddlewarePre after context error');
+
+    log(this.testVal, 'red');
 
     app.setStates({ test: 'test' });
   };
