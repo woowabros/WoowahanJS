@@ -26,9 +26,9 @@ export const MiddlewareRunner = {
         const middleware = curr[protocol];
 
         if (middleware.length > featuresLen) {
-          middleware.call(null, ...params, next);
+          middleware.call(curr, ...params, next);
         } else {
-          middleware.call(null, ...params);
+          middleware.call(curr, ...params);
 
           setTimeout(next, 1);
         }

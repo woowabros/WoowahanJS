@@ -1,11 +1,11 @@
 <div>
   <select id="sel-depth1" class="form-control form-control-sm" data-role="bind" data-name="depth1" data-type="select">
   </select>
-  <select id="sel-depth2" class="form-control form-control-sm" data-role="bind" data-name="depth2" data-type="select">
+  <select id="sel-depth2" class="form-control form-control-sm" data-role="plugin" data-plugins="depth2 => select">
   </select>
 </div>
 <div>
-  <p data-role="bind" data-name="selectedMenu" data-type="text"></p>
+  <p data-role="plugin" data-plugins="selectedMenu=>text+selectedMenu=>deco"></p>
 </div>
 <div>
   <label><input id="ckb-sel" type="checkbox"> 전체 선택</label>

@@ -531,8 +531,9 @@ View = Backbone.View.extend({
     this._unbindModel();
 
     let targetElements = this.$el.find('[data-role=bind]');
+    let element;
 
-    for (const element of targetElements) {
+    for (element of targetElements) {
       let key = $(element).data('name');
       let eventName = `change:${key}`;
       let type = ($(element).data('type') || DEFAULT_ATTR_TYPE).toLowerCase();
@@ -545,6 +546,35 @@ View = Backbone.View.extend({
       }.bind(this, element, key, type));
 
       if (typeof value !== 'undefined') this._plugins[type].call(this, element, value);
+    }
+
+    targetElements = this.$el.find('[data-role=plugin]');
+
+    for (element of targetElements) {
+      let plugins = $(element).data('plugins');
+
+      if (!plugins) throw new Error('plugin must have plugins');
+
+      plugins.split('+').map(s => $.trim(s)).forEach(plugin => {
+        let [keys, type] = plugin.split('=>').map(s => $.trim(s));
+
+        keys = keys.split(',').map(k => $.trim(k));
+        type = type.toLowerCase();
+        
+        keys.forEach(key => {
+          if (key === '') return;
+
+          let value = this.model.get(key);
+          
+          this.listenTo(this.model, `change:${key}`, function(element, key, type) {
+            let value = this.model.get(key);
+
+            this._plugins[type].call(this, element, value);
+          }.bind(this, element, key, type));
+        });
+
+        if (typeof value !== 'undefined') this._plugins[type].call(this, element, value);
+      });
     }
   },
 
