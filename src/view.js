@@ -556,16 +556,22 @@ View = Backbone.View.extend({
       if (!plugins) throw new Error('plugin must have plugins');
 
       plugins.split('+').map(s => $.trim(s)).forEach(plugin => {
-        let [key, type] = plugin.split('=>').map(s => $.trim(s));
-        let value = this.model.get(key);
+        let [keys, type] = plugin.split('=>').map(s => $.trim(s));
 
+        keys = keys.split(',').map(k => $.trim(k));
         type = type.toLowerCase();
         
-        this.listenTo(this.model, `change:${key}`, function(element, key, type) {
-          let value = this.model.get(key);
+        keys.forEach(key => {
+          if (key === '') return;
 
-          this._plugins[type].call(this, element, value);
-        }.bind(this, element, key, type));
+          let value = this.model.get(key);
+          
+          this.listenTo(this.model, `change:${key}`, function(element, key, type) {
+            let value = this.model.get(key);
+
+            this._plugins[type].call(this, element, value);
+          }.bind(this, element, key, type));
+        });
 
         if (typeof value !== 'undefined') this._plugins[type].call(this, element, value);
       });
