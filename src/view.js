@@ -571,9 +571,9 @@ View = Backbone.View.extend({
 
             this._plugins[type].call(this, element, value);
           }.bind(this, element, key, type));
-        });
 
-        if (typeof value !== 'undefined') this._plugins[type].call(this, element, value);
+          if (typeof value !== 'undefined') this._plugins[type].call(this, element, value);
+        });
       });
     }
   },
