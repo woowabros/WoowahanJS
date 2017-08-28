@@ -192,27 +192,30 @@ UI를 구성함에 있어 하나의 거대한 단일 뷰로 디자인할 것인�
 상위 뷰 즉, 부모 뷰는 자식 뷰를 포함하기 위한 컨테이너를 제공하여야 합니다.
 동시에 추가되는 자식 뷰가 1개 이상이라면 1개 이상의 컨테이너를 가진 HTML 태그 구조가 필요합니다.
 
-뷰 관리를 위해 updateView 메소드가 제공됩니다.
-updateView에 자식 뷰를 지정함으로서 자식 뷰를 추가하거나 업데이트 할 수 있습니다.
+뷰 관리를 위해 addView, updateView, removeView 메소드가 제공됩니다.
+addView 또는 updateView에 자식 뷰를 지정함으로써 자식 뷰를 추가하거나 업데이트 할 수 있습니다.
+addView는 updateView의 alias 메소드입니다. 사실상 두 메소드는 동일하며 맥락에 따라 선택하여 사용하십시오.
 
 ```javascript
+import Woowahan from './woowahan';
 import ChildView1 from './child1';
 import CHildView2 from './child2';
 
 Woowahan.View.create('ParentView', {
 
   viewDidMount($el) {
-    this.updateView('.nav', ChildView1);
-    this.updateView('.dashboard', ChildView2);
+    this.addView('.nav', ChildView1);
+    this.addView('.dashboard', ChildView2);
   }
 
 });
 ```
 
-자식 뷰에게 데이타를 넘겨줄 필요가 있다면 updateView의 세번째 인수로 전달할 수 있습니다.
+자식 뷰에게 데이타를 넘겨줄 필요가 있다면 updateView, addView의 세번째 인수로 전달할 수 있으며 세번째 인수는 생략 할 수 있습니다.
 
 ```javascript
-this.updateView('.nav', ChildView, { current: 'main' });
+this.addView('.nav',ChildView,{current:'main'})
+this.updateView('.nav', ChildView, { current: 'sub' });
 ```
 
 자식 뷰는 부모로 부터 전달된 데이타를 getModel로 참조할 수 있습니다.
@@ -224,9 +227,9 @@ this.getModel('address'); // address 값 반환
 this.setModel({ age: 10 }); // age 값 변경
 ```
 
-updateView는 뷰의 추가 뿐만 아니라 업데이트도 관장합니다.
-자식 뷰를 추가하는 메소드 이름이 updateView인 것은 이것 때문입니다. 
-자식 뷰의 변경이 발생한다면 최초 추가할 때와 같은 방식으로 updateView를 호출하면 됩니다.
+updateView는 뷰의 추가 뿐만 아니라 업데이트도 관장합니다.  
+하지만 뷰를 추가 할 때는 더 명확하고 정확한 처리가 가능한 addView 함수를 사용합니다.    
+자식 뷰의 변경이 발생한다면 updateView를 호출하면 됩니다.  
 이것은 updateView 메소드가 자식의 라이프사이클을 완전히 통제한다는 것을 의미합니다.
 
 ## 뷰 새로 그리기
@@ -234,3 +237,12 @@ updateView는 뷰의 추가 뿐만 아니라 업데이트도 관장합니다.
 updateView는 자식 뷰 관련 기능 뿐만 아니라 현재 뷰의 UI를 다시 랜더링할 수 있는 기능도 제공합니다. 
 뷰가 자신을 다시 그려야하는 경우는 언제 발생할까요? 뷰 데이타가 변경되고 변경사항이 UI에 반영되어야 할 때 뷰를 새로 그려야할 것입니다. 
 이런 경우 updateView를 인수 없이 호출하면 현재 뷰를 다시 그리게 되며 이것은 viewWillUnmount -> viewWillMount -> rendering -> viewDidMount 주기를 다시 실행한다는 것을 의미합니다.
+
+## 뷰 삭제하기
+
+뷰를 삭제하고자 할 때는 removeView 함수를 호출하면 됩니다.  
+removeView는 자식 뷰를 삭제하고자 할 때 사용되며 인자는 자신이 삭제하고자 하는 뷰와 mount되어있는 container를 인자로 넘겨줍니다.  
+
+```javascript
+this.removeView('.nav'); // .nav와 mount 되어있는 뷰를 삭제
+```
