@@ -20,106 +20,102 @@ let viewMount = null;
 let app = null;
 
 viewMount = function() {
-  let middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.BEFORE);
+  let tagName = this.tagName;
+  let container = this.container;
+  let template = this.template;
+  let domStr;
+  let $dom;
 
-  MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.BEFORE, [this], function() {
-    let tagName = this.tagName;
-    let container = this.container;
-    let template = this.template;
-    let domStr;
-    let $dom;
+  if (!container) {
+    throw new Error(`[${this.viewname}] Required attribute "container" is missing.`);
+  } else {
+    if (typeof container === 'string') {
+      container = $(container);
+    }
+  }
 
-    if (!container) {
-      throw new Error(`[${this.viewname}] Required attribute "container" is missing.`);
+  if (!container || !container.length) {
+    throw new Error(`[${this.viewname}] "container" is undefined.`);
+  }
+
+  let renderData = this.getModel();
+
+  if (typeof this.viewWillMount === 'function') {
+    renderData = this.viewWillMount(renderData) || renderData;
+  }
+
+  if (!!template) {
+    if (typeof template === 'string') {
+      domStr = template;
     } else {
-      if (typeof container === 'string') {
-        container = $(container);
-      }
+      domStr = template(renderData);
     }
 
-    if (!container || !container.length) {
-      throw new Error(`[${this.viewname}] "container" is undefined.`);
-    }
+    if (tagName === 'div') {
+      let proto = this;
 
-    let renderData = this.getModel();
+      tagName = '';
 
-    if (typeof this.viewWillMount === 'function') {
-      renderData = this.viewWillMount(renderData) || renderData;
-    }
-
-    if (!!template) {
-      if (typeof template === 'string') {
-        domStr = template;
-      } else {
-        domStr = template(renderData);
-      }
-
-      if (tagName === 'div') {
-        let proto = this;
-
-        tagName = '';
-
-        do {
-          if (proto.hasOwnProperty('tagName') && !!proto.tagName) {
-            tagName = proto.tagName;
-            break;
-          }
-        } while ((proto = proto.__proto__) && (proto.viewname !== '___WOOWA_VIEW___'));
-      }
-
-      if (!!tagName || $(domStr).length > 1) {
-        $dom = $(`<${tagName || 'div'}>${domStr}</${tagName || 'div'}>`);
-      } else {
-        $dom = $(domStr);
-      }
-
-      if (!!this.className) {
-        $dom.addClass(this.className);
-      }
-
-      if (this._viewMounted) {
-        if ($.contains(container[0], this.el)) {
-          this.$el.replaceWith($dom);
-        } else {
-          container.html($dom);
+      do {
+        if (proto.hasOwnProperty('tagName') && !!proto.tagName) {
+          tagName = proto.tagName;
+          break;
         }
-      } else {
-        if (!!this.append) {
-          container.append($dom);
-        } else if (!!this.prepend) {
-          container.prepend($dom);
-        } else if (!!this.after) {
-          container.after($dom);
-        } else {
-          container.html($dom);
-        }
-      }
+      } while ((proto = proto.__proto__) && (proto.viewname !== '___WOOWA_VIEW___'));
+    }
 
-      this.setElement($dom);
+    if (!!tagName || $(domStr).length > 1) {
+      $dom = $(`<${tagName || 'div'}>${domStr}</${tagName || 'div'}>`);
     } else {
-      this.setElement(container);
+      $dom = $(domStr);
     }
 
-    this._viewMounted = true;
-    this._bindRef();
-    this._bindModel();
-
-    if (typeof this.viewComponentDidMount === 'function') {
-      this.viewComponentDidMount($dom);
+    if (!!this.className) {
+      $dom.addClass(this.className);
     }
 
-    if (typeof this.viewDidMount === 'function') {
-      this.viewDidMount($dom);
+    if (this._viewMounted) {
+      if ($.contains(container[0], this.el)) {
+        this.$el.replaceWith($dom);
+      } else {
+        container.html($dom);
+      }
+    } else {
+      if (!!this.append) {
+        container.append($dom);
+      } else if (!!this.prepend) {
+        container.prepend($dom);
+      } else if (!!this.after) {
+        container.after($dom);
+      } else {
+        container.html($dom);
+      }
     }
 
-    middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.AFTER);
+    this.setElement($dom);
+  } else {
+    this.setElement(container);
+  }
 
-    MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.AFTER, [this], function() {
-      ['viewDidMount', 'mount'].forEach(type => {
-        this.dispatch(Woowahan.Event.create(type, this));
-        this.trigger(type);
-      });
-    }.bind(this));
+  this._viewMounted = true;
+  this._bindRef();
+  this._bindModel();
+
+  if (typeof this.viewComponentDidMount === 'function') {
+    this.viewComponentDidMount($dom);
+  }
+
+  if (typeof this.viewDidMount === 'function') {
+    this.viewDidMount($dom);
+  }
+
+  const middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.AFTER);
+
+  MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.AFTER, [this], function() {
+    ['viewDidMount', 'mount'].forEach(type => {
+      this.dispatch(Woowahan.Event.create(type, this));
+      this.trigger(type);
+    });
   }.bind(this));
 };
 
@@ -137,7 +133,11 @@ View = Backbone.View.extend({
       this.setModel(model);
     }
 
-    viewMount.apply(this);
+    const middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.BEFORE);
+
+    MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.BEFORE, [this], function() {
+      viewMount.apply(this);
+    }.bind(this));
   },
   
   _plugins: {
