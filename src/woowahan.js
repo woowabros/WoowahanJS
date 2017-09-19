@@ -289,6 +289,10 @@ class Woowahan {
 
       clearInterval(wait);
 
+      if (Backbone.History.started) {
+        Backbone.history.stop();
+      }
+
       if (!!design) {
         Router.design(design, options, toolset);
       }
