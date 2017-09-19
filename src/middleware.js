@@ -19,11 +19,11 @@ export const MiddlewareRunner = {
   get isRunning() {
     return _isRunning;
   },
-  run(middlewares, protocol, params, callback) {
+  run(middlewares, protocol, params, callback, preprocess) {
     if (!Array.isArray(middlewares) || typeof protocol !== 'string') throw new Error('MiddlewareRunner arguments error');
 
     if (_isRunning) {
-      queue.push([middlewares, protocol, params, callback]);
+      queue.push([middlewares, protocol, params, callback, preprocess]);
 
       return;
     }
@@ -59,6 +59,8 @@ export const MiddlewareRunner = {
         }
       }
     };
+
+    if (typeof preprocess === 'function') preprocess();
 
     next();
   }
