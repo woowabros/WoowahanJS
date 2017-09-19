@@ -11,9 +11,24 @@ export const MIDDLEWARE_PROTOCOL = {
   UNMOUNT: 'unmount',
 };
 
+const queue = [];
+
+let _isRunning = false;
+
 export const MiddlewareRunner = {
+  get isRunning() {
+    return _isRunning;
+  },
   run(middlewares, protocol, params, callback) {
     if (!Array.isArray(middlewares) || typeof protocol !== 'string') throw new Error('MiddlewareRunner arguments error');
+
+    if (_isRunning) {
+      queue.push([middlewares, protocol, params, callback]);
+
+      return;
+    }
+
+    _isRunning = true;
 
     const featuresLen = params.length;
 
@@ -33,7 +48,15 @@ export const MiddlewareRunner = {
           setTimeout(next, 1);
         }
       } else {
+        _isRunning = false;
+
         !!callback && callback();
+
+        const task = queue.shift();
+
+        if (!!task) {
+          MiddlewareRunner.run(...task);
+        }
       }
     };
 
