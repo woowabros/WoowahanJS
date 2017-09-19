@@ -105,8 +105,10 @@ viewMount = function() {
     this.viewComponentDidMount($dom);
   }
 
+  let viewDidMount;
+
   if (typeof this.viewDidMount === 'function') {
-    this.viewDidMount($dom);
+    viewDidMount = this.viewDidMount.bind(this, $dom);
   }
 
   const middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.AFTER);
@@ -116,7 +118,7 @@ viewMount = function() {
       this.dispatch(Woowahan.Event.create(type, this));
       this.trigger(type);
     });
-  }.bind(this));
+  }.bind(this), viewDidMount);
 };
 
 View = Backbone.View.extend({
