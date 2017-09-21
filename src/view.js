@@ -130,6 +130,7 @@ View = Backbone.View.extend({
     this._viewMounted = false;
     this._views = {};
     this.debug = Debug(`View:${this.viewname}`);
+    this.container = this.container;
 
     if (!!model) {
       this.setModel(model);
