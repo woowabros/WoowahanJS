@@ -233,17 +233,32 @@ View = Backbone.View.extend({
   updateView(container, ChildView, ...args) {
     if (!arguments.length) {
       this.close(false);
-      
+
       viewMount.apply(this);
-      
+
       return;
     }
 
-    if (!!container && !ChildView) {
-      if (!!this._views[container]) {
-        this._views[container].close();
+    let viewContainer;
+    let viewId;
 
-        delete this._views[container];
+    viewContainer = this.$(container);
+
+    if (!viewContainer.length) {
+      viewContainer = $(container);
+    }
+
+    if (!viewContainer.length) {
+      throw new Error('View must have container');
+    }
+
+    viewId = viewContainer.data('ref') || viewContainer.selector || container;
+
+    if (!!container && !ChildView) {
+      if (!!this._views[viewId]) {
+        this._views[viewId].close();
+
+        delete this._views[viewId];
       }
 
       return;
@@ -253,13 +268,7 @@ View = Backbone.View.extend({
       args = ChildView;
     }
 
-    let viewContainer = (typeof container === 'string') ? this.$(container) : container;
-
-    if (!viewContainer.length) {
-      viewContainer = $(container);
-    }
-
-    let view = this._views[container];
+    let view = this._views[viewId];
 
     if (!!view) {
       view.setModel.apply(view, Array.prototype.concat.call(args, { silent: true }));
@@ -275,14 +284,14 @@ View = Backbone.View.extend({
         view.dispatch(Woowahan.Event.create('unmount', this));
         view.trigger('unmount');
 
-        viewMount.apply(this._views[container]);
+        viewMount.apply(this._views[viewId]);
       }.bind(this));
     } else {
       ChildView.prototype.container = viewContainer;
 
       view = new (Function.prototype.bind.apply(ChildView, Array.prototype.concat.call(ChildView, args)));
 
-      this._views[container] = view;
+      this._views[viewId] = view;
     }
 
     return view;
