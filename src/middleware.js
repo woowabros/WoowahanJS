@@ -48,11 +48,11 @@ export const MiddlewareRunner = {
           setTimeout(next, 1);
         }
       } else {
-        _isRunning = false;
-
         !!callback && callback();
 
         const task = queue.shift();
+
+        _isRunning = false;
 
         if (!!task) {
           MiddlewareRunner.run(...task);
