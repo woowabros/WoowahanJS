@@ -469,6 +469,8 @@ View = Backbone.View.extend({
   },
 
   close(remove) {
+    this._unbindModel();
+
     let middlewares = app.getMiddleware(MIDDLEWARE.VIEW, MIDDLEWARE_PROTOCOL.UNMOUNT);
 
     MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.UNMOUNT, [this], function() {
@@ -479,7 +481,6 @@ View = Backbone.View.extend({
       this.dispatch(Woowahan.Event.create('unmount', this));
       this.trigger('unmount');
 
-      this._unbindModel();
       this._removeChild(remove);
 
       if (remove + '' !== 'false' && !!this) {
