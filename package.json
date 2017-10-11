@@ -4,8 +4,8 @@
   "description": "Web application framework for BackboneJS",
   "main": "./lib/woowahan.js",
   "scripts": {
+    "build": "rm -rf dist && webpack ./index.js dist/woowahan.js --module-bind js=babel-loader --optimize-minimize",
     "test": "./node_modules/mocha/bin/mocha --require babel-core/register",
-    "build": "./node_modules/gulp/bin/gulp.js build",
     "proxy-server": "node ./server/proxy.js",
     "demo-server": "node ./server/demo.js",
     "version-patch": "npm version patch"
@@ -26,43 +26,20 @@
     "url": "https://github.com/woowabros/WoowahanJS/issues"
   },
   "homepage": "https://github.com/woowabros/WoowahanJS#readme",
-  "devDependencies": {
-    "babel-core": "^6.1.2",
-    "babel-loader": "^6.0.1",
-    "babel-preset-es2015": "^6.9.0",
-    "chai": "^2.3.0",
-    "css-loader": "^0.23.1",
-    "del": "^1.1.1",
-    "express": "^4.13.4",
-    "gulp": "^3.8.11",
-    "gulp-autoprefixer": "^2.1.0",
-    "gulp-babel": "^6.1.2",
-    "gulp-connect": "^2.2.0",
-    "gulp-if": "^2.0.1",
-    "gulp-livereload": "^3.7.0",
-    "gulp-load-plugins": "1.0.0",
-    "gulp-notify": "^2.2.0",
-    "gulp-plumber": "^1.1.0",
-    "gulp-sass": "^2.3.1",
-    "gulp-size": "^1.2.0",
-    "gulp-stylus": "^2.0.0",
-    "gulp-util": "^3.0.3",
-    "gulp-watch": "^4.1.1",
-    "handlebars": "^4.0.3",
-    "handlebars-loader": "^1.1.4",
-    "mocha": "^2.2.1",
-    "morgan": "^1.7.0",
-    "nodemon": "^1.9.2",
-    "request": "^2.72.0",
-    "style-loader": "^0.13.1",
-    "webpack": "^1.12.3",
-    "webpack-dev-middleware": "^1.0.11",
-    "webpack-stream": "^2.1.1"
-  },
   "dependencies": {
     "backbone": "^1.3.3",
     "debug": "^2.2.0",
     "jquery": "^2.2.4",
     "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "chai": "^2.3.0",
+    "mocha": "^2.2.1",
+    "morgan": "^1.7.0",
+    "webpack": "^3.6.0",
+    "uglifyjs-webpack-plugin": "^1.0.0-beta.3",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1"
   }
 }
