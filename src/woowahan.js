@@ -1,4 +1,3 @@
-const format = require('util').format;
 const Debug = require('debug');
 const Backbone = require('backbone');
 const Router = require('./router');
@@ -224,7 +223,8 @@ class Woowahan {
   }
 
   dispatch(action, subscriber) {
-    debug(format('dispatch action %s', action.type));
+    debug(`dispatch action ${action.type}`);
+
     this.queue.push({ action, subscriber });
   }
   

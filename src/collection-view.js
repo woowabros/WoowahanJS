@@ -1,4 +1,4 @@
-const Backbone = require('backbone');
+const Collection = require('backbone').Collection;
 const Woowahan = require('./woowahan');
 const events = require('./events');
 
@@ -16,7 +16,7 @@ CollectionView = Woowahan.View.create('CollectionView', {
   },
 
   initialize(...args) {
-    this.collection = this.collection || new Backbone.Collection();
+    this.collection = this.collection || new Collection();
     this.collection.on('add', this.addRowView, this);
 
     this.rowViews = [];
