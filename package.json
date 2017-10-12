@@ -4,11 +4,16 @@
   "description": "Web application framework for BackboneJS",
   "main": "./lib/woowahan.js",
   "scripts": {
-    "build": "rm -rf dist && webpack ./index.js dist/woowahan.js --module-bind js=babel-loader --optimize-minimize",
-    "test": "./node_modules/mocha/bin/mocha --require babel-core/register",
+    "build": "run-s clean:* compile relocation bundling",
+    "clean:lib": "rm -rf lib",
+    "clean:dist": "rm -rf dist",
+    "compile": "babel --no-comments --presets es2015 --out-dir lib src/*js src/**/*js",
+    "relocation": "mv -f lib/src/* lib && rm -rf lib/src",
+    "bundling": "webpack ./index.js dist/woowahan.js --module-bind js=babel-loader --optimize-minimize",
     "proxy-server": "node ./server/proxy.js",
     "demo-server": "node ./server/demo.js",
-    "version-patch": "npm version patch"
+    "version-patch": "npm version patch",
+    "test": "./node_modules/mocha/bin/mocha --require babel-core/register"
   },
   "repository": {
     "type": "git",
@@ -33,13 +38,14 @@
     "lodash": "^4.17.4"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
     "chai": "^2.3.0",
     "mocha": "^2.2.1",
     "morgan": "^1.7.0",
-    "webpack": "^3.6.0",
+    "npm-run-all": "^4.1.1",
     "uglifyjs-webpack-plugin": "^1.0.0-beta.3",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-preset-es2015": "^6.24.1"
+    "webpack": "^3.6.0"
   }
 }
