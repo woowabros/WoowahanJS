@@ -86,7 +86,7 @@ const siteDesign = [
       { url: 'sub2', view: SubContentView2, routeName: 'Layout3Content2Sub2' }
     ]  },
     { url: 'content3', view: ContentView3, routeName: 'Layout3Content3', pages: [
-      { url: 'sub1', view: SubContentView1, routeName: 'Layout3Content3Sub1' },
+      { url: 'sub1', view: SubContentView1, routeName: 'Layout3Content3Sub1', empty: true },
       { url: 'sub2', view: SubContentView2, routeName: 'Layout3Content3Sub2' }
     ]  }
   ] },

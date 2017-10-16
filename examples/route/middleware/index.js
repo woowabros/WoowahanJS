@@ -129,6 +129,12 @@ export const RouterMiddlewarePre = function() {
   this.mwtype = 'router';
 
   this.before = function(route, app) {
+    if (route.empty) {
+      alert('준비 중입니다.');
+
+      window.location.hash = app.getRouteTables()['Layout1']();
+    }
+
     log('[RouterMiddlewarePre] before called', 'green');
   };
 
