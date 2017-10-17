@@ -1,11 +1,8 @@
-const Debug = require('debug');
 const Backbone = require('backbone');
 const Router = require('./router');
 const MIDDLEWARE = require('./middleware').MIDDLEWARE;
 const MIDDLEWARE_PROTOCOL = require('./middleware').MIDDLEWARE_PROTOCOL;
 const MiddlewareRunner = require('./middleware').MiddlewareRunner;
-
-const debug = Debug('Woowahan');
 
 const INTERVAL = 1000/60;
 
@@ -223,8 +220,6 @@ class Woowahan {
   }
 
   dispatch(action, subscriber) {
-    debug(`dispatch action ${action.type}`);
-
     this.queue.push({ action, subscriber });
   }
   

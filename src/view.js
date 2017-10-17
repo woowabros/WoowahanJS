@@ -1,5 +1,3 @@
-const Debug = require('debug');
-const format = require('util').format;
 const Backbone = require('backbone');
 
 const MIDDLEWARE = require('./middleware').MIDDLEWARE;
@@ -129,7 +127,6 @@ View = Backbone.View.extend({
   initialize(model) {
     this._viewMounted = false;
     this._views = {};
-    this.debug = Debug(`View:${this.viewname}`);
     this.container = this.container;
 
     if (!!model) {
@@ -460,8 +457,8 @@ View = Backbone.View.extend({
     return this.model.clone().get(key);
   },
 
-  log(...args) {
-    this.debug(format.apply(this, args));
+  log() {
+    console.warn('View.log:: Deprecated and will be removed in a future release.');
   },
 
   logStamp(...args) {
