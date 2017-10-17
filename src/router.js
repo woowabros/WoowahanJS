@@ -86,64 +86,7 @@ module.exports = {
       options.routes[page.url] = routeId;
 
       options[routeId] = function(page, ...args) {
-        const params = {};
-        const query = {};
-        
-        let idx = 0;
-
-        if (page.url.startsWith('*')) {
-          params[page.url.split('*')[1]] = args[0];
-        } else {
-          for (const part of page.url.split('/')) {
-            if (part.startsWith(':')) {
-              params[part.substr(1)] = decodeURIComponent(args[idx]);
-
-              ++idx;
-            }
-          }
-        }
-
-        const queryStr = decodeURIComponent(args[args.length - 1] || (window.location.search || '').substr(1));
-
-        if (!!queryStr && !!~queryStr.indexOf('=')) {
-          const queryArr = queryStr.split('&');
-
-          for (const q of queryArr) {
-            const arr = q.split('=');
-
-            if (arr.length === 2) {
-              query[arr[0]] = arr[1];
-            }
-          }
-        }
-        
-        if (!!page.layout) {
-          const layout = this.layouts.find(layout => layout.viewName === page.layout);
-
-          if (!this.currentLayout || this.currentLayout.viewname !== page.layout) {
-            if (!!layout) {
-              !!this.currentLayout && this.currentLayout.close();
-
-              layout.view.prototype.params = params;
-              layout.view.prototype.query = query;
-              layout.view.prototype.container = layout.container;
-          
-              this.currentLayout = new layout.view();
-            }
-          } else {
-            if (layout.options.update) {
-              this.currentLayout['params'] = params;
-              this.currentLayout['query'] = query;
-
-              this.currentLayout.updateView();
-            }
-          }
-        }
-
-        page.view.prototype.params = params;
-        page.view.prototype.query = query;
-        page.view.prototype.container = page.container;
-
+        const currentHref = window.location.href;
         const pageFeature = Object.assign({}, page);
 
         if (!!pageFeature.view) delete pageFeature.view;
@@ -152,6 +95,66 @@ module.exports = {
         let middlewares = app.getMiddleware(MIDDLEWARE.ROUTER, MIDDLEWARE_PROTOCOL.BEFORE);
 
         MiddlewareRunner.run(middlewares, MIDDLEWARE_PROTOCOL.BEFORE, [pageFeature, app], function() {
+          if (currentHref !== window.location.href) return;
+
+          const params = {};
+          const query = {};
+
+          let idx = 0;
+
+          if (page.url.startsWith('*')) {
+            params[page.url.split('*')[1]] = args[0];
+          } else {
+            for (const part of page.url.split('/')) {
+              if (part.startsWith(':')) {
+                params[part.substr(1)] = decodeURIComponent(args[idx]);
+
+                ++idx;
+              }
+            }
+          }
+
+          const queryStr = decodeURIComponent(args[args.length - 1] || (window.location.search || '').substr(1));
+
+          if (!!queryStr && !!~queryStr.indexOf('=')) {
+            const queryArr = queryStr.split('&');
+
+            for (const q of queryArr) {
+              const arr = q.split('=');
+
+              if (arr.length === 2) {
+                query[arr[0]] = arr[1];
+              }
+            }
+          }
+
+          if (!!page.layout) {
+            const layout = this.layouts.find(layout => layout.viewName === page.layout);
+
+            if (!this.currentLayout || this.currentLayout.viewname !== page.layout) {
+              if (!!layout) {
+                !!this.currentLayout && this.currentLayout.close();
+
+                layout.view.prototype.params = params;
+                layout.view.prototype.query = query;
+                layout.view.prototype.container = layout.container;
+
+                this.currentLayout = new layout.view();
+              }
+            } else {
+              if (layout.options.update) {
+                this.currentLayout['params'] = params;
+                this.currentLayout['query'] = query;
+
+                this.currentLayout.updateView();
+              }
+            }
+          }
+
+          page.view.prototype.params = params;
+          page.view.prototype.query = query;
+          page.view.prototype.container = page.container;
+
           const view = new page.view();
 
           if (!!this.currentView) {
