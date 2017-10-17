@@ -301,7 +301,9 @@ View = Backbone.View.extend({
   },
 
   removeView(container) {
-    this.updateView(container);
+    if (!!$(container).length) {
+      this.updateView(container);
+    }
   },
 
   addPopup(view, options = {}, callback) { // TODO: options 추가
