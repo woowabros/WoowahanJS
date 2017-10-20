@@ -55,6 +55,7 @@ Backbone.Model.prototype.idAttribute = '___ID_ATTR___';
 Backbone.View.prototype.viewname = '___WOOWA_VIEW___';
 
 class Woowahan {
+  
   constructor(settings = {}) {
     this.reducers = settings.reducers || {};
     this.components = settings.components || {};
@@ -78,14 +79,26 @@ class Woowahan {
       },
     };
 
+    this.importViews = {};
     this.store = null;
     this.queue = [];
+    this.pretasks = [];
     this.actionObject = {};
     this.queuemonitor = null;
     
     instance = this;
     
     this.enableQueue();
+  }
+
+  import(Package) {
+    Object.keys(Package.reducers || {}).forEach(reducerName => this.use(Package.reducers[reducerName]));
+    
+    Object.keys(Package.views || {}).forEach(viewname => this.importViews[viewname] = Package.views[viewname]);    
+  }
+
+  getView(viewname) {
+    return this.importViews[viewname];
   }
 
   enableQueue() {
