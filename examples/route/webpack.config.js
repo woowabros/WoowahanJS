@@ -6,8 +6,7 @@ var output = {
 };
 
 module.exports = {
-  debug : true,
-  devtools: 'cheap-module-eval-source-map',
+  devtool: 'cheap-module-eval-source-map',
   entry: entry,
   output: output,
   module : {
