@@ -69,6 +69,7 @@ Reducer = {
     fn.addError = (...args) => app.addError(...args);
     fn.removeAction = (...args) => app.removeAction(...args);
     fn.getStates = (...args) => app.getStates(...args);
+    fn.setStates = (...args) => app.setStates(...args);
 
     fn.use = function(key, handlers) {
       switch (key) {
