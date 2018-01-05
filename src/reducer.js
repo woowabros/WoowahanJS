@@ -65,10 +65,10 @@ Reducer = {
     fn.id = () => this._id;
     fn.actionName = actionName;
     fn.createtime = () => this._timestamp;
-    fn.addAction = id => app.addAction(id);
-    fn.addError = err => app.addError(err);
-    fn.removeAction = id => app.removeAction(id);
-    fn.getStates = () => app.getStates();
+    fn.addAction = (...args) => app.addAction(...args);
+    fn.addError = (...args) => app.addError(...args);
+    fn.removeAction = (...args) => app.removeAction(...args);
+    fn.getStates = (...args) => app.getStates(...args);
 
     fn.use = function(key, handlers) {
       switch (key) {
