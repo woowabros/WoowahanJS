@@ -505,9 +505,9 @@ View = Backbone.View.extend({
       this.trigger('unmount');
 
       this._removeChild(remove);
-      this._unbindRef();
 
       if (remove + '' !== 'false' && !!this) {  
+        this._unbindRef();
         this.remove();
       }
     }.bind(this));
