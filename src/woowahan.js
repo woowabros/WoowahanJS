@@ -348,3 +348,5 @@ module.exports = global.Woowahan = Woowahan;
 Woowahan.CollectionView = require('./collection-view')(toolset);
 Woowahan.ItemView = require('./item-view')(toolset);
 Woowahan.PopupView = require('./popup-view')(toolset);
+
+Woowahan.version = '1.1.0';

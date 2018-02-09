@@ -240,7 +240,7 @@ View = Backbone.View.extend({
   },
 
   updateView(container, ChildView, ...args) {
-    if (!arguments.length) {
+    if (typeof container === 'undefined') {
       this.close(false);
 
       viewMount.apply(this);
@@ -505,9 +505,9 @@ View = Backbone.View.extend({
       this.trigger('unmount');
 
       this._removeChild(remove);
+      this._unbindRef();
 
-      if (remove + '' !== 'false' && !!this) {
-        this._unbindRef();
+      if (remove + '' !== 'false' && !!this) {  
         this.remove();
       }
     }.bind(this));
