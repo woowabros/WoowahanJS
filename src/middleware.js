@@ -44,8 +44,9 @@ export const MiddlewareRunner = {
           middleware.call(curr, ...params, next);
         } else {
           middleware.call(curr, ...params);
-
-          setTimeout(next, 1);
+          
+          next();
+          // setTimeout(next, 1);
         }
       } else {
         !!callback && callback();
