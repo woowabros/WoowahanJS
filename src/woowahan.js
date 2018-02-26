@@ -349,4 +349,4 @@ Woowahan.CollectionView = require('./collection-view')(toolset);
 Woowahan.ItemView = require('./item-view')(toolset);
 Woowahan.PopupView = require('./popup-view')(toolset);
 
-Woowahan.version = '1.0.7';
+Woowahan.version = '1.2.2';
