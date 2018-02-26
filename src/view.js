@@ -501,11 +501,13 @@ View = Backbone.View.extend({
         this.viewWillUnmount();
       }
 
-      Object.keys(this.refs).forEach(refName => {
-        if (Array.isArray(this.refs[refName])) {
-          this.refs[refName] = [];
-        }
-      });
+      if (this.refs) {
+        Object.keys(this.refs).forEach(refName => {
+          if (Array.isArray(this.refs[refName])) {
+            this.refs[refName] = [];
+          }
+        });
+      } 
 
       this.dispatch(Woowahan.Event.create('unmount', this));
       this.trigger('unmount');
